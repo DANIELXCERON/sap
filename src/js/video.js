@@ -26,7 +26,6 @@ function loadConfig() {
     }
 
     var JSON_config = JSON.parse(localStorage.getItem("JSON_config"));
-    console.log(JSON_config.clock);
     getTime.startClock([JSON_config.clock.format], RelojDOM);
   } catch (error) {
     setTimeout(function () {
