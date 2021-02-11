@@ -1,0 +1,212 @@
+/* representaicion de fondo transparente cuadricula estilo photoshop */
+
+#videoPlayerPreView,
+.ql-editor,
+#marcoPreview {
+    background-image: url("../img/1x/bg-container-video-8.png");
+    background-color: white;
+    background-repeat: repeat;
+    /* background: linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black 0px) 0px 0px / 19.1px 19.1px, linear-gradient(45deg, black 25%, transparent 25%, transparent 75%, black 75%, black 0px) 9.55px 9.55px / 19.1px 19.1px, white; */
+}
+
+#anim {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/*animacion a barra de progreso*/
+
+.progress-bar {
+    transition: width 0.05s linear !important;
+    background-color: darkcyan;
+    height: 30px;
+}
+
+.progress {
+    border-radius: 0.1rem !important;
+    height: 30px;
+    background-color: #34495e;
+}
+
+.barraDeProgreso {
+    text-align: center;
+}
+
+#timeDisplay {
+    width: 100%;
+    position: absolute;
+    color: springgreen;
+    font-size: 1.5rem;
+    line-height: 1rem;
+    margin: 0px auto;
+    mix-blend-mode: difference;
+}
+#timeDisplayAD {
+    width: 100%;
+    position: absolute;
+    color: springgreen;
+    font-size: 1.5rem;
+    line-height: 1rem;
+    margin: 0px auto;
+    mix-blend-mode: difference;
+}
+
+
+/*cuadro de desplazamiento*/
+
+#tbodyPlayList {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    height: 64vh;
+    background-color: black;
+}
+
+
+/*Estilo del scroll*/
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+    /* background: #333; */
+    /* border-radius: 0.1rem; */
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #2980b9;
+    /* border-radius: 0.1rem; */
+}
+
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #27ae60;
+}
+
+
+/*********************************************************************/
+
+input[type="file"] {
+    display: none;
+}
+
+
+/* ////////////////////////// COLORS TAG ////////////////////////// */
+
+:root {
+    --color-black: #333 !important;
+    --color-white: #eee !important;
+}
+
+.LC-Violet {
+    background-color: #a690e0 !important;
+    color: var(--color-black);
+}
+
+.LC-Violet.active {
+    border-color: transparent transparent transparent #a690e0 !important;
+}
+
+.LC-Iris {
+    background-color: #729acc !important;
+    color: var(--color-black);
+}
+
+.LC-Iris.active {
+    border-color: transparent transparent transparent #729acc !important;
+}
+
+.LC-Caribbean {
+    background-color: #29d698 !important;
+    color: var(--color-black);
+}
+
+.LC-Caribbean.active {
+    border-color: transparent transparent transparent #29d698!important;
+}
+
+.LC-Lavender {
+    background-color: #e384e3 !important;
+    color: var(--color-black);
+}
+
+.LC-Lavender.active {
+    border-color: transparent transparent transparent #e384e3!important;
+}
+
+.LC-Cerulean {
+    background-color: #2fbfde !important;
+    color: var(--color-black);
+}
+
+.LC-Cerulean.active {
+    border-color: transparent transparent transparent #2fbfde!important;
+}
+
+.LC-Forest {
+    background-color: #51b858 !important;
+    color: var(--color-black);
+}
+
+.LC-Forest.active {
+    border-color: transparent transparent transparent #51b858!important;
+}
+
+.LC-Rose {
+    background-color: #f76fa4 !important;
+    color: var(--color-black);
+}
+
+.LC-Rose.active {
+    border-color: transparent transparent transparent #f76fa4!important;
+}
+
+.LC-Mango {
+    background-color: #eda63b !important;
+    color: var(--color-black);
+}
+
+.LC-Mango.active {
+    border-color: transparent transparent transparent #eda63b!important;
+}
+
+.nav-link.active {
+    background-color: transparent !important;
+    color: var(--color-white);
+}
+
+a:hover {
+    color: var(--color-black);
+}
+
+
+/**/
+
+.tag-label {
+    background-color: orangered;
+    padding: 0px 0px 0px 0px;
+    color: #eee;
+}
+
+#statusBar {
+    font-size: 0.7rem;
+    position: fixed;
+    bottom: 0px;
+    background-color: var(--gray-dark);
+    padding: 3px 10px 3px 10px;
+    color: #eee;
+    width: 100%;
+}

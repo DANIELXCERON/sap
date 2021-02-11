@@ -1,0 +1,74 @@
+[data-theme="dark"] {
+    background-color: #131c21 !important;
+    color: #eee;
+}
+
+[data-theme="dark"] .bg-light {
+    background-color: #333 !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: #000 !important;
+}
+
+[data-theme="dark"] .bg-black {
+    background-color: #eee !important;
+}
+
+[data-theme="dark"] .form-control {
+    /* background-color: #333 !important; */
+    background-color: #333 !important;
+    color: #eee;
+}
+
+[data-theme="dark"] .card {
+    background-color: #333 !important;
+    color: #eee;
+}
+
+[data-theme="dark"] hr {
+    border-top: 1px solid #eee !important;
+}
+
+[data-theme="dark"] .nav-link.active {
+    color: #eee !important;
+    background-color: transparent !important;
+    border-color: transparent;
+}
+
+[data-theme="dark"] a:hover {
+    color: #eee !important;
+}
+
+
+/* Dark Mode para Barra de Titulo custom-electron-titlebar*/
+
+[data-theme="dark"] .titlebar {
+    background-color: #2c3e50 !important;
+    color: #eee !important;
+}
+
+[data-theme="dark"] .menubar-menu-container {
+    background-color: #2c3e50 !important;
+}
+
+[data-theme="dark"] .action-menu-item {
+    background-color: rgba(0, 0, 0, 0) !important;
+    color: #eee !important;
+}
+
+[data-theme="dark"] .titlebar .window-controls-container .window-icon {
+    background-color: #eee !important;
+}
+
+
+/* [data-theme="dark"] .titlebar .window-controls-container .window-icon-bg:not(.inactive):hover {
+  background-color: rgba(238, 238, 238, 0.3) !important;
+} */
+
+[data-theme="dark"] .titlebar .window-controls-container .window-icon-bg.window-close-bg:hover {
+    background-color: rgba(232, 17, 35, 0.9) !important;
+}
+
+
+/* fin Dark Mode para custom-electron-titlebar */

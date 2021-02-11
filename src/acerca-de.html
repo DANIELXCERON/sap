@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="./css/dark-mode.css" />
+  <link rel="stylesheet" type="text/css" href="./css/icon.css" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    ::-webkit-scrollbar,
+    .invisible {
+      display: none;
+    }
+
+    .centrar-vertical {
+      display: flex;
+      align-items: center;
+      width: 450px;
+      height: 350px;
+    }
+
+    #bm {
+      width: 100%;
+      height: 90px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="centrar-vertical">
+    <div class="container-fluid text-center" style="margin-top: 5px;">
+      <div id="bm"></div>
+      <script type="text/javascript" src="./js/anim-lottie.js"></script>
+      <div id="aboutData"></div>
+      <p>Desarrollado por: Daniel Alfonso Ceron Claros</p>
+      <p>en desarrollo desde el 1 jun del 2020</p>
+      <hr>
+      <p class="mb-0">La venta no autorizada de esta app, a través de
+        cualquier medio está estrictamente prohibida</p>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="./js/dark-mode-listen.js"></script>
+  <script>
+    const { app } = require('electron').remote;
+    const remote = require('electron').remote;
+
+    var aboutData = document.querySelector('#aboutData');
+    aboutData.innerHTML = `
+      <h4>Schedule Auto Playlist</h4>
+      <p>Versión: ${app.getVersion()} (${app.getName()})</p>
+      `;
+
+    document.querySelector("body").addEventListener("click", function (e) {
+      var window = remote.getCurrentWindow();
+      window.close();
+    }); 
+  </script>
+</body>
+
+</html>

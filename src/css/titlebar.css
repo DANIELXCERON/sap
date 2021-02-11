@@ -1,0 +1,53 @@
+.titlebar {
+    background-color: #eee !important;
+    color: #333 !important;
+}
+
+.window-title {
+    font-size: 16px !important;
+}
+
+.menubar-menu-container {
+    background-color: #eee !important;
+}
+
+.action-menu-item {
+    background-color: rgba(0, 0, 0, 0) !important;
+    color: #333 !important;
+}
+
+.menubar .menubar-menu-button:not(.disabled):focus,
+.menubar .menubar-menu-button:not(.disabled).open,
+.menubar .menubar-menu-button:not(.disabled):hover {
+    background-color: #2980b9 !important;
+    color: #eee !important;
+}
+
+.titlebar.light .menubar .menubar-menu-button:focus,
+.titlebar.light .menubar .menubar-menu-button.open,
+.titlebar.light .menubar .menubar-menu-button:hover {
+    background-color: #2980b9 !important;
+    color: #eee !important;
+}
+
+.menubar-menu-container .action-item:hover {
+    background-color: #2980b9 !important;
+}
+
+.action-menu-item:hover {
+    color: #eee !important;
+}
+
+.titlebar .window-controls-container .window-icon {
+    background-color: #333 !important;
+}
+
+.titlebar .window-controls-container .window-icon-bg:not(.inactive):hover {
+    background-color: #2980b9 !important;
+}
+
+.titlebar .window-controls-container .window-icon-bg .window-icon.window-maximize:hover,
+.titlebar .window-controls-container .window-icon-bg .window-icon.window-minimize:hover,
+.titlebar .window-controls-container .window-icon-bg .window-icon.window-unmaximize:hover {
+    background-color: #eee !important;
+}

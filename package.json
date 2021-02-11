@@ -1,0 +1,30 @@
+{
+    "name": "sap-pre-alfa",
+    "productName": "SAP Playout Pre-Alfa",
+    "version": "0.1.0",
+    "description": "Playout software iniciada el 1 de junio del 2020",
+    "repository": "https://github.com/DANIELXCERON/sap",
+    "main": "src/main.js",
+    "scripts": {
+        "start": "electron . ",
+        "pack": "electron-builder --dir",
+        "dist": "yarn electron-builder --x64 --win --config electron-builder/base.config.js"
+    },
+    "keywords": [],
+    "author": {
+        "name": "Daniel Alfonso Ceron Claros"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "ffprobe": "^1.1.0",
+        "ffprobe-static": "^3.0.0",
+        "jquery": "^3.5.1",
+        "lottie-web": "^5.7.1",
+        "md5": "^2.3.0",
+        "nedb": "^1.8.0"
+    },
+    "devDependencies": {
+        "electron": "^11.2.3",
+        "electron-builder": "^22.9.1"
+    }
+}

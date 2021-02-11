@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* background-color: black; */
+    font-family: 'Roboto', sans-serif;
+}
+
+::-webkit-scrollbar,
+.invisible {
+    display: none;
+}
+
+
+/* estilos para video 1280*720*/
+
+
+/*
+:root {
+  --main-video-width: 1280px;
+  --main-video-height: 720px;
+}
+*/
+
+
+/* estilos para video 720*480*/
+
+:root {
+    --main-video-width: 720px;
+    --main-video-height: 405px;
+}
+
+#marcoVideoWebview webview,
+video,
+#clockdate,
+#GCText,
+.SafeArea {
+    transform: scaleY(1.1852);
+    margin-top: 6.2%;
+}
+
+#videoloop,
+.marcoVideoLocal,
+#videobanner,
+#marcoVideoWebview {
+    top: -7px;
+}
+
+video {
+    width: var(--main-video-width);
+    height: var(--main-video-height);
+}
+
+#videoloop,
+.marcoVideoLocal,
+#videobanner,
+#marcoVideoWebview {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#videoloop {
+    opacity: 1;
+    transition: opacity 2;
+    transition-timing-function: linear;
+}
+
+webview {
+    height: var(--main-video-height);
+    opacity: 0;
+    transition: opacity 2s;
+    transition-timing-function: linear;
+}
+
+.GCContainer {
+    width: 90%;
+    height: 20%;
+    position: absolute;
+    left: 5%;
+    bottom: 5%;
+    overflow: hidden;
+}
+
+#GCText {
+    position: absolute;
+    left: var(--main-video-width);
+    inline-size: max-content;
+    bottom: 0.4em;
+}
+
+.moviendoGC {
+    animation-name: moviendoGC;
+    /* animation-iteration-count: infinite; */
+    animation-timing-function: linear;
+}
+
+@keyframes moviendoGC {
+    from {
+        left: 0px;
+    }
+    to {
+        left: 0px;
+    }
+}
+
+.SafeArea {
+    background-image: url(../img/AreaSegura.png);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-size: contain;
+}

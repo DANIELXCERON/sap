@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./css/video.css" />
+    <link rel="stylesheet" href="./css/reloj.css" />
+    <link rel="stylesheet" href="./css/gc-style.css" />
+
+    <!--Quill Rich Text Editor-->
+    <link rel="stylesheet" href="./quill/css/katex.min.css" />
+    <link rel="stylesheet" href="./quill/css/monokai-sublime.min.css" />
+    <link rel="stylesheet" href="./quill/css/quill.snow.css" />
+  </head>
+
+  <body>
+    <!--Safe Area-->
+    <div class="SafeArea invisible" style="z-index: 100;"></div>
+    <!--Reloj-->
+    <div id="clockdate" style="z-index: 6;">
+      <div class="clockdate-wrapper">
+        <div id="clock"></div>
+      </div>
+    </div>
+    <!--Generador de caracteres-->
+    <div class="GCContainer" style="z-index: 5;">
+      <div id="GCText"></div>
+    </div>
+    <!--video loop-->
+    <div id="videoloop" style="z-index: 4;">
+      <video id="videoplayerloop" src="" autoplay loop muted></video>
+    </div>
+    <!--video banner-->
+    <div id="videobanner" style="z-index: 3;">
+      <video id="videoplayerbanner" src="" autoplay muted></video>
+    </div>
+    <!--video Web -->
+    <div id="marcoVideoWebview" style="z-index: 2;"></div>
+
+    <!--video local-->
+
+    <div class="marcoVideoLocal" style="z-index: 1;">
+      <video id="vPLdos" src="" autoplay></video>
+    </div>
+
+    <div class="marcoVideoLocal" style="z-index: 0;">
+      <video id="vPLuno" src="" autoplay></video>
+    </div>
+    
+    <script type="text/javascript" src="./js/video.js"></script>
+    <script type="text/javascript" src="./js/css-animations.js"></script>
+  </body>
+</html>

@@ -1,0 +1,412 @@
+const { ipcRenderer } = require("electron");
+const getTime = require("../src/js/modules/reloj");
+const nTF = require("../src/js/modules/nice-time-format");
+
+const SafeArea = document.querySelector(".SafeArea");
+const videobanner = document.querySelector("#videobanner");
+const videoloop = document.querySelector("#videoloop");
+const marcoVideoWebview = document.querySelector("#marcoVideoWebview");
+const vPLuno = document.querySelector("#vPLuno");
+const vPLdos = document.querySelector("#vPLdos");
+const videoplayerloop = document.querySelector("#videoplayerloop");
+const videoPlayerBanner = document.querySelector("#videoplayerbanner");
+const GCText = document.querySelector("#GCText");
+const body = document.querySelector("body");
+const RelojDOM = document.querySelector("#clock");
+
+// Inicia reloj de la ventana de video
+loadConfig();
+
+function loadConfig() {
+  try {
+    /** cargar video loop agregado por ultima vez */
+    if (localStorage.getItem("CurrentLoopVideoPath")) {
+      videoplayerloop.src = localStorage.getItem("CurrentLoopVideoPath");
+      videoplayerloop.load();
+    }
+
+    var JSON_config = JSON.parse(localStorage.getItem("JSON_config"));
+    console.log(JSON_config.clock);
+    getTime.startClock([JSON_config.clock.format], RelojDOM);
+  } catch (error) {
+    setTimeout(function () {
+      loadConfig();
+    }, 1000);
+  }
+}
+
+//guardar estado del reproductor
+localStorage.setItem("playerStatus", "onpause"); // al iniciar indicar que esta en pausa
+vPLuno.onpause = (event) => {
+  localStorage.setItem("playerStatus", "onpause");
+};
+vPLuno.onplay = (event) => {
+  localStorage.setItem("playerStatus", "onplay");
+};
+vPLuno.onended = (event) => {
+  localStorage.setItem("playerStatus", "onended");
+};
+vPLuno.onerror = function (event) {
+  localStorage.setItem("playerStatus", "error");
+};
+
+// obtener datos del video 1 actual cada vez que cambia el tiempo del video
+vPLuno.ontimeupdate = function () {
+  if (vPLuno.readyState == 4) {
+    //si hay video diponiple para reproducir
+    const videoActualTime = {
+      TiempoTranscurrido: vPLuno.currentTime,
+      TiempoDuracion: vPLuno.duration,
+      TiempoRestante: vPLuno.duration - vPLuno.currentTime,
+      TiempoRelojFin:
+        nTF.RelojToSec(getTime.gT("hms24")) +
+        (vPLuno.duration - vPLuno.currentTime),
+      srcVideoCurrent: vPLuno.src,
+    };
+    localStorage.setItem("DataVideoCurrent", JSON.stringify(videoActualTime));
+    ipcRenderer.send("datos:videoactual", videoActualTime);
+  }
+};
+// obtener datos del video 2 actual cada vez que cambia el tiempo del video
+vPLdos.ontimeupdate = function () {
+  if (vPLdos.readyState == 4) {
+    //si hay video diponiple para reproducir
+    const videoActualTime = {
+      TiempoTranscurrido: vPLdos.currentTime,
+      TiempoDuracion: vPLdos.duration,
+      TiempoRestante: vPLdos.duration - vPLdos.currentTime,
+      TiempoRelojFin:
+        nTF.RelojToSec(getTime.gT("hms24")) +
+        (vPLdos.duration - vPLdos.currentTime),
+      srcVideoCurrent: vPLdos.src,
+    };
+    localStorage.setItem("DataVideoCurrent2", JSON.stringify(videoActualTime));
+    ipcRenderer.send("datos:videoactual2", videoActualTime);
+  }
+};
+
+/** dispositivo de video externo TEST */
+const constraints = {
+  audio: {
+    sampleSize: 16,
+    channelCount: 2,
+    sampleRate: 44100,
+    noiseSuppression: false,
+    echoCancellation: false,
+  },
+  video: {
+    mandatory: {
+      // maxHeight: 480,
+      // maxWidth: 640,
+      // minHeight: 480,
+      // minWidth: 640,
+    },
+  },
+};
+
+// Recibir Datos para Generar Caracteres GC
+ipcRenderer.on("datos:gc", (e, datosGC) => {
+  // remover animacion css
+  GCText.classList.remove("moviendoGC");
+
+  // se agrega el texto
+  GCText.innerHTML = datosGC.textoGC;
+
+  /**se calcula el tiempo de desplazamiento en bace
+   * a la longitud del texto y a la velocidad
+   * condigurada
+   */
+  GCText.style.cssText =
+    "animation-duration:" +
+    Math.floor(
+      (5 * (body.clientWidth + GCText.clientWidth)) /
+        (parseInt(localStorage.getItem("SpeedGC")) * 100)
+    ) +
+    "s;";
+
+  // agregar animacion css
+  CSSAnimations.get("moviendoGC").setKeyframe("0%", {
+    left: body.clientWidth + "px",
+  });
+  CSSAnimations.get("moviendoGC").setKeyframe("100%", {
+    left: -GCText.clientWidth + "px",
+  });
+  // ejecutar animacion css
+  GCText.classList.add("moviendoGC");
+});
+
+//datos stream ipc render
+ipcRenderer.on("datos:stream", (e, datosStream) => {
+  switch (datosStream.referencia) {
+    case "livestream":
+      marcoVideoWebview.innerHTML = `
+        <webview id="wv1" src="${datosStream.url}/player?autoPlay=true&enableInfoAndActivity=false&defaultDrawer=&mute=false"
+          frameborder="0"
+          scrolling="no"
+          allowfullscreen>
+        </webview>
+        `;
+      break;
+    case "anyone":
+      marcoVideoWebview.innerHTML = `
+          <webview id="wv1" src="${datosStream.url}"
+            frameborder="0"
+            scrolling="no"
+            allowfullscreen>
+          </webview>
+          `;
+      break;
+    case "facebook":
+      marcoVideoWebview.innerHTML = `
+        <webview id="wv1"
+          src="https://www.facebook.com/plugins/video.php?href=${datosStream.url}/
+          &data-autoplay=1&mute=0&show_text=0&appId"
+          style="border:none;overflow:hidden;"
+          scrolling="no"
+          frameborder="0"
+          allowTransparency="true"
+          allow="encrypted-media"
+          allowFullScreen="true">
+        </webview>
+        `;
+      break;
+    case "SetAspectRatioForFacebook":
+      document.querySelector("#wv1").style.cssText = `
+      width: ${datosStream.numberAspectRatio}px;
+      margin-left:${(body.clientWidth - datosStream.numberAspectRatio) / 2}px;
+      opacity: 1;
+      `;
+      break;
+    case "youtube":
+      marcoVideoWebview.innerHTML = `
+      <webview id="wv1"
+        src="https://www.youtube.com/embed/${datosStream.url}?autoplay=1&start=${datosStream.in}&cc_load_policy=1" allowfullscreen>
+      </webview>
+      `;
+      break;
+    case "file-video": //video local 1
+      marcoVideoWebview.innerHTML = ``;
+      vPLuno.src = datosStream.url;
+      vPLuno.currentTime = datosStream.in;
+      vPLuno.load();
+      break;
+    case "videoloop": //reproduce video loop
+      videoplayerloop.src = datosStream.url;
+      videoplayerloop.load();
+      localStorage.setItem("CurrentLoopVideoPath", datosStream.url);
+      break;
+    case "videobanner": //reproduce video banner
+      videoPlayerBanner.src = datosStream.url;
+      videoPlayerBanner.load();
+      break;
+    case "stopStream": //detiene stream web y reanuda video local
+      marcoVideoWebview.innerHTML = "";
+      vPLuno.play();
+      break;
+    case "ocultar-mostrar-video-loop": //oculta o muestra video loop
+      if (datosStream.valor == "ocultar") {
+        videoloop.classList.add("invisible");
+        videobanner.classList.add("invisible");
+      }
+      if (datosStream.valor == "mostrar") {
+        videoloop.classList.remove("invisible");
+        videobanner.classList.remove("invisible");
+      }
+      break;
+    case "opacity-video-loop": //opacidad para video loop
+      videoloop.style.opacity = datosStream.valor;
+      break;
+    case "ocultar-mostrar-safe-area": //oculta o muestra el margen safe area
+      if (datosStream.valor == "ocultar") {
+        SafeArea.classList.add("invisible");
+      }
+      if (datosStream.valor == "mostrar") {
+        SafeArea.classList.remove("invisible");
+      }
+      break;
+    default:
+      console.log("no se definio origen");
+      break;
+  }
+  //eliminar graficos en livestream y facebook
+  var webview = document.querySelector("#wv1");
+  if (webview) {
+    // if evita error en caso de que no exista el elemento wv1
+    webview.addEventListener("dom-ready", function () {
+      //cuando webview este listo, pausar video local
+      vPLuno.pause();
+      webview.style.opacity = 1;
+      //ocultar para livestream
+      webview.insertCSS(`
+      .top-bar,
+      .spinner-layer,
+      .control-bar{
+        display: none !important;
+      }
+      `);
+      //ocultar para facebook
+      webview.insertCSS(`
+      ._5pf2,._1jb_{
+        display: none !important;
+      }
+      ._u_g {
+        background-color: transparent !important;
+      }
+      ._u_h {
+        color: white !important;
+        font-weight: bold !important;
+        font-size: 1em !important;
+        font-family: 'Roboto', sans-serif !important;
+      }
+      ._u_0 {
+        position: absolute!important;
+        left: 3.4rem !important;
+        top: 1.4rem !important;
+      }
+      `);
+      // //ocultar para facebook privado
+      // webview.insertCSS(`
+      // .so2p5rfc.so2p5rfc,.o36gj0jk,.swu4x5w2,.taijpn5t{
+      //     display: none !important;
+      // }
+      // .l44iypv3 {
+      //     background-color: #34495e !important;
+      //     display: none !important;
+      // }
+      // `);
+      //ocultar para facebook privado
+      webview.insertCSS(`
+        .o36gj0jk {
+            width: 0px !important;
+        }
+        .poy2od1o {
+            display: none !important;
+        }
+        .l9j0dhe7 {
+            position: sticky !important;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .k4urcfbm {
+            /* width: 100% !important; */
+        }
+        .datstx6m {
+            height: 405px !important;
+        }
+        .datstx6m {
+            height: 405px !important;
+        }
+        `);
+      //ocultar para Youtube
+      webview.insertCSS(`
+      .ytp-gradient-top,
+      .ytp-videowall-still,
+      .ytp-ce-element,
+      .ytp-pause-overlay,
+      .branding-img-container,
+      .ytp-chrome-top,
+      .ytp-show-cards-title,
+      .ytp-chrome-bottom,
+      .ytp-spinner {
+        display: none! important;
+      }
+      `);
+      //subtitulos de facebook
+      webview.insertCSS(`
+      ._30vn {
+        text-align: center !important;
+        left: 30px !important;
+        bottom: 30px !important;
+        font-size: 1.5em !important;
+        font-family: 'Roboto', sans-serif !important;
+      }
+      ._30vo {
+        padding: .0em .2em !important;
+        border-radius: 0px !important;
+        background-color: rgba(0, 0, 0, 0.8) !important;
+        line-height: 1.2 !important;
+        display: inline !important;
+        font-family: 'Roboto', sans-serif !important;
+        text-shadow: none !important;
+      }
+      `);
+      /*webview.insertCSS(`
+            ._30vn {
+              text-align: center !important;
+              left: 30px !important;
+              bottom: 65px !important;
+              font-size: 2em !important;
+            }
+            ._30vo {
+              padding: .0em .2em !important;
+              border-radius: 0px !important;
+              background-color: rgba(0, 0, 0, 0.8) !important;
+              line-height: 1.2 !important;
+              display: inline !important;
+              font-family: 'Roboto', sans-serif !important;
+              text-shadow: none !important;
+            }
+            `);*/
+    });
+  }
+});
+
+// reproductor 2
+ipcRenderer.on("datos:stream2", (e, datosStream) => {
+  switch (datosStream.referencia) {
+    case "file-video": //video local 2
+      vPLdos.src = datosStream.url;
+      vPLdos.currentTime = datosStream.in;
+      vPLdos.load();
+      vPLuno.style.opacity = "0";
+      break;
+  }
+});
+
+// control reproductor 1
+ipcRenderer.on("control:player", (e, control) => {
+  switch (control) {
+    case "play":
+      vPLuno.play();
+      vPLuno.style.opacity = "1";
+      break;
+    case "pause":
+      vPLuno.pause();
+      break;
+    case "stop":
+      vPLuno.pause();
+      vPLuno.currentTime = 0;
+      break;
+    case "forward":
+      vPLuno.currentTime += 5;
+      break;
+  }
+});
+
+// control reproductor 2
+ipcRenderer.on("control:player2", (e, control) => {
+  switch (control) {
+    case "play":
+      vPLdos.play();
+      break;
+    case "pause":
+      vPLdos.pause();
+      break;
+    case "stop":
+      vPLdos.pause();
+      vPLdos.currentTime = 0;
+      vPLdos.src = "";
+      break;
+    case "forward":
+      vPLdos.currentTime += 5;
+      break;
+  }
+});
+
+//Al finalizar en el reproductor BANNER
+videoPlayerBanner.onended = function () {
+  /**simplemente termina el video */
+  videoPlayerBanner.src = "";
+  videoPlayerBanner.load();
+};

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <link rel="stylesheet" type="text/css" href="./css/titlebar.css" />
+    <!--Estilos para barra de titulo-->
+    <link rel="stylesheet" type="text/css" href="./css/dark-mode.css" />
+    <link rel="stylesheet" type="text/css" href="./css/index.css" />
+    <!--material icons-->
+    <link rel="stylesheet" type="text/css" href="./css/icon.css" />
+    <!--Font Awesome pro-->
+    <link rel="stylesheet" type="text/css" href="./css/pro.css" />
+    <!-- <link rel="stylesheet" href="./codebase/suite.css"> -->
+    <link rel="stylesheet" href="./codebase/suite-dark.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2 my-1">
+                <div class="btn-group mx-auto" role="group">
+                    <!--Control de reproduccion-->
+                    <button id="controlPlay" type="button" class="btn btn-success">
+						<i class="fas fa-play"></i></button>
+                    <button id="controlPause" type="button" class="btn btn-success">
+						<i class="fas fa-pause"></i></button>
+                    <button id="controlStop" type="button" class="btn btn-danger">
+						<i class="fas fa-stop"></i></button>
+                    <button id="controlForward" type="button" class="btn btn-success">
+						<span class="material-icons">forward_10</span></button>
+                </div>
+            </div>
+            <div class="col-10 my-auto">
+                <div class="barraDeProgreso">
+                    <div id="timeDisplay" class="my-1">
+                        00:00:00 / 00:00:00 | 00:00:00/00:00:00
+                    </div>
+                    <div class="progress my-1">
+                        <div id="progressBarDom" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2 my-1">
+            </div>
+            <div class="col-10 my-auto">
+                <div class="window-title"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="ml-1 my-2" style="font-size: 1.3rem;">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="LC-Violet nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                            <span class="material-icons">queue</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="LC-Iris nav-link" id="profile1-tab" data-toggle="tab" href="#profile1" role="tab" aria-controls="profile1" aria-selected="false">
+                            <span class="material-icons">picture_in_picture</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="LC-Mango nav-link" id="profile3-tab" data-toggle="tab" href="#profile3" role="tab" aria-controls="profile3" aria-selected="false">
+                            <span class="material-icons">live_tv</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="LC-Rose nav-link" id="profile3-tab" data-toggle="tab" href="#profile4" role="tab" aria-controls="profile4" aria-selected="false">
+                            <span class="material-icons">schedule</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="LC-Caribbean nav-link" id="profile2-tab" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false">
+                            <span class="material-icons">settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-11">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active my-2" id="home" role="tabpanel" aria-labelledby="home-tab">
+
+                        <div class="row">
+                            <div class="col-4 form-inline">
+                                <div class="btn-group">
+                                    <button id="grid_jsonFile_btn" class="btn btn-primary mb-2">
+										<span class="material-icons">playlist_add</span>
+									</button>
+                                    <button id="grid_save_btn" class="btn btn-primary mb-2">
+										<span class="material-icons">save</span>
+									</button>
+                                    <button id="grid_remove_btn" class="btn btn-danger mb-2">
+										<span class="material-icons">delete_forever</span>
+									</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <p>
+                                    Programa
+                                </p>
+                                <div id="grid_queue_container" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"></div>
+                                <span id="DurationListViewDOM"></span>
+                            </div>
+                            <div class="col-6">
+                                <p>
+                                    Publicidad
+                                </p>
+                                <div class="col-12 my-auto">
+                                    <div class="barraDeProgreso">
+                                        <div id="timeDisplayAD" class="my-1">
+                                            00:00:00 / 00:00:00 | 00:00:00/00:00:00
+                                        </div>
+                                        <div class="progress my-1">
+                                            <div id="progressBarDomAD" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="grid_queue_ad_container" ></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane fade my-2" id="profile1" role="tabpanel" aria-labelledby="profile1-tab">
+
+                        <button id="abrirArchivo" class="btn btn-success mb-2"><span
+								class="material-icons">insert_drive_file</span></button>
+                        <div id="tbodyPlayList" class="mx-0 py-1 row row-cols-md-3"></div>
+                    </div>
+
+                    <div class="tab-pane fade my-2" id="profile2" role="tabpanel" aria-labelledby="profile2-tab">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="SafeAreaSwitch">
+                            <label class="custom-control-label" for="SafeAreaSwitch">Safe Area</label>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="ViewGraSwitch">
+                            <label class="custom-control-label" for="ViewGraSwitch"><span
+									class="material-icons">picture_in_picture</span></label>
+                        </div>
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="darkSwitch">
+                            <label class="custom-control-label" for="darkSwitch"><span
+									class="material-icons">settings_brightness</span></label>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane fade my-2" id="profile3" role="tabpanel" aria-labelledby="profile3-tab">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="controlPlay btn-group" role="group">
+                                    <button id="LiveStreamVimeo" class="btn btn-success mb-2"><span class="material-icons">live_tv</span></button>
+                                    <button id="detenerWebVideo" class="btn btn-danger mb-2"><span class="material-icons">pan_tool</span></button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form id="formAnyone" class="form-inline" role="form">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fas fa-rocket"></i>
+                                            </div>
+                                        </div>
+<!-- <input type="url" id="ulrany" class="form-control" placeholder="url livestream" value="https://mdstrm.com/live-stream/57d2ebe8fd61d8f9327f8ad1?jsapi=true&autoplay=true"> -->
+<input type="url" id="ulrany" class="form-control" placeholder="url livestream" value="https://player-cdn.logicideas.media/embed/LI29a62fa1">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                </form>
+                                <form id="formLiveStream" class="form-inline" role="form">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fab fa-vimeo"></i>
+                                            </div>
+                                        </div>
+                                        <input type="url" id="ulrls" class="form-control" placeholder="url
+												livestream" value="https://livestream.com/accounts/28238881/events/8574038">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                </form>
+                                <form id="formFaceBook" class="form-inline" role="form">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fab fa-facebook"></i></div>
+                                        </div>
+                                        <input type="url" id="urlfb" class="form-control" placeholder="url
+												facebook" value="https://www.facebook.com/PUBGLITE.LATAM.OFFICIAL/videos/224458685414701">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                </form>
+                                <form id="formSetAspectRatio" class="form-inline" role="form">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <span class="material-icons">aspect_ratio</span>
+                                            </div>
+                                        </div>
+                                        <input type="number" id="numberAspectRatio" class="form-control" value="720" step="10">
+                                    </div>
+                                </form>
+                                <form id="formYouTube" class="form-inline" role="form">
+                                    <div class="input-group mb-2 mr-sm-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text"><i class="fab fa-youtube"></i></div>
+                                        </div>
+                                        <input type="text" id="urlYT" class="form-control" placeholder="url
+												facebook" value="Ga540v27NpE">
+                                        <input type="number" id="StartTime" class="form-control" value="0">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- <webview id="test" src="https://www.facebook.com/" style="height: 534px;"></webview> -->
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade my-2" id="profile4" role="tabpanel" aria-labelledby="profile4-tab">
+                        <div class="row">
+                            <div class="ml-1" style="font-size: 1.3rem;">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="LC-Violet nav-link active" id="scheduler-list-tab" data-toggle="tab" href="#scheduler-list" role="tab" aria-controls="scheduler-list" aria-selected="true">
+                                            <i class="fas fa-list"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="LC-Lavender nav-link" id="scheduler-events-tab" data-toggle="tab" href="#scheduler-events" role="tab" aria-controls="scheduler-events" aria-selected="false">
+                                            <i class="far fa-calendar"></i>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="LC-Caribbean nav-link" id="scheduler-promo-tab" data-toggle="tab" href="#scheduler-promo" role="tab" aria-controls="scheduler-promo" aria-selected="false">
+                                            <i class="fas fa-ad"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="col-11">
+                                <div class="tab-content" id="scheduler-tabContent">
+                                    <div class="tab-pane fade show active" id="scheduler-list" role="tabpanel" aria-labelledby="scheduler-list-tab">
+                                        <h3>Programador de listas</h3>
+                                        <p style="font-size: small;">
+                                            🔸 listas *.plst *.json (carga completa de videos)
+                                        </p>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button id="jsonFile_btn_scheluder_list" class="btn btn-primary mb-2">
+													<span class="material-icons">playlist_add</span>
+												</button>
+                                                <button id="save_btn_scheluder_list" class="btn btn-primary mb-2">
+													<span class="material-icons">save</span>
+												</button>
+                                                <button id="remove_btn_scheluder_list" class="btn btn-danger mb-2">
+													<span class="material-icons">delete_forever</span>
+												</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div id="grid_scheduler_list_container" ondrop="drop_scheduler_list(event);" ondragover="drag_scheduler_list(event);"></div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div id="form_scheduler_list_container"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="scheduler-events" role="tabpanel" aria-labelledby="scheduler-events-tab">
+                                        <h3>Programador de eventos</h3>
+                                        <p style="font-size: small;">
+                                            🔸 GC *.sgc 🔸 loops *.webm 🔸 Videos H264 🔸 listas *.plst (carga de videos uno a uno)
+                                        </p>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button id="jsonFile_btn_scheluder_event" class="btn btn-primary mb-2">
+													<span class="material-icons">playlist_add</span>
+												</button>
+                                                <button id="save_btn_scheluder_event" class="btn btn-primary mb-2">
+													<span class="material-icons">save</span>
+												</button>
+                                                <button id="remove_btn_scheluder_event" class="btn btn-danger mb-2">
+													<span class="material-icons">delete_forever</span>
+												</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div id="grid_event_container" ondrop="drop_scheduler_event(event);" ondragover="drag_scheduler_event(event);"></div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p style="font-size: xx-small;">
+                                                    <br>10 > 00 10 20 30 40 50 
+                                                    <br>15 > 10 25 40 55 
+                                                    <br>20 > 05 25 45 
+                                                    <br>30 > 15 45 
+                                                    <br>60 > 30
+                                                </p>
+                                                <div id="form_container"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="scheduler-promo" role="tabpanel" aria-labelledby="scheduler-promo-tab">
+                                        <h3>Programador de publicidad</h3>
+                                        <p style="font-size: small;">
+                                            🔸 listas *.plst, *.json (carga de videos uno a uno) 🔸 banners *.webm
+                                        </p>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button id="jsonFile_btn_scheluder_ad" class="btn btn-primary mb-2">
+													<span class="material-icons">playlist_add</span>
+												</button>
+                                                <button id="save_btn_scheluder_ad" class="btn btn-primary mb-2">
+													<span class="material-icons">save</span>
+												</button>
+                                                <button id="remove_btn_scheluder_ad" class="btn btn-danger mb-2">
+													<span class="material-icons">delete_forever</span>
+												</button>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div id="grid_ad_container" ondrop="drop_scheduler_ad(event);" ondragover="drag_scheduler_ad(event);"></div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <p style="font-size: xx-small;">
+                                                    <br>10 > 00 10 20 30 40 50 
+                                                    <br>15 > 10 25 40 55 
+                                                    <br>20 > 05 25 45 
+                                                    <br>30 > 15 45 
+                                                    <br>60 > 30
+                                                </p>
+                                                <div id="form_ad_container"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="statusBar"></div>
+    <script type="text/javascript" src="./codebase/suite.js"></script>
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script>
+        window.$ = window.jQuery = require('jquery');
+    </script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="./js/min/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./js/index.js"></script>
+    <script type="text/javascript" src="./js/programador.js"></script>
+    <script type="text/javascript" src="./js/min/dark-mode-switch.min.js"></script>
+</body>
+
+</html>
