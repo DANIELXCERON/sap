@@ -12,7 +12,6 @@ const imgPath_n_screenFail = path.join(__dirname, "img/screen-fail.png");
 
 let mainWindow = null;
 let videoWindow = null;
-let ListWindow = null;
 let GCWindow = null;
 let windowAcercaDe = null;
 
