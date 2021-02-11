@@ -2,7 +2,7 @@ const base = {
   appId: "com.sap.app",
   productName: "SAP Playout",
   icon: "src/img/icon.ico",
-  files: ["src","config"],
+  files: ["src", "config"],
   nsis: {
     oneClick: true,
     perMachine: true,
@@ -19,24 +19,25 @@ const base = {
     env: "production",
   },
   win: {
-    extraResources: [],
-    extraFiles: [
-      // {
-      //   from: "config",
-      //   to: "config",
-      // },
-    ],
+    target: [
+      {
+        target: "squirrel",
+        arch: [
+          "x64"
+        ]
+      }
+    ]
   },
   fileAssociations: [
     {
       name: "SLST",
-      description: "Archivo lista de programacion.",
+      description: "Lista SAP",
       ext: "slst",
       icon: "electron-builder/FileTypeIcons/slst.ico"
     },
     {
       name: "SGC",
-      description: "Archivo de generador de caracteres.",
+      description: "Generador de caracteres",
       ext: "sgc",
       icon: "electron-builder/FileTypeIcons/sgc.ico"
     }
