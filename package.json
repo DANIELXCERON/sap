@@ -1,7 +1,7 @@
 {
     "name": "sap-pre-alfa",
     "productName": "SAP Playout Pre-Alfa",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Playout software iniciada el 1 de junio del 2020",
     "repository": "https://github.com/DANIELXCERON/sap",
     "main": "src/main.js",
