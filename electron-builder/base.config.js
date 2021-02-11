@@ -21,26 +21,25 @@ const base = {
   win: {
     target: [
       {
-        target: "squirrel",
-        arch: [
-          "x64"
-        ]
-      }
-    ]
+        target: "nsis",
+        arch: ["x64"],
+      },
+    ],
+    publish: ["github"],
   },
   fileAssociations: [
     {
       name: "SLST",
       description: "Lista SAP",
       ext: "slst",
-      icon: "electron-builder/FileTypeIcons/slst.ico"
+      icon: "electron-builder/FileTypeIcons/slst.ico",
     },
     {
       name: "SGC",
       description: "Generador de caracteres",
       ext: "sgc",
-      icon: "electron-builder/FileTypeIcons/sgc.ico"
-    }
+      icon: "electron-builder/FileTypeIcons/sgc.ico",
+    },
   ],
 };
 

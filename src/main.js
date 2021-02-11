@@ -374,11 +374,10 @@ const GCWindowMenu = [
 ];
 
 // Herramientas para desarrolladores en entornos de desarrollo
-// if (app.isPackaged === false) {
-//si la app no esta empaquetada
-MainWindowMenu.push({
-  label: "dev",
-  submenu: [
+if (app.isPackaged === false) {
+  //si la app no esta empaquetada
+  MainWindowMenu[2].submenu.push(
+    { type: "separator" },
     {
       label: "toggle Dev Tools",
       click(item, focusedWindow) {
@@ -391,19 +390,17 @@ MainWindowMenu.push({
         videoWindow.webContents.openDevTools();
       },
     },
-  ],
-});
-
-GCWindowMenu.push({
-  label: "dev",
-  submenu: [
-    {
-      label: "toggle Dev Tools",
-      click(item, focusedWindow) {
-        focusedWindow.toggleDevTools();
+  );
+  
+  GCWindowMenu.push({
+    label: "dev",
+    submenu: [
+      {
+        label: "toggle Dev Tools",
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        },
       },
-    },
-  ],
-});
-// }else{
-// }
+    ],
+  });
+}
