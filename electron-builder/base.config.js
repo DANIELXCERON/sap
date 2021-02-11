@@ -1,9 +1,10 @@
 const base = {
   appId: "com.sap.app",
-  productName: "SAP Playout",
+  productName: "SAP",
   icon: "src/img/icon.ico",
   files: ["src", "config"],
   nsis: {
+    artifactName: '${productName}-Setup-${version}.${ext}',
     oneClick: true,
     perMachine: true,
     createDesktopShortcut: "always",

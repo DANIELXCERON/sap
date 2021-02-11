@@ -4,6 +4,16 @@ const electron = require("electron");
 const url = require("url");
 const path = require("path");
 
+const log = require('electron-log');
+const {autoUpdater} = require("electron-updater");
+
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
+
+
 /* ruta de imagenes */
 // icono de la app
 const imgPath_icon = path.join(__dirname, "img/logo-icon.png");
@@ -15,11 +25,17 @@ let videoWindow = null;
 let GCWindow = null;
 let windowAcercaDe = null;
 
+
+
 // solicitar bloqueo de instancia única
 const gotTheLock = app.requestSingleInstanceLock();
 
 // cuando la app este lista se crean las ventanas
 app.on("ready", () => {
+
+  // se buscan actualizaciones
+  autoUpdater.checkForUpdatesAndNotify();
+
   let displays = electron.screen.getAllDisplays();
   let externalDisplay = displays.find((display) => {
     return display.bounds.x !== 0 || display.bounds.y !== 0;
@@ -86,6 +102,38 @@ function openMainWindow() {
     if (process.platform == "win32" && process.argv.length >= 2) {
       mainWindow.webContents.send("open:fileType", process.argv[1]);
     }
+    /**ACTUALIZACIONES */
+    function sendStatusToWindow(text) {
+      log.info(text);
+      mainWindow.webContents.send("message", text);
+    }
+    autoUpdater.on("checking-for-update", () => {
+      sendStatusToWindow("Comprobación de actualización...");
+    });
+    autoUpdater.on("update-available", (info) => {
+      sendStatusToWindow("Actualización disponible.");
+    });
+    autoUpdater.on("update-not-available", (info) => {
+      sendStatusToWindow("Actualización no disponible.");
+    });
+    autoUpdater.on("error", (err) => {
+      sendStatusToWindow("Error en el actualizador automático." + err);
+    });
+    autoUpdater.on("download-progress", (progressObj) => {
+      let log_message = "Velocidad de Descarga: " + progressObj.bytesPerSecond;
+      log_message = log_message + " - descargado" + progressObj.percent + "%";
+      log_message =
+        log_message +
+        " (" +
+        progressObj.transferred +
+        "/" +
+        progressObj.total +
+        ")";
+      sendStatusToWindow(log_message);
+    });
+    autoUpdater.on("update-downloaded", (info) => {
+      sendStatusToWindow("Actualización descargada");
+    });
   });
   // Si cerramos la ventana principal, la segunda ventana se cierra
   mainWindow.on("closed", () => {
@@ -95,6 +143,7 @@ function openMainWindow() {
     mainWindow = null;
   });
 }
+
 
 // Ventana de video
 function openVideoWindow() {
@@ -332,6 +381,10 @@ const MainWindowMenu = [
   {
     label: "Ayuda",
     submenu: [
+      {
+        label: 'About ' + app.getName(),
+        role: 'about'
+      },
       { type: "separator" },
       {
         label: "Acerca de SAP...",
@@ -374,7 +427,7 @@ const GCWindowMenu = [
 ];
 
 // Herramientas para desarrolladores en entornos de desarrollo
-if (app.isPackaged === false) {
+// if (app.isPackaged === false) {
   //si la app no esta empaquetada
   MainWindowMenu[2].submenu.push(
     { type: "separator" },
@@ -403,4 +456,4 @@ if (app.isPackaged === false) {
       },
     ],
   });
-}
+// }

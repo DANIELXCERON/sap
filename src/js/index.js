@@ -414,6 +414,7 @@ grid_queue.events.on("CellDblClick", function (cell, e) {
 });
 
 ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
+
   /** Bara de progreso */
   let barvalue = progressBar.setBar(
     videoActualTime.TiempoTranscurrido,
@@ -840,3 +841,8 @@ function SendFileToPlay2(datosStream) {
 
   ipcRenderer.send("datos:stream2", datosStream);
 }
+
+//**ACTUALIZACIONES  */
+ipcRenderer.on('message', function(event, text) {
+  console.log(text)
+})

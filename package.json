@@ -1,6 +1,6 @@
 {
-    "name": "sap-pre-alfa",
-    "productName": "SAP Playout Pre-Alfa",
+    "name": "sap",
+    "productName": "SAP",
     "version": "0.1.1",
     "description": "Playout software iniciada el 1 de junio del 2020",
     "repository": "https://github.com/DANIELXCERON/sap",
@@ -16,6 +16,7 @@
     },
     "license": "MIT",
     "dependencies": {
+        "electron-log": "^4.3.1",
         "electron-updater": "^4.3.5",
         "ffprobe": "^1.1.0",
         "ffprobe-static": "^3.0.0",
