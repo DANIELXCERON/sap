@@ -298,6 +298,7 @@ function OpenUpdatesWindow() {
 // si hay una actualizacion abre la ventana de actualizacion
 appUpdater.on("update-available", (info) => {
   appUpdater.autoDownload = false;
+  appUpdater.autoInstallOnAppQuit = false;
   if (windowUpdates) { // si la ventana de actualizaciones esta abierta
     windowUpdates.focus();
     windowUpdates.webContents.send("update-available", info);
@@ -320,7 +321,6 @@ ipcMain.on("btnUpdates", (e, btn) => {
   }
 });
 
-/**ACTUALIZACIONES */
 appUpdater.on("checking-for-update", () => {
   if (windowUpdates) { // si la ventana de actualizaciones esta abierta
     windowUpdates.focus();
@@ -340,6 +340,7 @@ appUpdater.on("error", (err) => {
 appUpdater.on("update-downloaded", (info) => {
   windowUpdates.webContents.send("update-downloaded", info);
 });
+//////////////////////////////////////// fin Updater
 
 //////////////////////////////////////// Ipc Renderer Events
 ipcMain.on("datos:stream", (e, datosStream) => {

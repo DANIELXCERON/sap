@@ -266,9 +266,8 @@ var grid_queue = new sapsuite.Grid("grid_queue_container", {
       id: "duration",
       header: [{ text: "Duración" }],
       template: function (text, row, col) {
-        return `<span class='item_2'> <i class="fad fa-clock"></i> ${nTF.secToHHMMSS(
-          text
-        )}</span>`;
+        return `
+        <span class='item_2'> <i class="fad fa-clock"></i> ${nTF.secToHHMMSS(text)}</span>`;
       },
     },
     {
@@ -810,18 +809,15 @@ function getIndexAddGrid(grid) {
 /**envia a reproductor 1 */
 function SendFileToPlay(datosStream) {
   var index = grid_queue.data.getIndex(datosStream.id);
-
   localStorage.setItem("CurrentVideoIndex", index);
   if (index < grid_queue._currentData.length - 1) {
     localStorage.setItem("NextVideoIndex", index + 1);
   } else {
     localStorage.setItem("NextVideoIndex", 0);
   }
-
   try {
     grid_queue.addRowCss(datosStream.id, "bg_id_Current");
   } catch (error) {}
-
   ipcRenderer.send("datos:stream", datosStream);
 }
 /**envia a reproductor 2 */

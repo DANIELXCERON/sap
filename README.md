@@ -3,8 +3,20 @@
 
 ## Instalación
 
-Para instalar, use [`npm`] (https://docs.npmjs.com/):
+Requiere node y yarn
 
 ```sh
 npm install
+```
+
+## Iniciar
+
+```sh
+npm start
+```
+
+## Distribuir
+
+```sh
+yarn dist
 ```
