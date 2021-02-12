@@ -103,37 +103,48 @@ function openMainWindow() {
       mainWindow.webContents.send("open:fileType", process.argv[1]);
     }
     /**ACTUALIZACIONES */
-    function sendStatusToWindow(text) {
-      log.info(text);
-      mainWindow.webContents.send("message", text);
-    }
     autoUpdater.on("checking-for-update", () => {
-      sendStatusToWindow("Comprobación de actualización...");
+      sendInfo({
+        text: "Comprobación de actualización... ",
+        progress: {},
+      });
     });
     autoUpdater.on("update-available", (info) => {
-      sendStatusToWindow("Actualización disponible.");
+      sendInfo({
+        text: info,
+        progress: {},
+      });
     });
     autoUpdater.on("update-not-available", (info) => {
-      sendStatusToWindow("Actualización no disponible.");
+      sendInfo({
+        text: "Actualización no disponible. ",
+        progress: {},
+      });
     });
     autoUpdater.on("error", (err) => {
-      sendStatusToWindow("Error en el actualizador automático." + err);
+      sendInfo({
+        text: "Error en el actualizador automático. " + err,
+        progress: {},
+      });
     });
     autoUpdater.on("download-progress", (progressObj) => {
-      let log_message = "Velocidad de Descarga: " + progressObj.bytesPerSecond;
-      log_message = log_message + " - descargado" + progressObj.percent + "%";
-      log_message =
-        log_message +
-        " (" +
-        progressObj.transferred +
-        "/" +
-        progressObj.total +
-        ")";
-      sendStatusToWindow(log_message);
+      sendInfo({
+        text: "Descarga en progreso",
+        progress: progressObj,
+      });
     });
     autoUpdater.on("update-downloaded", (info) => {
-      sendStatusToWindow("Actualización descargada");
+      sendInfo({
+        text: "Actualización descargada",
+        progress: {
+          bytesPerSecond: 0
+        },
+      });
     });
+    function sendInfo(info) {
+      log.info(info);
+      mainWindow.webContents.send("message", info);
+    }
   });
   // Si cerramos la ventana principal, la segunda ventana se cierra
   mainWindow.on("closed", () => {

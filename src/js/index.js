@@ -842,7 +842,29 @@ function SendFileToPlay2(datosStream) {
   ipcRenderer.send("datos:stream2", datosStream);
 }
 
-//**ACTUALIZACIONES  */
-ipcRenderer.on('message', function(event, text) {
-  console.log(text)
+//**mostrar info de actualizacion  */
+ipcRenderer.on('message', function(event, info) {
+  timeDisplayAD.innerHTML = getReadableFileSizeString(info.progress.bytesPerSecond) + " " + info.text;
+  console.log("("+formatSizeUnits(info.progress.transferred)+"/"+formatSizeUnits(info.progress.total),") delta: "+formatSizeUnits(info.progress.delta),)
+  progressBarDomAD.style.width = `${info.progress.percent}%`;
 })
+
+function getReadableFileSizeString(fileSizeInBytes) {
+  var i = -1;
+  var byteUnits = [' kbps', ' Mbps', ' Gbps', ' Tbps', 'Pbps', 'Ebps', 'Zbps', 'Ybps'];
+  do {
+    fileSizeInBytes = fileSizeInBytes / 1024;
+    i++;
+  } while (fileSizeInBytes > 1024);
+  return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+};
+
+function formatSizeUnits(bytes) {
+  if (bytes >= 1073741824) { bytes = (bytes / 1073741824).toFixed(2) + " GB"; }
+  else if (bytes >= 1048576) { bytes = (bytes / 1048576).toFixed(2) + " MB"; }
+  else if (bytes >= 1024) { bytes = (bytes / 1024).toFixed(2) + " KB"; }
+  else if (bytes > 1) { bytes = bytes + " bytes"; }
+  else if (bytes == 1) { bytes = bytes + " byte"; }
+  else { bytes = "0 bytes"; }
+  return bytes;
+}

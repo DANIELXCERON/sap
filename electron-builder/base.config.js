@@ -26,7 +26,11 @@ const base = {
         arch: ["x64"],
       },
     ],
-    publish: ["github"],
+    publish: [
+      {
+        provider: "github"
+      }
+    ],
   },
   fileAssociations: [
     {
