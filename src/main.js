@@ -1,16 +1,17 @@
-const {app,BrowserWindow,Menu,MenuItem,ipcMain,dialog,Notification,} = require("electron");
+const {app,BrowserWindow,Menu,MenuItem,ipcMain,dialog,Notification,shell} = require("electron");
 const electron = require("electron");
 
 const url = require("url");
 const path = require("path");
 
 const log = require('electron-log');
-const {autoUpdater} = require("electron-updater");
 
+// https://www.electron.build/auto-update
+const {autoUpdater: appUpdater} = require("electron-updater");
 
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
+appUpdater.logger = log;
+appUpdater.logger.transports.file.level = 'info';
+log.info('Iniciando aplicación...');
 
 
 
@@ -24,6 +25,7 @@ let mainWindow = null;
 let videoWindow = null;
 let GCWindow = null;
 let windowAcercaDe = null;
+let windowUpdates = null;
 
 
 
@@ -34,7 +36,7 @@ const gotTheLock = app.requestSingleInstanceLock();
 app.on("ready", () => {
 
   // se buscan actualizaciones
-  autoUpdater.checkForUpdatesAndNotify();
+  appUpdater.checkForUpdates();
 
   let displays = electron.screen.getAllDisplays();
   let externalDisplay = displays.find((display) => {
@@ -102,50 +104,8 @@ function openMainWindow() {
     if (process.platform == "win32" && process.argv.length >= 2) {
       mainWindow.webContents.send("open:fileType", process.argv[1]);
     }
-    /**ACTUALIZACIONES */
-    autoUpdater.on("checking-for-update", () => {
-      sendInfo({
-        text: "Comprobación de actualización... ",
-        progress: {},
-      });
-    });
-    autoUpdater.on("update-available", (info) => {
-      sendInfo({
-        text: info,
-        progress: {},
-      });
-    });
-    autoUpdater.on("update-not-available", (info) => {
-      sendInfo({
-        text: "Actualización no disponible. ",
-        progress: {},
-      });
-    });
-    autoUpdater.on("error", (err) => {
-      sendInfo({
-        text: "Error en el actualizador automático. " + err,
-        progress: {},
-      });
-    });
-    autoUpdater.on("download-progress", (progressObj) => {
-      sendInfo({
-        text: "Descarga en progreso",
-        progress: progressObj,
-      });
-    });
-    autoUpdater.on("update-downloaded", (info) => {
-      sendInfo({
-        text: "Actualización descargada",
-        progress: {
-          bytesPerSecond: 0
-        },
-      });
-    });
-    function sendInfo(info) {
-      log.info(info);
-      mainWindow.webContents.send("message", info);
-    }
   });
+
   // Si cerramos la ventana principal, la segunda ventana se cierra
   mainWindow.on("closed", () => {
     app.quit();
@@ -302,6 +262,85 @@ function OpenAboutWindow() {
   });
 }
 
+
+// Ventana de Actualizacion
+function OpenUpdatesWindow() {
+  windowUpdates = new BrowserWindow({
+    show: false,
+    parent: mainWindow,
+    title: "Actualizacion",
+    modal: true,
+    width: 450,
+    height: 350,
+    resizable: true,
+    frame: true,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+    },
+  });
+  windowUpdates.setIcon(imgPath_icon);
+  windowUpdates.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "updates.html"),
+      protocol: "file",
+      slashes: true,
+    })
+  );
+  windowUpdates.once("ready-to-show", () => {
+    windowUpdates.show();
+  });
+  windowUpdates.on("closed", () => {
+    windowUpdates = null;
+  });
+}
+
+// si hay una actualizacion abre la ventana de actualizacion
+appUpdater.on("update-available", (info) => {
+  appUpdater.autoDownload = false;
+  if (windowUpdates) { // si la ventana de actualizaciones esta abierta
+    windowUpdates.focus();
+    windowUpdates.webContents.send("update-available", info);
+  } else {
+    OpenUpdatesWindow();
+  }
+});
+
+ipcMain.on("btnUpdates", (e, btn) => {
+  switch (btn) {
+    case "downloadUpdate":
+      appUpdater.downloadUpdate();
+      break;
+    case "checkForUpdates":
+      appUpdater.checkForUpdates();
+      break;
+    case "quitAndInstall":
+      appUpdater.quitAndInstall(true, true)
+      break;
+  }
+});
+
+/**ACTUALIZACIONES */
+appUpdater.on("checking-for-update", () => {
+  if (windowUpdates) { // si la ventana de actualizaciones esta abierta
+    windowUpdates.focus();
+    windowUpdates.webContents.send("checking-for-update");
+  }
+});
+appUpdater.on("update-not-available", (info) => {
+  windowUpdates.webContents.send("update-not-available");
+});
+appUpdater.on("download-progress", (progress) => {
+  windowUpdates.webContents.send("download-progress", progress);
+  log.info(progress);
+});
+appUpdater.on("error", (err) => {
+  log.info(err);
+});
+appUpdater.on("update-downloaded", (info) => {
+  windowUpdates.webContents.send("update-downloaded", info);
+});
+
 //////////////////////////////////////// Ipc Renderer Events
 ipcMain.on("datos:stream", (e, datosStream) => {
   videoWindow.webContents.send("datos:stream", datosStream);
@@ -393,12 +432,20 @@ const MainWindowMenu = [
     label: "Ayuda",
     submenu: [
       {
-        label: 'About ' + app.getName(),
-        role: 'about'
+        label: "Visitar Web",
+        click: async () => {
+          shell.openExternal("https://github.com/DANIELXCERON/sap/blob/main/README.md");
+        },
       },
       { type: "separator" },
       {
-        label: "Acerca de SAP...",
+        label: "Comprobar Actualizaciones",
+        click: async () => {
+          OpenUpdatesWindow();
+        },
+      },
+      {
+        label: "Acerca de ",
         click: async () => {
           OpenAboutWindow();
         },

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="./css/dark-mode.css" />
+  <link rel="stylesheet" type="text/css" href="./css/icon.css" />
+  <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    ::-webkit-scrollbar,
+    .invisible {
+      display: none;
+    }
+
+    /* .centrar-vertical {
+      display: flex;
+      align-items: center;
+      width: 450px;
+      height: 350px;
+    } */
+
+    #bm {
+      width: 100%;
+      height: 90px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="centrar-vertical">
+    <div class="container-fluid text-center" style="margin-top: 5px;">
+      <div id="bm"></div>
+      <script type="text/javascript" src="./js/anim-lottie.js"></script>
+
+      <div id="infoRelease"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="./js/dark-mode-listen.js"></script>
+
+  <script>
+    const { app } = require('electron').remote;
+    const remote = require('electron').remote;
+    const { ipcRenderer } = require("electron");
+
+    // Comprobar actualizaciones al iniciar la ventana
+    start()
+    function start() {
+      ipcRenderer.send("btnUpdates", "checkForUpdates");
+    }
+
+    //**mostrar info de actualizacion  */
+    // comprobación de actualización
+    ipcRenderer.on("checking-for-update", function (event, info) {
+      console.log(info)
+      document.querySelector('#infoRelease').innerHTML = `
+      checking-for-update...
+      `;
+    })
+    // Cuando hay una actualización disponible
+    ipcRenderer.on("update-available", function (event, info) {
+      console.log(info)
+      document.querySelector('#infoRelease').innerHTML = `
+      <h6>Hay una actualización disponible</h6>
+      <button id="downloadUpdate" type="button" class="btn btn-primary">Actualizar ${info.version}</button>
+      ${info.releaseNotes}
+      `;
+      document.querySelector("#downloadUpdate").addEventListener("click", function (e) {
+        ipcRenderer.send("btnUpdates", "downloadUpdate");
+      });
+    })
+    // Cuando NO hay una actualiación disponible
+    ipcRenderer.on("update-not-available", function (event, info) {
+      console.log(info)
+      document.querySelector('#infoRelease').innerHTML = `
+      <h6>No Hay Actualizaciones Disponibles</h6>
+      <button id="cerrar" type="button" class="btn btn-danger">Cerrar</button>
+      `;
+      document.querySelector("#cerrar").addEventListener("click", function (e) {
+        var window = remote.getCurrentWindow();
+        window.close();
+      });
+    })
+    // Mostrar progreso de descarga
+    ipcRenderer.on("download-progress", function (event, progress) {
+      console.log(progress)
+      document.querySelector('#infoRelease').innerHTML = `
+      <p>Descargando</p>
+      <p>${Math.round(progress.percent)}%</p>
+      <p>(${formatSizeUnits(progress.transferred)}/${formatSizeUnits(progress.total)})</p>
+      <p>delta: ${formatSizeUnits(progress.delta)}</p>
+      <p>${getReadableFileSizeString(progress.bytesPerSecond)}</p>
+      `;
+    })
+    // Cuando la descarga ha terminado
+    ipcRenderer.on("update-downloaded", function (event, info) {
+      console.log(info)
+      document.querySelector('#infoRelease').innerHTML = `
+      <h6>Actualización Descargada</h6>
+      <button id="quitAndInstall" type="button" class="btn btn-success">salir e instalar</button>
+      `;
+      document.querySelector("#quitAndInstall").addEventListener("click", function (e) {
+        ipcRenderer.send("btnUpdates", "quitAndInstall");
+      });
+    })
+
+    function getReadableFileSizeString(fileSizeInBytes) {
+      var i = -1;
+      var byteUnits = [' kbps', ' Mbps', ' Gbps', ' Tbps', 'Pbps', 'Ebps', 'Zbps', 'Ybps'];
+      do {
+        fileSizeInBytes = fileSizeInBytes / 1024;
+        i++;
+      } while (fileSizeInBytes > 1024);
+      return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
+    };
+
+    function formatSizeUnits(bytes) {
+      if (bytes >= 1073741824) { bytes = (bytes / 1073741824).toFixed(2) + " GB"; }
+      else if (bytes >= 1048576) { bytes = (bytes / 1048576).toFixed(2) + " MB"; }
+      else if (bytes >= 1024) { bytes = (bytes / 1024).toFixed(2) + " KB"; }
+      else if (bytes > 1) { bytes = bytes + " bytes"; }
+      else if (bytes == 1) { bytes = bytes + " byte"; }
+      else { bytes = "0 bytes"; }
+      return bytes;
+    }
+
+  </script>
+
+</body>
+
+</html>

@@ -5,7 +5,7 @@ const base = {
   files: ["src", "config"],
   nsis: {
     artifactName: '${productName}-Setup-${version}.${ext}',
-    oneClick: true,
+    oneClick: false,
     perMachine: true,
     createDesktopShortcut: "always",
     allowToChangeInstallationDirectory: false,
