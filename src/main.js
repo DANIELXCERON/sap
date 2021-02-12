@@ -7,7 +7,7 @@ const path = require("path");
 const log = require('electron-log');
 
 // https://www.electron.build/auto-update
-const {autoUpdater: appUpdater} = require("electron-updater");
+const {autoUpdater: appUpdater, CancellationToken} = require("electron-updater");
 
 appUpdater.logger = log;
 appUpdater.logger.transports.file.level = 'info';
@@ -268,10 +268,10 @@ function OpenUpdatesWindow() {
   windowUpdates = new BrowserWindow({
     show: false,
     parent: mainWindow,
-    title: "Actualizacion",
+    title: "Actualizador",
     modal: true,
-    width: 450,
-    height: 350,
+    width: 500,
+    height: 400,
     resizable: true,
     frame: true,
     webPreferences: {
@@ -315,6 +315,9 @@ ipcMain.on("btnUpdates", (e, btn) => {
     case "checkForUpdates":
       appUpdater.checkForUpdates();
       break;
+    case "cancel":
+      appUpdater.downloadUpdate(CancellationToken);
+      break;
     case "quitAndInstall":
       appUpdater.quitAndInstall(true, true)
       break;
@@ -328,11 +331,11 @@ appUpdater.on("checking-for-update", () => {
   }
 });
 appUpdater.on("update-not-available", (info) => {
-  windowUpdates.webContents.send("update-not-available");
+  windowUpdates.webContents.send("update-not-available", info);
 });
+
 appUpdater.on("download-progress", (progress) => {
   windowUpdates.webContents.send("download-progress", progress);
-  log.info(progress);
 });
 appUpdater.on("error", (err) => {
   log.info(err);

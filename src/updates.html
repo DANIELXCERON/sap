@@ -17,7 +17,7 @@
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      /* overflow: hidden; */
     }
 
     /* ::-webkit-scrollbar,
@@ -84,13 +84,14 @@
       var releaseDate = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
 
       document.querySelector('#infoRelease').innerHTML = `
-<h6>Hay una nueva versión disponible</h6>
+<h6>Una nueva versión de SAP esta disponible para actualizar!</h6>
+<div>Versión actual: ${app.getVersion()}</div>
+<div>Última versión: ${info.version}</div>
 <button id="downloadUpdate" type="button" class="btn btn-primary">
   <span class="material-icons">get_app</span> 
   ${formatSizeUnits(info.files[0].size)}
 </button>
-<p>La version ${info.version} lanzada el ${releaseDate}</p>
-<h6>Notas de lanzamiento</h6>
+<h6>Notas de lanzamiento ${releaseDate}</h6>
 ${info.releaseNotes}
       `;
       document.querySelector("#downloadUpdate").addEventListener("click", function (e) {
@@ -110,7 +111,8 @@ ${info.releaseNotes}
     ipcRenderer.on("update-not-available", function (event, info) {
       console.log(info)
       document.querySelector('#infoRelease').innerHTML = `
-<h6>No Hay Actualizaciones Disponibles</h6>
+<h6>Ya tienes la ultima versión</h6>
+<p>${info.version}</p>
 <button id="cerrar" type="button" class="btn btn-danger">Cerrar</button>
       `;
       document.querySelector("#cerrar").addEventListener("click", function (e) {
@@ -131,10 +133,13 @@ ${info.releaseNotes}
     ${Math.round(progress.percent)}%
   </div>
 </div>
-<p></p>
 <p>${getReadableFileSizeString(progress.bytesPerSecond)} - ${formatSizeUnits(progress.transferred)} de ${formatSizeUnits(progress.total)}</p>
 <p>Quedan ${nTF.secToHHMMSS((progress.total-progress.transferred)/progress.bytesPerSecond)}</p>
+<button id="cancel" type="button" class="btn btn-danger">Cancelar</button>
       `;
+      document.querySelector("#cancel").addEventListener("click", function (e) {
+        ipcRenderer.send("btnUpdates", "cancel");
+      });
     })
     // Cuando la descarga ha terminado
     ipcRenderer.on("update-downloaded", function (event, info) {
