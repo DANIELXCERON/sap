@@ -1,8 +1,8 @@
 {
     "name": "sap",
     "productName": "SAP",
-    "version": "0.1.0",
-    "description": "Playout software iniciada el 1 de junio del 2020",
+    "version": "0.1.2",
+    "description": "TV Playout",
     "repository": {
         "type": "git",
         "url": "https://github.com/DANIELXCERON/sap.git"
