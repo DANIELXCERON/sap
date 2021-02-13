@@ -126,7 +126,7 @@
       var time_s = progress.bytesPerSecond / (progress.total);
       document.querySelector('#infoRelease').innerHTML = `
         <h6>Descarga en progreso</h6>
-        <p>Por favor no cierre esta ventana hasta que la descargarga termine</p>
+        <p>Por favor no cierre esta ventana hasta que la descarga termine</p>
         <div class="progress">
           <div class="progress-bar" role="progressbar" style="width: ${progress.percent}%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
             ${Math.round(progress.percent)}%

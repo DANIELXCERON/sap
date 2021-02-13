@@ -40,11 +40,10 @@ var grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
         },
         { width: 150, id: "path", header: [{ text: "Ruta de la lista" }] },
     ],
+    css: "my_grid_css",
     rowHeight: 25,
     height: 377,
-    rowCss: function (row) {
-        return row.custom;
-    },
+    rowCss: function (row) { return row.custom; },
     htmlEnable: true,
     dragMode: "both",
     dragCopy: false,
@@ -126,11 +125,13 @@ remove_btn_scheluder_list.addEventListener("click", function () {
 });
 /** formulario para agregar */
 var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
+    css: "my_form_css",
     rows: [
         {
             type: "timepicker",
             labelInline: true,
             label: "Play Time",
+            labelPosition: "left",
             value: "00:00",
             name: "playTime",
         },
@@ -138,6 +139,7 @@ var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
             type: "checkbox",
             labelInline: true,
             label: "activar random",
+            labelPosition: "left",
             value: true,
             checked: true,
             name: "trueRandom",
@@ -145,6 +147,7 @@ var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
         {
             type: "combo",
             label: "Días",
+            labelPosition: "left",
             multiselection: true,
             selectAllButton: true,
             name: "playDay",
@@ -162,6 +165,7 @@ var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
         {
             type: "combo",
             label: "Meses",
+            labelPosition: "left",
             multiselection: true,
             selectAllButton: true,
             name: "playMonths",
@@ -251,7 +255,7 @@ function loadListQueue(item) {
 
             /**si el siguiente video es igual al primer item de la lista */
             let index = 0;
-            if (grid_queue.data._order[0].path === JSON.parse(localStorage.getItem("NextVideoData")).path) {
+            if (localStorage.getItem("NextVideoData") && (grid_queue.data._order[0].path === JSON.parse(localStorage.getItem("NextVideoData")).path)) {
                 index++
                 /** el index del video actual pasa a ser el anterior al siguiente*/
                 localStorage.setItem("CurrentVideoIndex", index - 1);
@@ -390,6 +394,7 @@ var grid_scheduler_event = new dhx.Grid("grid_event_container", {
             },
         }
     ],
+    css: "my_grid_css",
     rowHeight: 25,
     height: 377,
     rowCss: function (row) {
@@ -463,12 +468,14 @@ remove_btn_scheluder_event.addEventListener("click", function () {
 });
 /** formulario para agregar */
 var form_scheduler_events = new dhx.Form("form_container", {
+    css: "my_form_css",
     rows: [{
         name: "interval",
         type: "select",
         label: "Intervalo",
         labelInline: true,
         value: "No",
+        labelPosition: "left",
         options: [
             { value: "No", content: "No" },
             { value: "10", content: "Cada 10 min" },
@@ -482,6 +489,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "playTime",
         type: "timepicker",
         label: "Play Time",
+        labelPosition: "left",
         labelInline: true,
         value: "00:00",
     },
@@ -489,6 +497,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "stopTime",
         type: "timepicker",
         label: "Stop Time",
+        labelPosition: "left",
         labelInline: true,
         value: "00:00",
     },
@@ -496,6 +505,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "instant",
         type: "checkbox",
         label: "Inmediato",
+        labelPosition: "left",
         labelInline: true,
         value: false,
     },
@@ -503,6 +513,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "playDay",
         type: "combo",
         label: "Días",
+        labelPosition: "left",
         multiselection: true,
         selectAllButton: true,
         value: ["dom", "lun", "mar", "mie", "jue", "vie", "sab"],
@@ -520,6 +531,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "playDateRange",
         type: "datepicker",
         label: "date",
+        labelPosition: "left",
         labelInline: true,
         range: true,
         dateFormat: "%d/%m/%Y",
@@ -528,6 +540,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "timeStart",
         type: "timepicker",
         label: "Start Time",
+        labelPosition: "left",
         labelInline: true,
         value: "00:00",
     },
@@ -535,6 +548,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "timeEnd",
         type: "timepicker",
         label: "End Time",
+        labelPosition: "left",
         labelInline: true,
         value: "23:59",
     },
@@ -735,8 +749,7 @@ function loadListProgram(item) {
                 temp: true,
             }
             try {
-                grid_queue.removeRowCss(
-                    JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
+                grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
             } catch (error) { console.error("[P] error pasable ;)", error) }
 
             grid_queue.data.add(NextVideo, parseInt(localStorage.getItem("NextVideoIndex")));
@@ -927,6 +940,7 @@ var grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
         },
         { width: 150, id: "path", header: [{ text: "Ruta de la lista" }] },
     ],
+    css: "my_grid_css",
     rowHeight: 25,
     height: 377,
     rowCss: function (row) {
@@ -1003,10 +1017,12 @@ remove_btn_scheluder_ad.addEventListener("click", function () {
 });
 /** formulario para agregar */
 var form_ad = new dhx.Form("form_ad_container", {
+    css: "my_form_css",
     rows: [{
         type: "select",
         labelInline: true,
         label: "Intervalo",
+        labelPosition: "left",
         value: "10",
         name: "interval",
         options: [
@@ -1020,6 +1036,7 @@ var form_ad = new dhx.Form("form_ad_container", {
     {
         type: "combo",
         label: "Días",
+        labelPosition: "left",
         multiselection: true,
         selectAllButton: true,
         name: "playDay",
@@ -1038,6 +1055,7 @@ var form_ad = new dhx.Form("form_ad_container", {
         type: "datepicker",
         labelInline: true,
         label: "range date",
+        labelPosition: "left",
         range: true,
         name: "playDateRange",
         dateFormat: "%d/%m/%Y",
@@ -1130,10 +1148,6 @@ function loadListAd(item) {
                 grid_queue.data.add(NextVideo, parseInt(localStorage.getItem("NextVideoIndex")));
                 localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
             }else{
-                try {
-                    grid_ad_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData2")).id, "bg_id_Next");
-                } catch (error) { console.error("[ADD] error pasable ;)", error) }
-    
                 grid_ad_queue.data.add(NextVideo, 0);
                 controlPlayerAD();
             }

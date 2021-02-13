@@ -259,6 +259,7 @@ controlForward.addEventListener("click", (e) => {
 ////////////////////////////// LIST QUEUE ///////////////////////////////////////////////
 /** crear nueva lista en grid_queue_container */
 var grid_queue = new dhx.Grid("grid_queue_container", {
+  css: "my_grid_css",
   columns: [
     { width: 200, id: "namefile", header: [{ text: "Nombre" }] },
     {
@@ -293,9 +294,7 @@ var grid_queue = new dhx.Grid("grid_queue_container", {
   rowHeight: 25,
   // width: 500,
   height: 400,
-  rowCss: function (row) {
-    return row.custom;
-  },
+  rowCss: function (row) { return row.custom ? row.custom : "bg_id_Block" },
   htmlEnable: true,
   dragMode: "both",
   dragCopy: false,
@@ -586,6 +585,7 @@ function dragOverHandler(ev) {
 ////////////////////////////// AD QUEUE ///////////////////////////////////////////////
 /** crear nueva lista en grid_queue_ad_container */
 var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
+  css: "my_grid_css",
   columns: [
     { width: 200, id: "namefile", header: [{ text: "Nombre" }] },
     {

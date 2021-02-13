@@ -1,0 +1,27 @@
+/*GRID*/
+.my_grid_css .dhx_grid-header-cell {
+  background: #34495e;
+  border-color: #ecf0f1;
+  color: #ecf0f1;
+}
+.dhx_data-wrap,
+.dhx_grid-body {
+  background-color: #34495e;
+}
+/*FORM*/
+.my_form_css,
+.my_form_css,
+.dhx_layout-cell {
+  background: #34495e;
+}
+
+.dhx_label {
+  color: #ecf0f1;
+}
+.dhx_combobox-tag {
+  border: 1px solid #34495e;
+  background-color: #3498db;
+}
+.dhx_combobox-tag__value {
+  color: #ecf0f1;
+}
