@@ -20,40 +20,41 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-2 my-1">
-                <div class="btn-group mx-auto" role="group">
-                    <!--Control de reproduccion-->
-                    <button id="controlPlay" type="button" class="btn btn-success">
-						<i class="fas fa-play"></i></button>
-                    <button id="controlPause" type="button" class="btn btn-success">
-						<i class="fas fa-pause"></i></button>
-                    <button id="controlStop" type="button" class="btn btn-danger">
-						<i class="fas fa-stop"></i></button>
-                    <button id="controlForward" type="button" class="btn btn-success">
-						<span class="material-icons">forward_10</span></button>
-                </div>
-            </div>
-            <div class="col-10 my-auto">
-                <div class="barraDeProgreso">
-                    <div id="timeDisplay" class="my-1">
-                        00:00:00 / 00:00:00 | 00:00:00/00:00:00
+    <div class="container-fluid px-2">
+        <div class="bg_id_Current p-1 sticky-top">
+            <div class="row">
+                <div class="col-2 my-1">
+                    <div class="btn-group mx-auto" role="group">
+                        <!--Control de reproduccion-->
+                        <button id="controlPlay" type="button" class="btn btn-success">
+                            <i class="fas fa-play"></i></button>
+                        <button id="controlPause" type="button" class="btn btn-success">
+                            <i class="fas fa-pause"></i></button>
+                        <button id="controlStop" type="button" class="btn btn-danger">
+                            <i class="fas fa-stop"></i></button>
+                        <button id="controlForward" type="button" class="btn btn-success">
+                            <span class="material-icons">forward_10</span></button>
                     </div>
-                    <div class="progress my-1">
-                        <div id="progressBarDom" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                </div>
+                <div class="col-10 my-auto">
+                    <div class="barraDeProgreso">
+                        <div id="timeDisplay" class="my-1">
+                            00:00:00 / 00:00:00 | 00:00:00/00:00:00
+                        </div>
+                        <div class="progress my-1">
+                            <div id="progressBarDom" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-2 my-1">
-            </div>
-            <div class="col-10 my-auto">
-                <div class="window-title"></div>
+            <div class="row">
+                <div class="col-10 my-auto">
+                    <div class="window-title"></div>
+                </div>
             </div>
         </div>
+        
 
         <div class="row">
             <div class="ml-1 my-2" style="font-size: 1.3rem;">
@@ -309,13 +310,6 @@
                                                 <div id="grid_event_container" ondrop="drop_scheduler_event(event);" ondragover="drag_scheduler_event(event);"></div>
                                             </div>
                                             <div class="col-md-4">
-                                                <p style="font-size: xx-small;">
-                                                    <br>10 > 00 10 20 30 40 50 
-                                                    <br>15 > 10 25 40 55 
-                                                    <br>20 > 05 25 45 
-                                                    <br>30 > 15 45 
-                                                    <br>60 > 30
-                                                </p>
                                                 <div id="form_container"></div>
                                             </div>
                                         </div>
@@ -343,13 +337,6 @@
                                                 <div id="grid_ad_container" ondrop="drop_scheduler_ad(event);" ondragover="drag_scheduler_ad(event);"></div>
                                             </div>
                                             <div class="col-md-4">
-                                                <p style="font-size: xx-small;">
-                                                    <br>10 > 00 10 20 30 40 50 
-                                                    <br>15 > 10 25 40 55 
-                                                    <br>20 > 05 25 45 
-                                                    <br>30 > 15 45 
-                                                    <br>60 > 30
-                                                </p>
                                                 <div id="form_ad_container"></div>
                                             </div>
                                         </div>

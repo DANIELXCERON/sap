@@ -8,6 +8,9 @@
 .dhx_grid-body {
   background-color: #34495e;
 }
+.dhx_grid-cell .dhx_cell-content {
+  color: #ecf0f1;
+}
 /*FORM*/
 .my_form_css,
 .my_form_css,

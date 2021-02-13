@@ -396,7 +396,7 @@ var grid_scheduler_event = new dhx.Grid("grid_event_container", {
     ],
     css: "my_grid_css",
     rowHeight: 25,
-    height: 377,
+    height: 454,
     rowCss: function (row) {
         return row.custom;
     },
@@ -473,6 +473,15 @@ var form_scheduler_events = new dhx.Form("form_container", {
         name: "interval",
         type: "select",
         label: "Intervalo",
+        helpMessage: `
+    <p style="font-size: xx-small;">
+        <br>10 > 00 10 20 30 40 50 
+        <br>15 > 10 25 40 55 
+        <br>20 > 05 25 45 
+        <br>30 > 15 45 
+        <br>60 > 30
+    </p>
+      `,
         labelInline: true,
         value: "No",
         labelPosition: "left",
@@ -1022,6 +1031,15 @@ var form_ad = new dhx.Form("form_ad_container", {
         type: "select",
         labelInline: true,
         label: "Intervalo",
+        helpMessage: `
+    <p style="font-size: xx-small;">
+        <br>10 > 00 10 20 30 40 50 
+        <br>15 > 10 25 40 55 
+        <br>20 > 05 25 45 
+        <br>30 > 15 45 
+        <br>60 > 30
+    </p>
+      `,
         labelPosition: "left",
         value: "10",
         name: "interval",
