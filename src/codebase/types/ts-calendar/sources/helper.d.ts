@@ -1,1 +1,1 @@
-export declare const linkButtonClasses = ".sapLVC_button.sapLVC_button--view_link.sapLVC_button--icon.sapLVC_button--size_medium.sapLVC_button--color_secondary";
+export declare const linkButtonClasses = ".dhx_button.dhx_button--view_link.dhx_button--icon.dhx_button--size_medium.dhx_button--color_secondary";

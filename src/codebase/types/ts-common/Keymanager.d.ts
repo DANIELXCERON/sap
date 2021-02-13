@@ -11,5 +11,5 @@ declare class KeyManager implements IKeyManager {
     exist(key: string): boolean;
 }
 export declare const keyManager: KeyManager;
-export declare function addHotkeys(handlers: any, beforeCall?: () => boolean): () => void;
+export declare function addHotkeys(handlers: any, beforeCall: (e: Event, focus: any) => boolean, context?: any): () => void;
 export {};

@@ -1,6 +1,6 @@
 import { IEventSystem } from "../../ts-common/events";
 import { Sort } from "./datacollection/sort";
-import { DataCallback, DataEvents, Id, IDataCollection, IDataItem, IDataProxy, IFilterCallback, IFilterConfig, IFilterMode, ISortMode, ITreeCollection, IUpdateObject, ReduceCallBack, Statuses, IDataEventsHandlersMap, DataDriver, IDataConfig } from "./types";
+import { DataCallback, DataEvents, Id, IDataCollection, IDataItem, IDataProxy, IFilterCallback, IFilterConfig, IFilterMode, ISortMode, ITreeCollection, IUpdateObject, ReduceCallBack, Statuses, IDataEventsHandlersMap, DataDriver, IDataConfig, ISortConfig } from "./types";
 import { TreeCollection } from "./treecollection";
 export declare class DataCollection<T extends IDataItem = IDataItem> implements IDataCollection<T> {
     loadData: Promise<any>;
@@ -13,11 +13,16 @@ export declare class DataCollection<T extends IDataItem = IDataItem> implements 
         [id: string]: T;
     };
     protected _sort: Sort;
-    protected _filters: any;
+    protected _filter: any;
+    protected _sorter: ISortMode;
+    protected _meta: any;
+    protected _range: [number, number];
+    protected _loaded: boolean;
     private _changes;
     private _initOrder;
     private _loader;
     constructor(config?: any, events?: IEventSystem<any>);
+    protected _reset(): void;
     add(obj: IDataItem, index?: number): Id;
     add(obj: IDataItem[], index?: number): Id[];
     remove(id: Id | Id[]): void;
@@ -33,14 +38,14 @@ export declare class DataCollection<T extends IDataItem = IDataItem> implements 
     filter(rule?: IFilterMode | IFilterCallback, config?: IFilterConfig): void;
     find(conf: IFilterMode | DataCallback<T>): any;
     findAll(conf: IFilterMode | DataCallback<T>): any[];
-    sort(by?: ISortMode): void;
+    sort(by?: ISortMode, config?: ISortConfig): void;
     copy(id: Id | Id[], index: number, target?: IDataCollection | ITreeCollection, targetId?: Id): Id | Id[];
     move(id: Id | Id[], index: number, target?: DataCollection | TreeCollection, targetId?: Id): Id | Id[];
     forEach(cb: DataCallback<T>): void;
     load(url: IDataProxy | string, driver?: any): Promise<any>;
     parse(data: T[], driver?: any): any;
     $parse(data: any[]): void;
-    save(url: IDataProxy): void;
+    save(url: IDataProxy | string): void;
     changeId(id: Id, newId?: Id, silent?: boolean): void;
     isSaved(): boolean;
     map(cb: DataCallback<T>): any[];
@@ -48,16 +53,22 @@ export declare class DataCollection<T extends IDataItem = IDataItem> implements 
     reduce<A>(cb: ReduceCallBack<T, A>, acc: A): A;
     serialize(driver?: DataDriver): any;
     getInitialData(): T[];
+    setMeta(obj: T, key: string, value: any): void;
+    getMeta(obj: T, key: string): any;
+    getMetaMap(obj: T): any;
+    setRange(from: number, to: number): void;
+    getRawData(from: number, to: number, order?: T[], mode?: number): T[];
     protected _add(obj: IDataItem, index: number): Id;
     protected _remove(id: Id): void;
     protected _copy(id: Id, index: number, target?: IDataCollection | ITreeCollection, targetId?: Id, key?: number): Id;
     protected _move(id: Id, index: number, target?: IDataCollection | ITreeCollection, targetId?: Id, key?: number): Id;
-    protected _removeAll(): void;
     protected _addCore(obj: IDataItem, index: number): Id;
     protected _removeCore(id: Id): void;
     protected _parse_data(data: any[]): void;
     protected _approximate(data: any[], values: string[], maxNum: number): any[];
     protected _onChange(status: Statuses, id: Id, obj: any): void;
     protected _addToOrder(array: any[], obj: any, index?: number): void;
-    protected _applyFilters(): void;
+    protected _applySmart(): void;
+    protected _applySorters(by?: ISortMode): void;
+    protected _applyFilters(rule?: IFilterCallback): void;
 }

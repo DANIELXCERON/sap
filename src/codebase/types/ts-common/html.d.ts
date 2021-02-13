@@ -1,9 +1,10 @@
+import { anyFunction } from "./types";
 export declare function toNode(node: string | HTMLElement): HTMLElement;
 declare type eventPrepare = (ev: Event) => any;
 interface IHandlerHash {
     [name: string]: (...args: any[]) => boolean | void;
 }
-export declare function eventHandler(prepare: eventPrepare, hash: IHandlerHash): (ev: Event) => boolean | void;
+export declare function eventHandler(prepare: eventPrepare, hash: IHandlerHash, afterCall?: anyFunction): (ev: Event) => boolean;
 export declare function locateNode(target: Event | Element, attr?: string, dir?: string): Element;
 export declare function locate(target: Event | Element, attr?: string): string;
 export declare function locateNodeByClassName(target: Event | Element, className?: string): Element;
@@ -36,9 +37,10 @@ export interface IFitPositionConfig {
     height: number;
 }
 export declare type IAlign = "left" | "center" | "right";
+export declare type Position = "left" | "right" | "bottom" | "top";
+export declare type FlexDirection = "start" | "center" | "end" | "between" | "around" | "evenly";
 export declare function isIE(): boolean;
 export declare function getRealPosition(node: HTMLElement): IFitPosition;
-export declare type Position = "left" | "right" | "bottom" | "top";
 export declare function calculatePosition(pos: IFitPosition, config: IFitPositionConfig): {
     left: string;
     top: string;

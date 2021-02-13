@@ -33,7 +33,10 @@ export interface IFilterMode {
 }
 export interface IFilterConfig {
     add?: boolean;
-    multiple?: boolean;
+    smartFilter?: boolean;
+}
+export interface ISortConfig {
+    smartSorting?: boolean;
 }
 export interface ITreeFilterConfig extends IFilterConfig {
     type?: TreeFilterType;
@@ -59,7 +62,7 @@ export interface IDataCollection<T extends IDataItem = IDataItem> {
     dataProxy: IDataProxy;
     loadData: Promise<any>;
     saveData: Promise<any>;
-    load(url: IDataProxy): Promise<any>;
+    load(url: IDataProxy | string): Promise<any>;
     parse(data: T[]): any;
     add(obj: IDataItem, index?: number): Id;
     add(obj: IDataItem[], index?: number): Id[];
@@ -86,8 +89,9 @@ export interface IDataCollection<T extends IDataItem = IDataItem> {
     move(id: Id | Id[], index: number, target?: DataCollection | TreeCollection, targetId?: Id): Id | Id[];
     changeId(id: Id, newId?: Id, silent?: boolean): void;
     forEach(cb: DataCallback<T>): void;
-    save(url: IDataProxy): void;
+    save(url: IDataProxy | string): void;
     isSaved(): boolean;
+    getRawData(from: number, to: number, order?: T[], mode?: number): T[];
 }
 export interface IDataChangeStack {
     order: IDataChange[];
@@ -144,12 +148,12 @@ export interface ITreeCollection<T extends IDataItem = IDataItem> extends IDataC
     map(cb: DataCallback<T>, parent?: Id, direct?: boolean): any;
     filter(rule?: IFilterMode | IFilterCallback, config?: ITreeFilterConfig): void;
     restoreOrder(): void;
-    copy(id: Id, index: number, target: IDataCollection | ITreeCollection, targetId: Id): Id;
-    copy(id: Id[], index: number, target: IDataCollection | ITreeCollection, targetId: Id): Id[];
-    copy(id: Id | Id[], index: number, target: IDataCollection | ITreeCollection, targetId: Id): Id | Id[];
-    move(id: Id, index: number, target: ITreeCollection | IDataCollection, targetId: Id): Id;
-    move(id: Id[], index: number, target: ITreeCollection | IDataCollection, targetId: Id): Id[];
-    move(id: Id | Id[], index: number, target: ITreeCollection | IDataCollection, targetId: Id): Id | Id[];
+    copy(id: Id, index: number, target?: IDataCollection | ITreeCollection, targetId?: Id): Id;
+    copy(id: Id[], index: number, target?: IDataCollection | ITreeCollection, targetId?: Id): Id[];
+    copy(id: Id | Id[], index: number, target?: IDataCollection | ITreeCollection, targetId?: Id): Id | Id[];
+    move(id: Id, index: number, target?: ITreeCollection | IDataCollection, targetId?: Id): Id;
+    move(id: Id[], index: number, target?: ITreeCollection | IDataCollection, targetId?: Id): Id[];
+    move(id: Id | Id[], index: number, target?: ITreeCollection | IDataCollection, targetId?: Id): Id | Id[];
     eachChild(id: Id, cb: DataCallback<T>, direct?: boolean, checkItem?: (item: IDataItem) => boolean): void;
     eachParent(id: Id, cb: DataCallback<T>, self?: boolean): void;
     loadItems(id: Id, driver?: any): void;
@@ -162,11 +166,7 @@ export interface IDataItem {
     id?: string;
     [key: string]: any;
 }
-export declare enum DropPosition {
-    top = "top",
-    bot = "bot",
-    in = "in"
-}
+export declare type DropPosition = "top" | "bottom" | "in";
 export interface IObjWithData {
     data: TreeCollection | DataCollection;
     events: IEventSystem<DragEvents, IDragEventsHandlersMap>;
@@ -179,12 +179,15 @@ export interface ITransferData {
     x?: number;
     y?: number;
     ghost?: HTMLElement;
-    targetId?: Id;
-    id?: Id;
+    componentId?: Id;
     dragConfig?: IDragConfig;
-    target?: IObjWithData;
+    component?: IObjWithData;
     dropPosition?: DropPosition;
+    dropComponentId?: Id;
     item?: HTMLElement;
+    start?: Id;
+    source?: Id[];
+    target?: Id;
 }
 export interface IDragConfig {
     dragCopy?: boolean;
@@ -193,7 +196,7 @@ export interface IDragConfig {
 }
 export interface ICopyObject {
     id: string;
-    target: IObjWithData;
+    component: IObjWithData;
 }
 export declare enum DataEvents {
     afterAdd = "afteradd",
@@ -207,21 +210,6 @@ export declare enum DataEvents {
     beforeLazyLoad = "beforelazyload",
     afterLazyLoad = "afterlazyload"
 }
-export declare enum DragEvents {
-    beforeDrag = "beforedrag",
-    beforeDrop = "beforeDrop",
-    dragStart = "dragstart",
-    dragEnd = "dragend",
-    canDrop = "candrop",
-    cancelDrop = "canceldrop",
-    dropComplete = "dropcomplete",
-    dragOut = "dragOut",
-    dragIn = "dragIn",
-    beforeColumnDrag = "beforeColumnDrag",
-    beforeColumnDrop = "beforeColumnDrop"
-}
-export declare type DragMode = "target" | "both" | "source";
-export declare type DropBehaviour = "child" | "sibling" | "complex";
 export interface IDataEventsHandlersMap {
     [key: string]: (...args: any[]) => any;
     [DataEvents.change]: (id?: string, status?: Statuses, obj?: any) => any;
@@ -232,20 +220,39 @@ export interface IDataEventsHandlersMap {
     [DataEvents.load]: () => void;
     [DataEvents.removeAll]: () => void;
     [DataEvents.loadError]: (response: any) => boolean | void;
-    [DataEvents.beforeLazyLoad]: () => boolean;
+    [DataEvents.beforeLazyLoad]: () => boolean | void;
     [DataEvents.afterLazyLoad]: (from: number, count: number) => void;
 }
+export declare enum DragEvents {
+    beforeDrag = "beforeDrag",
+    dragStart = "dragStart",
+    dragOut = "dragOut",
+    dragIn = "dragIn",
+    canDrop = "canDrop",
+    cancelDrop = "cancelDrop",
+    beforeDrop = "beforeDrop",
+    afterDrop = "afterDrop",
+    afterDrag = "afterDrag"
+}
+export interface IDragInfo {
+    start: string;
+    source: string[];
+    target: string;
+    dropPosition?: DropPosition;
+}
+export declare type DragMode = "target" | "both" | "source";
+export declare type DropBehaviour = "child" | "sibling" | "complex";
 export interface IDragEventsHandlersMap {
     [key: string]: (...args: any[]) => any;
-    [DragEvents.beforeDrag]: (item: any, ghost: HTMLElement, id: string) => void | boolean;
-    [DragEvents.beforeDrop]: (id: string, target: IObjWithData, sourceId: string) => any;
-    [DragEvents.canDrop]: (id: string, dropPosition: DropPosition) => any;
-    [DragEvents.cancelDrop]: (id: string, ids?: string[]) => any;
-    [DragEvents.dragEnd]: (id: string, ids?: string[]) => any;
-    [DragEvents.dragIn]: (id: string, dropPosition: DropPosition, target: IObjWithData) => void | boolean;
-    [DragEvents.dragOut]: (id: string, target: IObjWithData) => any;
-    [DragEvents.dragStart]: (id: string, ids?: string[]) => any;
-    [DragEvents.dropComplete]: (id: string, position: DropPosition) => any;
+    [DragEvents.beforeDrag]: (data: IDragInfo, events: MouseEvent, ghost: HTMLElement) => void | boolean;
+    [DragEvents.dragStart]: (data: IDragInfo, events: MouseEvent) => any;
+    [DragEvents.dragOut]: (data: IDragInfo, events: MouseEvent) => any;
+    [DragEvents.dragIn]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [DragEvents.canDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [DragEvents.cancelDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [DragEvents.beforeDrop]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [DragEvents.afterDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [DragEvents.afterDrag]: (data: IDragInfo, events: MouseEvent) => any;
 }
 export declare enum DataDriver {
     json = "json",

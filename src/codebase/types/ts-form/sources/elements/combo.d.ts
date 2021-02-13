@@ -1,13 +1,18 @@
 import { Combobox } from "../../../ts-combobox";
 import { IEventSystem } from "../../../ts-common/events";
 import { Label } from "./helper/label";
-import { ICombo, BaseItemEvent, IBaseComboEventHandlersMap } from "../types";
-export declare class Combo extends Label {
-    config: ICombo;
+import { IComboConfig, ItemEvent, IComboEventHandlersMap, ICombo, IComboProps } from "../types";
+export declare class Combo extends Label implements ICombo {
+    config: IComboConfig;
     combobox: Combobox;
-    events: IEventSystem<BaseItemEvent, IBaseComboEventHandlersMap>;
-    private _changeClear;
-    constructor(container: any, config: ICombo);
+    events: IEventSystem<ItemEvent, IComboEventHandlersMap>;
+    private _isValid;
+    private _propsItem;
+    private _propsCombo;
+    private _props;
+    constructor(container: any, config: IComboConfig);
+    setProperties(propertyConfig: IComboProps): void;
+    getProperties(): IComboProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
@@ -17,12 +22,14 @@ export declare class Combo extends Label {
     clear(): void;
     getValue(): string | string[];
     setValue(value: string | string[]): void;
-    validate(): boolean;
+    validate(silent?: boolean, validateValue?: string | string[]): boolean;
     clearValidate(): void;
     getWidget(): Combobox;
-    setConfig(config: ICombo): void;
-    protected _initView(config: ICombo): void;
+    focus(): void;
+    protected _initView(config: IComboConfig): void;
+    protected _initHandlers(): void;
     protected _validationStatus(): void;
     protected _getRootView(): any;
     protected _draw(): any;
+    private _exsistData;
 }

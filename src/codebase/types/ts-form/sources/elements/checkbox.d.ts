@@ -1,25 +1,34 @@
 import { IEventSystem } from "../../../ts-common/events";
-import { View } from "../../../ts-common/view";
 import { Popup } from "../../../ts-popup";
-import { ICheckbox, BaseItemEvent, IBaseCheckboxEventHandlersMap } from "../types";
-export declare class Checkbox extends View {
-    config: ICheckbox;
-    events: IEventSystem<BaseItemEvent, IBaseCheckboxEventHandlersMap>;
+import { ICheckboxConfig, ItemEvent, ICheckboxEventHandlersMap, ICheckbox, ICheckboxProps } from "../types";
+import { Label } from "./helper/label";
+export declare class Checkbox extends Label implements ICheckbox {
+    config: ICheckboxConfig;
+    events: IEventSystem<ItemEvent, ICheckboxEventHandlersMap>;
     protected _handlers: any;
     protected _helper: Popup;
+    private _inGroup;
+    private _isValid;
+    private _propsItem;
+    private _props;
     constructor(container: HTMLElement | string, config?: {});
+    setProperties(propertyConfig: ICheckboxProps, silent?: boolean): void;
+    getProperties(): ICheckboxProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
     disable(): void;
     enable(): void;
     isDisabled(): boolean;
-    clear(): void;
+    validate(silent?: boolean): boolean;
     clearValidate(): void;
-    setValue(value: boolean): void;
-    getValue(): boolean;
-    setConfig(config: ICheckbox): void;
-    validate(): boolean;
-    protected _initView(config: ICheckbox): void;
-    private _draw;
+    setValue(checked: boolean, silent?: boolean): void;
+    getValue(): string | boolean;
+    clear(silent?: boolean): void;
+    destructor(): void;
+    focus(): void;
+    isChecked(): boolean;
+    private _initView;
+    protected _initHandlers(): void;
+    protected _draw(): any;
 }

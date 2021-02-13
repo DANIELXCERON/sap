@@ -1,6 +1,29 @@
-import { IRibbonElement } from "./types";
-import { Navbar, IState } from "../../ts-navbar";
-export declare class Ribbon extends Navbar<IRibbonElement> {
+import { Navbar, IState, IBlock, INavbar, IButton, IInput, IImageButton, ISeparator, ISpacer, ITitle, ICustomHTML, ISelectButton, INavItem } from "../../ts-navbar";
+import { TreeCollection } from "../../ts-data";
+export interface IToolbarConfig {
+    css?: string;
+    menuCss?: string;
+    data?: any[] | TreeCollection<IRibbonElement>;
+}
+export interface IRibbon extends INavbar {
+    config: IToolbarConfig;
+    getState(): IState;
+    setState(state: IState): void;
+}
+interface IRibbonButton extends IButton {
+    size?: "small" | "medium" | "auto";
+}
+interface IRibbonImageButton extends IImageButton {
+    size?: "small" | "medium" | "auto";
+}
+interface IRibbonSelectButton extends ISelectButton {
+    size?: "small" | "medium" | "auto";
+}
+interface IRibbonNavItem extends INavItem {
+    size?: "small" | "medium" | "auto";
+}
+export declare type IRibbonElement = IRibbonButton | IInput | IRibbonImageButton | ISeparator | ISpacer | ITitle | IRibbonSelectButton | ICustomHTML | IBlock | IRibbonNavItem;
+export declare class Ribbon extends Navbar<IRibbonElement> implements IRibbon {
     private _listeners;
     constructor(element?: string | HTMLElement, config?: any);
     getState(): IState;
@@ -12,3 +35,4 @@ export declare class Ribbon extends Navbar<IRibbonElement> {
     protected _setRoot(id: string): void;
     private _drawBlock;
 }
+export {};

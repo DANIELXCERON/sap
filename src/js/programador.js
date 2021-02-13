@@ -1,7 +1,7 @@
 ///////////////////////////////////////// * LIST * //////////////////////////////////////////////////
 
 /** crear nueva lista en grid_scheduler_list_container */
-var grid_scheduler_list = new sapsuite.Grid("grid_scheduler_list_container", {
+var grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
     columns: [
         { width: 100, id: "item", header: [{ text: "Nombre" }] },
         {
@@ -74,9 +74,9 @@ jsonFile_btn_scheluder_list.addEventListener("click", () => {
 
         /**si no ha sido canselado */
         if (!result.canceled) {
-            if (grid_scheduler_list._currentData && grid_scheduler_list._currentData.length > 0) {
+            if (grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0) {
                 /**si hay datos en la lista borrarlos primero */
-                grid_scheduler_list._currentData.forEach((item) => {
+                grid_scheduler_list.data._order.forEach((item) => {
                     grid_scheduler_list.data.remove(item.id);
                 });
             }
@@ -101,11 +101,11 @@ save_btn_scheluder_list.addEventListener("click", () => {
     };
 
     dialog.showSaveDialog(null, options).then((result) => {
-        var dataSchedulerList = JSON.stringify(grid_scheduler_list._currentData);
+        var dataSchedulerList = JSON.stringify(grid_scheduler_list.data._order);
         if (!result.canceled) {
             fs.writeFile(result.filePath.toString(), dataSchedulerList, function (err) {
                 if (err) throw err;
-                sapsuite.message({
+                dhx.message({
                     text: "Lista guardada con exito",
                     expire: 3000,
                     icon: "dxi dxi-close",
@@ -125,7 +125,7 @@ remove_btn_scheluder_list.addEventListener("click", function () {
     }
 });
 /** formulario para agregar */
-var form_scheduler_list = new sapsuite.Form("form_scheduler_list_container", {
+var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
     rows: [
         {
             type: "timepicker",
@@ -191,8 +191,8 @@ grid_scheduler_list.events.on("CellDblClick", function (cell, e) {
 function ejecute_scheduler_list() {
     /**programacion local */
     // si hay lista y datos en ella
-    if (grid_scheduler_list._currentData && grid_scheduler_list._currentData.length > 0) {
-        grid_scheduler_list._currentData.forEach((item) => {
+    if (grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0) {
+        grid_scheduler_list.data._order.forEach((item) => {
             // mes
             if (item.playMonths.some((months) => months === getTime.gT("mesCorto"))) {
                 // dia
@@ -209,9 +209,9 @@ function ejecute_scheduler_list() {
 
 /**cargar lista en cola */
 function loadListQueue(item) {
-    if (grid_queue._currentData && grid_queue._currentData.length > 0) {
+    if (grid_queue.data._order && grid_queue.data._order.length > 0) {
         /**si hay datos en la lista de cola, borrarlos primero */
-        grid_queue._currentData.forEach(item => {
+        grid_queue.data._order.forEach(item => {
             /**solo quitar los items que no son temporales */
             if (item.temp === false) {
                 grid_queue.data.remove(item.id);
@@ -221,7 +221,6 @@ function loadListQueue(item) {
     /**cargar los nuevos datos */
     // grid_queue.data.load(item.path);
     /** obtener datos de la lista al cargar */
-    console.log(item)
     fetch(item.path)
         .then((results) => results.json())
         .then(function (list) {
@@ -252,13 +251,13 @@ function loadListQueue(item) {
 
             /**si el siguiente video es igual al primer item de la lista */
             let index = 0;
-            if (grid_queue._currentData[0].path === JSON.parse(localStorage.getItem("NextVideoData")).path) {
+            if (grid_queue.data._order[0].path === JSON.parse(localStorage.getItem("NextVideoData")).path) {
                 index++
                 /** el index del video actual pasa a ser el anterior al siguiente*/
                 localStorage.setItem("CurrentVideoIndex", index - 1);
             }
             /** el index del video actual pasa a ser el anterior al siguiente*/
-            localStorage.setItem("CurrentVideoIndex", grid_queue._currentData.length - 1);
+            localStorage.setItem("CurrentVideoIndex", grid_queue.data._order.length - 1);
             /** el siguiente video pasa a ser el siguiente de la lista (index++ o index = 0) */
             localStorage.setItem("NextVideoIndex", index);
         });
@@ -276,7 +275,7 @@ function drop_scheduler_list(ev) {
             if (validExts(file.name, ["json", "plst"])) {
                 const formData = form_scheduler_list.getValue();
                 if (!formData.playTime) {
-                    sapsuite.message({
+                    dhx.message({
                         text: "Primero selecciona una hora de inicio",
                         expire: 5000,
                         icon: "dxi dxi-close",
@@ -309,7 +308,7 @@ function drop_scheduler_list(ev) {
                     });
 
             } else {
-                sapsuite.message({
+                dhx.message({
                     text: "Archivo no válido",
                     expire: 3000,
                     icon: "dxi dxi-close",
@@ -338,7 +337,7 @@ function drag_scheduler_list(ev) {
 
 ///////////////////////////////////////// * EVENTS * //////////////////////////////////////////////////
 /** crear nueva lista en grid_event_container  */
-var grid_scheduler_event = new sapsuite.Grid("grid_event_container", {
+var grid_scheduler_event = new dhx.Grid("grid_event_container", {
     columns: [
         {
             width: 45,
@@ -441,7 +440,7 @@ save_btn_scheluder_event.addEventListener("click", () => {
     dialog
         .showSaveDialog(null, options)
         .then((result) => {
-            var dataFilePlayList = JSON.stringify(grid_scheduler_event._currentData);
+            var dataFilePlayList = JSON.stringify(grid_scheduler_event.data._order);
             if (!result.canceled) {
                 fs.writeFile(result.filePath.toString(), dataFilePlayList, function (
                     err
@@ -463,7 +462,7 @@ remove_btn_scheluder_event.addEventListener("click", function () {
     }
 });
 /** formulario para agregar */
-var form_scheduler_events = new sapsuite.Form("form_container", {
+var form_scheduler_events = new dhx.Form("form_container", {
     rows: [{
         name: "interval",
         type: "select",
@@ -581,10 +580,10 @@ grid_scheduler_event.events.on("CellDblClick", function (cell, e) {
 function ejecute_scheduler_event() {
     /**programacion local */
     // si hay lista y datos en ella
-    if (grid_scheduler_event._currentData && grid_scheduler_event._currentData.length > 0) {
+    if (grid_scheduler_event.data._order && grid_scheduler_event.data._order.length > 0) {
 
         // recorrer cada item
-        grid_scheduler_event._currentData.forEach((item) => {
+        grid_scheduler_event.data._order.forEach((item) => {
             // rango de fecha y hora
             if (rangeDate(item.playDateRange) && rangeTime(item.playTimeRange)) {
                 // dia
@@ -609,7 +608,6 @@ function ejecute_scheduler_event() {
                     } else {
                         // hora
                         if (getTime.gT("hms24") === item.playTime) {
-                            console.log(getTime.gT("hms24"))
                             if (item.instant) {
                                 ejecuteInstant(item);
                             } else {
@@ -753,7 +751,7 @@ function drop_scheduler_event(ev) {
     const formData = form_scheduler_events.getValue();
     // validar datos del formulario
     if (!formData.playDateRange) {
-        sapsuite.message({
+        dhx.message({
             text: "Debe seleccionar un rango de fecha",
             expire: 5000,
             icon: "dxi dxi-close",
@@ -877,7 +875,7 @@ function drop_scheduler_event(ev) {
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
             } else {
-                sapsuite.message({
+                dhx.message({
                     text: "Archivo no válido",
                     expire: 3000,
                     icon: "dxi dxi-close",
@@ -903,7 +901,7 @@ function drag_scheduler_event(ev) {ev.preventDefault();}
 
 ///////////////////////////////////////// * AD * //////////////////////////////////////////////////
 /** crear nueva lista en grid_ad_container */
-var grid_scheduler_ad = new sapsuite.Grid("grid_ad_container", {
+var grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
     columns: [
         { width: 100, id: "interval", header: [{ text: "interval" }] },
         { width: 100, id: "item", header: [{ text: "Nombre" }] },
@@ -982,7 +980,7 @@ save_btn_scheluder_ad.addEventListener("click", () => {
     dialog
         .showSaveDialog(null, options)
         .then((result) => {
-            var dataFilePlayList = JSON.stringify(grid_scheduler_ad._currentData);
+            var dataFilePlayList = JSON.stringify(grid_scheduler_ad.data._order);
             if (!result.canceled) {
                 fs.writeFile(result.filePath.toString(), dataFilePlayList, function (
                     err
@@ -1004,7 +1002,7 @@ remove_btn_scheluder_ad.addEventListener("click", function () {
     }
 });
 /** formulario para agregar */
-var form_ad = new sapsuite.Form("form_ad_container", {
+var form_ad = new dhx.Form("form_ad_container", {
     rows: [{
         type: "select",
         labelInline: true,
@@ -1053,8 +1051,8 @@ grid_scheduler_ad.events.on("CellDblClick", function (cell, e) {
 function ejecute_scheduler_ad() {
     /**programacion local */
     // si hay lista y datos en ella
-    if (grid_scheduler_ad._currentData && grid_scheduler_ad._currentData.length > 0) {
-        grid_scheduler_ad._currentData.forEach((item) => {
+    if (grid_scheduler_ad.data._order && grid_scheduler_ad.data._order.length > 0) {
+        grid_scheduler_ad.data._order.forEach((item) => {
             // rango de fecha
             if (rangeDate(item.playDateRange)) {
                 // dia
@@ -1156,7 +1154,7 @@ function drop_scheduler_ad(ev) {
     ev.preventDefault();
     const formData = form_ad.getValue();
     if (!formData.playDateRange) {
-        sapsuite.message({
+        dhx.message({
             text: "Debe seleccionar un rango de fechas",
             expire: 5000,
             icon: "dxi dxi-close",
@@ -1222,7 +1220,7 @@ function drop_scheduler_ad(ev) {
                 grid_scheduler_ad.data.add(data, getIndexAddGrid(grid_scheduler_ad));
 
             } else {
-                sapsuite.message({
+                dhx.message({
                     text: "Archivo no válido",
                     expire: 3000,
                     icon: "dxi dxi-close",
@@ -1350,8 +1348,8 @@ function RelojProgramador() {
             /**indice del proximo video */
             let index = parseInt(localStorage.getItem("CurrentVideoIndex"))
             /**datos del proximo video */
-            let item = grid_queue._currentData[index+1]
-            let itemCurrent = grid_queue._currentData[index]
+            let item = grid_queue.data._order[index+1]
+            let itemCurrent = grid_queue.data._order[index]
 
             /**mensaje de error */
             console.error("video error" , item.path)
@@ -1380,15 +1378,15 @@ function RelojProgramador() {
 
 
 function validContent(content) {
-    if (content._currentData) {
-        return content._currentData
+    if (content.data._order) {
+        return content.data._order
     } else {
         return []
     }
 }
 
 function seeMessage(text) {
-    sapsuite.message({
+    dhx.message({
         text: text,
         expire: 3000,
         icon: "dxi dxi-close",
@@ -1512,18 +1510,18 @@ function loadFileSLST(path) {
         .then((results) => results.json())
         .then(function (content) {
             /**si hay datos en la lista borrarlos primero */
-            if (grid_scheduler_list._currentData && grid_scheduler_list._currentData.length > 0) {
-                grid_scheduler_list._currentData.forEach((item) => {
+            if (grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0) {
+                grid_scheduler_list.data._order.forEach((item) => {
                     grid_scheduler_list.data.remove(item.id);
                 });
             }
-            if (grid_scheduler_event._currentData && grid_scheduler_event._currentData.length > 0) {
-                grid_scheduler_event._currentData.forEach((item) => {
+            if (grid_scheduler_event.data._order && grid_scheduler_event.data._order.length > 0) {
+                grid_scheduler_event.data._order.forEach((item) => {
                     grid_scheduler_event.data.remove(item.id);
                 });
             }
-            if (grid_scheduler_ad._currentData && grid_scheduler_ad._currentData.length > 0) {
-                grid_scheduler_ad._currentData.forEach((item) => {
+            if (grid_scheduler_ad.data._order && grid_scheduler_ad.data._order.length > 0) {
+                grid_scheduler_ad.data._order.forEach((item) => {
                     grid_scheduler_ad.data.remove(item.id);
                 });
             }

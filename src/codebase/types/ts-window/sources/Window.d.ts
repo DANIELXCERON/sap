@@ -1,9 +1,9 @@
 import { EventSystem } from "../../ts-common/events";
 import { Toolbar } from "../../ts-toolbar";
-import { IWindowConfig, WindowEvents, IWindow, ISize, IPosition } from "./types";
+import { IWindowConfig, WindowEvents, IWindow, ISize, IPosition, IWindowEventHandlersMap } from "./types";
 export declare class Window implements IWindow {
     config: IWindowConfig;
-    events: EventSystem<WindowEvents>;
+    events: EventSystem<WindowEvents, IWindowEventHandlersMap>;
     header: Toolbar;
     footer: Toolbar;
     private _popup;
@@ -21,6 +21,7 @@ export declare class Window implements IWindow {
     getPosition(): IPosition;
     show(left?: number, top?: number): void;
     hide(): void;
+    private _hide;
     isVisible(): boolean;
     getWidget(): any;
     getContainer(): HTMLElement;
@@ -28,6 +29,7 @@ export declare class Window implements IWindow {
     attachHTML(html: string): void;
     getRootView(): any;
     destructor(): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     fullScreen(): void;
     protected _initHandlers(): void;
     private _initUI;

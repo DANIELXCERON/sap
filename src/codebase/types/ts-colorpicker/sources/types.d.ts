@@ -11,8 +11,11 @@ export interface IColorpicker {
     getCustomColors(): string[];
     getValue(): string;
     getCurrentMode(): ViewsMode;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     getView(): ViewsMode;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     setView(view: ViewsMode): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     focusValue(value: string): void;
 }
 export interface IColorpickerConfig {
@@ -20,7 +23,7 @@ export interface IColorpickerConfig {
     grayShades?: boolean;
     customColors?: string[];
     palette?: string[][];
-    width?: string;
+    width?: string | number;
     mode?: ViewsMode;
     pickerOnly?: boolean;
     paletteOnly?: boolean;
@@ -30,16 +33,19 @@ export declare enum ColorpickerEvents {
     apply = "apply",
     cancelClick = "cancelClick",
     modeChange = "modeChange",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     selectClick = "selectClick",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     colorChange = "colorChange",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     viewChange = "viewChange"
 }
 export interface IEventHandlersMap {
     [key: string]: (...args: any[]) => any;
     [ColorpickerEvents.change]: (color: string) => void;
-    [ColorpickerEvents.selectClick]: () => void;
     [ColorpickerEvents.cancelClick]: () => void;
     [ColorpickerEvents.modeChange]: (view: ViewsMode) => void;
+    [ColorpickerEvents.selectClick]: () => void;
     [ColorpickerEvents.colorChange]: (color: string) => void;
     [ColorpickerEvents.viewChange]: (view: ViewsMode) => void;
 }

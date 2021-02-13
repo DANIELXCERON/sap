@@ -19,6 +19,8 @@ export declare class Slider extends View implements ISlider {
     private _findNewDirection;
     private _mouseIn;
     private _focusIn;
+    private _tooltip;
+    private _activeTooltip;
     private _hotkeysDestructor;
     constructor(container: HTMLElement | string, config: ISliderConfig);
     disable(): void;
@@ -48,4 +50,5 @@ export declare class Slider extends View implements ISlider {
     private _getTicks;
     private _drawTicks;
     private _isNullable;
+    private _setTooltip;
 }

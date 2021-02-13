@@ -16,6 +16,8 @@ export declare class TreeGrid extends ProGrid implements ITreeGrid {
     adjustColumnWidth(id: string | number, adjust?: IAdjustBy): void;
     groupBy(property: string | ((item: IDataItem) => string)): void;
     ungroup(): void;
+    showRow(id: string): void;
+    hideRow(id: string): void;
     protected _createCollection(prep: (data: any[]) => any[]): void;
     protected _checkColumns(): void;
     protected _getRowIndex(rowId: any): number;

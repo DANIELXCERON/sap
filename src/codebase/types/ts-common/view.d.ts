@@ -1,10 +1,10 @@
 export interface IView {
     getRootView(): any;
     paint(): void;
-    mount(container: any, vnode: any): any;
+    mount(container: any, vnode?: any): void;
 }
 export interface IViewLike {
-    mount?(container: any, vnode?: any): any;
+    mount?(container: any, vnode?: any): void;
     getRootView(): any;
 }
 export declare class View {

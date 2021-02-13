@@ -36,6 +36,10 @@ export declare abstract class Navbar<T extends IItem = IItem> extends View {
     show(ids: string | string[]): void;
     hide(ids: string | string[]): void;
     destructor(): void;
+    select(id: string, unselect?: boolean): void;
+    unselect(id?: string): void;
+    isSelected(id: string): boolean;
+    getSelected(): string[];
     protected abstract _getFactory(): (item: T, asMenuItem?: boolean) => any;
     protected _customHandlers(): {};
     protected _close(e: MouseEvent): void;

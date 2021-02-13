@@ -1,7 +1,9 @@
 import { DataEvents, DragEvents, IDataEventsHandlersMap, IDragEventsHandlersMap, IDataItem } from "../../ts-data";
-import { GridEvents, IAdjustBy, IEventHandlersMap, IGrid } from "../../ts-grid";
+import { GridEvents, IAdjustBy, IEventHandlersMap, IGrid, IGridConfig } from "../../ts-grid";
 import { IEventSystem } from "../../ts-common/events";
-export { IGridConfig as ITreeGridConfig } from "../../ts-grid";
+export interface ITreeGridConfig extends IGridConfig {
+    rootParent?: string;
+}
 export interface ITreeGrid extends IGrid {
     events: IEventSystem<DataEvents | GridEvents | DragEvents | TreeGridEvents, IEventHandlersMap & IDataEventsHandlersMap & IDragEventsHandlersMap & ITreeEventHandlersMap>;
     scrollTo(row: string, col: string): void;
@@ -21,8 +23,8 @@ export declare enum TreeGridEvents {
 }
 export interface ITreeEventHandlersMap {
     [key: string]: (...args: any[]) => any;
-    [TreeGridEvents.beforeCollapse]: (id: string) => boolean;
+    [TreeGridEvents.beforeCollapse]: (id: string) => boolean | void;
     [TreeGridEvents.afterCollapse]: (id: string) => any;
-    [TreeGridEvents.beforeExpand]: (id: string) => boolean;
+    [TreeGridEvents.beforeExpand]: (id: string) => boolean | void;
     [TreeGridEvents.afterExpand]: (id: string) => any;
 }

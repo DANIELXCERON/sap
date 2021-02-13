@@ -67,7 +67,7 @@ ipcRenderer.on("saveGC", () => {
       fileGcContent,
       function (err) {
         if (err) throw err;
-        sapsuite.message({
+        dhx.message({
           text: "GC guardado con exito",
           expire: 3000,
           icon: "dxi dxi-close",
@@ -127,7 +127,7 @@ function saveAsGC() {
 
         fs.writeFile(result.filePath.toString(), fileGcContent, function (err) {
           if (err) throw err;
-          sapsuite.message({
+          dhx.message({
             text: "GC guardado con exito",
             expire: 3000,
             icon: "dxi dxi-close",

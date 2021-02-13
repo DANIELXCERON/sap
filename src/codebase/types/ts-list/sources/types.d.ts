@@ -1,6 +1,6 @@
 import { IDataItem, DataCollection, DataEvents, DragEvents, IDataEventsHandlersMap, IDragEventsHandlersMap, IDragConfig } from "../../ts-data";
 import { IEventSystem } from "../../ts-common/events";
-import { SelectionEvents, ISelectionEventsHandlersMap } from "../../ts-common/types";
+import { IHandlers, SelectionEvents, ISelectionEventsHandlersMap } from "../../ts-common/types";
 export declare type MultiselectionMode = "click" | "ctrlClick";
 export interface IListConfig extends IDragConfig {
     template?: (obj: IDataItem) => string;
@@ -9,11 +9,17 @@ export interface IListConfig extends IDragConfig {
     itemHeight?: number | string;
     css?: string;
     height?: number | string;
-    selection?: ISelectionConfig | false;
+    selection?: boolean;
     multiselection?: boolean | MultiselectionMode;
     keyNavigation?: boolean | (() => boolean);
     editable?: boolean;
+    hotkeys?: IHandlers;
+    eventHandlers?: {
+        [key: string]: any;
+    };
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     editing?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     multiselectionMode?: MultiselectionMode;
 }
 export declare enum ListEvents {
@@ -26,6 +32,7 @@ export declare enum ListEvents {
     afterEditEnd = "afterEditEnd",
     itemRightClick = "itemRightClick",
     itemMouseOver = "itemMouseOver",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     contextmenu = "contextmenu"
 }
 export interface IListEventHandlersMap {
@@ -43,7 +50,7 @@ export interface IListEventHandlersMap {
 }
 export interface ISelectionConfig {
     multiselection?: boolean | MultiselectionMode;
-    multiselectionMode?: MultiselectionMode;
+    disabled?: boolean;
 }
 export interface IList<T = any> {
     config: IListConfig;
@@ -56,9 +63,11 @@ export interface IList<T = any> {
     getFocusItem(): T;
     setFocus(id: string): void;
     getFocus(): string;
-    getFocusIndex(): number;
-    setFocusIndex(index: number): void;
-    edit(id: string): void;
+    showItem(id: string): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
+    disableSelection(): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
+    enableSelection(): void;
 }
 export interface ISelection<T = any> {
     config: ISelectionConfig;
@@ -66,8 +75,11 @@ export interface ISelection<T = any> {
     getId(): string | string[] | undefined;
     getItem(): T;
     contains(id?: string): boolean;
-    remove(id?: string): boolean;
-    add(id?: string, isShift?: boolean, isCtrl?: boolean): void;
+    remove(id?: string): void;
+    add(id?: string, isShift?: boolean, isCtrl?: boolean, silent?: boolean): void;
+    enable(): void;
+    disable(): void;
+    destructor(): void;
 }
 export interface IListItem {
     [key: string]: any;

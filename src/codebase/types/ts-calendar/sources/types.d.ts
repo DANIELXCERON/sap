@@ -11,10 +11,12 @@ export interface ICalendarConfig {
     dateFormat?: string;
     timeFormat?: 24 | 12;
     thisMonthOnly?: boolean;
-    width?: string;
+    width?: string | number;
     range?: boolean;
     $rangeMark?: (a: Date) => string;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     block?: (a: Date) => boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     view?: ViewMode;
 }
 export interface ICalendar {
@@ -46,6 +48,7 @@ export declare enum CalendarEvents {
     yearSelected = "yearSelected",
     cancelClick = "cancelClick",
     dateMouseOver = "dateMouseOver",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     dateHover = "dateHover"
 }
 export interface ICalendarHandlersMap {

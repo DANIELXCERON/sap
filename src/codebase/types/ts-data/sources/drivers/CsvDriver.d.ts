@@ -1,4 +1,4 @@
-import { IDataDriver, ICsvDriverConfig } from "../types";
+import { IDataDriver, ICsvDriverConfig } from "./../types";
 import { IAnyObj } from "../../../ts-common/types";
 export interface ICsvDriver extends IDataDriver {
     getFields(data: string, headers?: string[]): any;

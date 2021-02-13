@@ -1,11 +1,16 @@
 import { IAlign } from "../../ts-common/html";
-export interface IAlertProps {
+export interface IBaseProps {
     text: string;
     header?: string;
     css?: string;
-    buttons?: string[];
     buttonsAlignment?: IAlign;
     blockerCss?: string;
+}
+export interface IAlertProps extends IBaseProps {
+    buttons?: [string];
+}
+export interface IConfirmProps extends IBaseProps {
+    buttons?: [string, string?];
 }
 export declare enum RealPosition {
     left = "left",

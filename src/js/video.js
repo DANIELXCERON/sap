@@ -224,7 +224,6 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       }
       break;
     default:
-      console.log("no se definio origen");
       break;
   }
   //eliminar graficos en livestream y facebook

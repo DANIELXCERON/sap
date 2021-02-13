@@ -1,4 +1,5 @@
 export declare type Direction = "vertical" | "horizontal";
+export declare type ActiveSlider = "tooltip" | "extraTooltip" | "none";
 export interface ISlider {
     config: ISliderConfig;
     paint(): void;
@@ -14,7 +15,7 @@ export declare enum SliderEvents {
     mousedown = "mousedown",
     mouseup = "mouseup"
 }
-export declare type ILabelPosition = "right" | "left" | "top" | "bottom";
+export declare type ILabelPosition = "left" | "top";
 export interface ISliderConfig {
     min: number;
     max: number;
@@ -34,7 +35,10 @@ export interface ISliderConfig {
     labelPosition?: ILabelPosition;
     labelWidth?: string | number;
     hiddenLabel?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     help?: string;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     thumbLabel?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     labelInline?: boolean;
 }

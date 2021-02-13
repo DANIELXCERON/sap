@@ -1,6 +1,7 @@
 import { IView, IViewLike } from "../../ts-common/view";
 import { VNode } from "../../ts-common/dom";
 import { IEventSystem } from "../../ts-common/events";
+import { FlexDirection } from "../../ts-common/html";
 export interface ICellConfig {
     id?: string;
     html?: string;
@@ -12,18 +13,25 @@ export interface ICellConfig {
     on?: {
         [key: string]: any;
     };
-    width?: string | number;
-    height?: string | number;
-    gravity?: boolean;
+    width?: number | string;
+    height?: number | string;
+    minWidth?: number | string;
+    maxWidth?: number | string;
+    minHeight?: number | string;
+    maxHeight?: number | string;
     css?: string;
-    padding?: string | number;
-    align?: "start" | "center" | "end" | "between" | "around" | "evenly";
+    padding?: number | string;
+    align?: FlexDirection;
+    type?: "line" | "wide" | "space" | string;
+    gravity?: number | boolean;
     collapsable?: boolean;
     resizable?: boolean;
     collapsed?: boolean;
     tab?: string;
     tabCss?: string;
     full?: boolean;
+    init?: (c: ICell, cfg: ICellConfig | IView) => void;
+    $fixed?: boolean;
 }
 export interface ILayoutConfig extends ICellConfig {
     rows?: ICellConfig[] | ILayoutConfig[];
@@ -63,6 +71,8 @@ export interface ILayout extends ICell {
     getCell(id: string): ICell;
     getId(index: number): string;
     forEach(cb: LayoutCallback): void;
+    destructor(): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     cell(id: string): ICell;
 }
 export declare enum LayoutEvents {
@@ -110,3 +120,4 @@ export declare enum resizeMode {
     mixedperc2 = 6
 }
 export declare type LayoutCallback = (cell: ICell, index: number, array: any) => any;
+export declare type IFillSpace = boolean | "x" | "y";

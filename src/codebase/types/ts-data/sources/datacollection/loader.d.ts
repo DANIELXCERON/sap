@@ -1,5 +1,5 @@
 import { DataCollection } from "../datacollection";
-import { IDataDriver, IDataProxy } from "../types";
+import { IDataChangeStack, IDataDriver, IDataProxy } from "../types";
 export declare class Loader {
     private _parent;
     private _saving;
@@ -8,6 +8,7 @@ export declare class Loader {
     load(url: IDataProxy, driver?: IDataDriver): Promise<any>;
     parse(data: any | any[], driver?: any): any;
     save(url: IDataProxy): void;
+    updateChanges(changes: IDataChangeStack): void;
     private _setPromise;
     private _addToChain;
     private _findPrevState;

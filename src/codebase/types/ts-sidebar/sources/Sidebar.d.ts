@@ -7,10 +7,6 @@ export declare class Sidebar extends Navbar<ISidebarElement> implements ISidebar
     config: ISidebarConfig;
     private _waitRestore;
     constructor(element?: string | HTMLElement, config?: any);
-    select(id: string, unselect?: boolean): void;
-    unselect(id?: string): void;
-    isSelected(id: string): boolean;
-    getSelected(): string[];
     toggle(): void;
     collapse(): void;
     expand(): void;

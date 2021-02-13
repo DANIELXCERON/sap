@@ -1,27 +1,34 @@
 import { Label } from "./helper/label";
 import { IEventSystem } from "../../../ts-common/events";
-import { ISelect, BaseItemEvent, IBaseSelectEventHandlersMap, IOption } from "../types";
-export declare class Select extends Label {
-    config: ISelect;
-    events: IEventSystem<BaseItemEvent, IBaseSelectEventHandlersMap>;
-    constructor(container: any, config: ISelect);
+import { ISelectConfig, ItemEvent, ISelectEventHandlersMap, IOption, ISelect, ISelectProps } from "../types";
+export declare class Select extends Label implements ISelect {
+    config: ISelectConfig;
+    events: IEventSystem<ItemEvent, ISelectEventHandlersMap>;
+    private _isValid;
+    private _propsItem;
+    private _props;
+    constructor(container: any, config: ISelectConfig);
+    setProperties(propertyConfig: ISelectProps): void;
+    getProperties(): ISelectProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
     disable(): void;
     enable(): void;
     isDisabled(): boolean;
-    validate(): boolean;
+    validate(silent?: boolean): boolean;
     clearValidate(): void;
     clear(): void;
-    setValue(value: string): void;
-    getValue(): string;
+    setValue(value: string | number): void;
+    focus(): void;
+    getValue(): string | number;
     setOptions(options: IOption[]): void;
     getOptions(): IOption[];
-    setConfig(config: ISelect): void;
-    protected _initView(config: ISelect): void;
+    protected _initView(config: ISelectConfig): void;
+    protected _initHandlers(): void;
     protected _getHandlers(): {
         onchange: (e: Event) => void;
     };
     protected _draw(): any;
+    private _checkOptions;
 }

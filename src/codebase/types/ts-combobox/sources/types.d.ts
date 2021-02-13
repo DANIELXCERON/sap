@@ -1,9 +1,9 @@
 import { DataCollection } from "../../ts-data";
-export declare type ILabelPosition = "right" | "left" | "top" | "bottom";
+export declare type ILabelPosition = "left" | "top";
 export interface IComboboxConfig {
     data?: DataCollection<any> | any[];
-    readonly?: boolean;
     disabled?: boolean;
+    readOnly?: boolean;
     template?: (item: any) => string;
     filter?: (item: any, input: string) => boolean;
     multiselection?: boolean;
@@ -20,10 +20,17 @@ export interface IComboboxConfig {
     helpMessage?: string;
     hiddenLabel?: boolean;
     css?: string;
+    value?: string | string[];
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     cellHeight?: number;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     help?: string;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     showItemsCount?: boolean | ((count: number) => string);
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     labelInline?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
+    readonly?: boolean;
 }
 export interface IComboFilterConfig {
     data?: DataCollection<any> | any[];
@@ -39,6 +46,7 @@ export declare enum ComboboxEvents {
     input = "input",
     beforeClose = "beforeClose",
     afterClose = "afterClose",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     close = "close"
 }
 export interface IComboboxEventHandlersMap {
@@ -46,7 +54,7 @@ export interface IComboboxEventHandlersMap {
     [ComboboxEvents.change]: (ids: string | string[]) => any;
     [ComboboxEvents.open]: () => any;
     [ComboboxEvents.input]: (value: any) => any;
-    [ComboboxEvents.beforeClose]: () => boolean;
+    [ComboboxEvents.beforeClose]: () => boolean | void;
     [ComboboxEvents.afterClose]: () => any;
     [ComboboxEvents.close]: () => any;
 }
@@ -60,6 +68,7 @@ export interface ICombobox {
     focus(): void;
     getValue(asArray?: boolean): string[] | string;
     setValue(ids: string[] | string): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     setState(state: State): void;
 }
 export declare enum ComboState {
@@ -67,4 +76,5 @@ export declare enum ComboState {
     error = 1,
     success = 2
 }
+/** @deprecated See a documentation: https://docs.dhtmlx.com/ */
 export declare type State = "success" | "error" | "default";

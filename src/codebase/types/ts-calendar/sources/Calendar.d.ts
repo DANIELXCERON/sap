@@ -13,7 +13,8 @@ export declare class Calendar extends View implements ICalendar {
     private _linkedCalendar;
     constructor(container: HTMLElement | string, config?: ICalendarConfig);
     setValue(value: Date | Date[] | string | string[]): boolean;
-    getValue<T extends boolean = false>(asDateObject?: T): any;
+    getValue<T extends boolean = false>(asDateObject?: T): Date | string;
+    getValue<T extends boolean = true>(asDateObject?: T): Date[] | string[];
     getCurrentMode(): ViewMode;
     showDate(date?: Date, mode?: ViewMode): void;
     destructor(): void;

@@ -25,10 +25,10 @@ export declare class TreeCollection<T extends IDataItem = IDataItem> extends Dat
     sort(by?: ISortMode): void;
     filter(rule?: IFilterMode | IFilterCallback, config?: ITreeFilterConfig): void;
     restoreOrder(): void;
-    copy(id: Id, index: number, target: IDataCollection | ITreeCollection, targetId: Id): Id;
-    copy(id: Id[], index: number, target: IDataCollection | ITreeCollection, targetId: Id): Id[];
-    move(id: Id, index: number, target: ITreeCollection | IDataCollection, targetId: Id): Id;
-    move(id: Id[], index: number, target: ITreeCollection | IDataCollection, targetId: Id): Id[];
+    copy(id: Id, index: number, target?: IDataCollection | ITreeCollection, targetId?: Id): Id;
+    copy(id: Id[], index: number, target?: IDataCollection | ITreeCollection, targetId?: Id): Id[];
+    move(id: Id, index: number, target?: ITreeCollection | IDataCollection, targetId?: Id): Id;
+    move(id: Id[], index: number, target?: ITreeCollection | IDataCollection, targetId?: Id): Id[];
     forEach(cb: DataCallback<any>, parent?: Id, level?: number): void;
     eachChild(id: Id, cb: DataCallback<T>, direct?: boolean, checkItem?: (item: IDataItem) => boolean): void;
     getNearId(id: Id): Id;
@@ -40,10 +40,12 @@ export declare class TreeCollection<T extends IDataItem = IDataItem> extends Dat
     serialize(driver?: DataDriver, checkItem?: (item: any) => any): any;
     getId(index: number, parent?: string): string;
     map(cb: DataCallback<T>, parent?: Id, direct?: boolean): any[];
+    getRawData(from: number, to: number, order?: T[], mode?: number, parent?: string): T[];
+    protected flatten(input: T[]): T[];
     protected _add(obj: IDataItem, index?: number, parent?: Id, key?: number): Id;
     protected _copy(id: Id, index: number, target?: IDataCollection | ITreeCollection, targetId?: Id, key?: number): Id;
     protected _move(id: Id, index: number, target?: ITreeCollection | IDataCollection, targetId?: Id, key?: number): Id;
-    protected _removeAll(id?: Id): void;
+    protected _reset(id?: Id): void;
     protected _removeCore(id: any): void;
     protected _addToOrder(_order: any, obj: any, index: number): void;
     protected _parse_data(data: any, parent?: string): void;

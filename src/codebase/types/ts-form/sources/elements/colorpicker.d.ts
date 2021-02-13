@@ -1,32 +1,41 @@
 import { Colorpicker } from "../../../ts-colorpicker";
 import { IEventSystem } from "../../../ts-common/events";
 import { Label } from "./helper/label";
-import { IColorpickerInput, BaseItemEvent, IBaseColorpickerEventHandlersMap } from "../types";
-export declare class ColorpickerInput extends Label {
-    config: IColorpickerInput;
+import { IColorPickerConfig, ItemEvent, IColorPickerEventHandlersMap, IColorPicker, IColorpickerProps } from "../types";
+export declare class ColorPicker extends Label implements IColorPicker {
+    config: IColorPickerConfig;
     colorpicker: Colorpicker;
-    events: IEventSystem<BaseItemEvent, IBaseColorpickerEventHandlersMap>;
+    events: IEventSystem<ItemEvent, IColorPickerEventHandlersMap>;
     private _popup;
-    constructor(container: any, config: IColorpickerInput);
+    private _isValid;
+    private _propsItem;
+    private _propsColorpicker;
+    private _props;
+    constructor(container: any, config: IColorPickerConfig);
+    setProperties(propertyConfig: IColorpickerProps): void;
+    getProperties(): IColorpickerProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
     disable(): void;
     enable(): void;
     isDisabled(): boolean;
-    validate(): boolean;
+    validate(silent?: boolean, validateValue?: string): boolean;
     clearValidate(): void;
     setValue(value: string): void;
     getValue(): string;
     clear(): void;
     getWidget(): Colorpicker;
-    setConfig(config: IColorpickerInput): void;
-    protected _initView(config: IColorpickerInput): void;
+    focus(): void;
+    protected _initView(config: IColorPickerConfig): void;
+    protected _initHandlers(): void;
     protected _getHandlers(): {
+        onblur: () => void;
         onfocus: () => void;
+        oninput: (e: Event) => void;
         onchange: (e: Event) => void;
         onkeyup: (e: KeyboardEvent) => void;
+        onkeydown: (e: KeyboardEvent) => void;
     };
-    protected _inputValidate(value: string): string;
     protected _draw(): any;
 }

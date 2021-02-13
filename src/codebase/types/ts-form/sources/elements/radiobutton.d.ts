@@ -1,20 +1,27 @@
 import { IEventSystem } from "../../../ts-common/events";
 import { View } from "../../../ts-common/view";
-import { Popup } from "../../../ts-popup";
-import { IRadioButton } from "../types";
+import { IRadioButtonConfig } from "../types";
 export declare enum RadioButtonEvents {
     change = "change"
 }
 export declare class RadioButton extends View {
-    config: IRadioButton;
+    config: IRadioButtonConfig;
     events: IEventSystem<RadioButtonEvents>;
     protected _handlers: any;
-    protected _helper: Popup;
+    private _propsItem;
+    private _props;
     constructor(container: HTMLElement | string, config?: {});
-    clearValidate(): void;
-    clear(): void;
+    destructor(): void;
+    setProperties(propertyConfig: any): void;
+    getProperties(): {};
     getValue(): string | void;
     setValue(checked: boolean): void;
-    destructor(): void;
+    focus(): void;
+    disable(): void;
+    enable(): void;
+    isDisabled(): boolean;
+    clear(): void;
+    validate(): boolean;
+    clearValidate(): void;
     private _draw;
 }

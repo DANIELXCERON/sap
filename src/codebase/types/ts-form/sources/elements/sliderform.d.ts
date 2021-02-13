@@ -1,12 +1,17 @@
 import { Slider } from "../../../ts-slider";
 import { IEventSystem } from "../../../ts-common/events";
 import { Label } from "./helper/label";
-import { ISlider, BaseItemEvent, IBaseSliderEventHandlersMap } from "../types";
-export declare class SliderForm extends Label {
-    config: ISlider;
+import { ISliderFormConfig, ItemEvent, ISliderFormEventHandlersMap, ISliderForm, ISliderProps } from "../types";
+export declare class SliderForm extends Label implements ISliderForm {
+    config: ISliderFormConfig;
     slider: Slider;
-    events: IEventSystem<BaseItemEvent, IBaseSliderEventHandlersMap>;
-    constructor(container: any, config: ISlider);
+    events: IEventSystem<ItemEvent, ISliderFormEventHandlersMap>;
+    private _propsItem;
+    private _propsCombo;
+    private _props;
+    constructor(container: any, config: ISliderFormConfig);
+    setProperties(propertyConfig: ISliderProps): void;
+    getProperties(): ISliderProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
@@ -15,11 +20,10 @@ export declare class SliderForm extends Label {
     isDisabled(): boolean;
     clear(): void;
     getValue(): number[];
-    setValue(value: string | number | number[]): void;
-    validate(): boolean;
+    setValue(value: number | number[]): void;
     getWidget(): Slider;
-    setConfig(config: ISlider): void;
-    protected _initView(config: ISlider): void;
+    protected _initView(config: ISliderFormConfig): void;
+    protected _initHandlers(): void;
     protected _getRootView(): any;
     protected _drawSlider(): any;
 }

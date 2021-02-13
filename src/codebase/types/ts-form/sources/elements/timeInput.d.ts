@@ -1,31 +1,40 @@
-import { Timepicker } from "../../../ts-timepicker";
+import { ITimeObject, Timepicker } from "../../../ts-timepicker";
 import { Label } from "./helper/label";
 import { IEventSystem } from "../../../ts-common/events";
-import { ITimeInput, IBaseTimepickerEventHandlersMap, BaseItemEvent } from "../types";
-export declare class TimeInput extends Label {
-    config: ITimeInput;
+import { ITimePickerConfig, ITimePickerEventHandlersMap, ItemEvent, ITimePicker, ITimePickerProps } from "../types";
+export declare class TimePicker extends Label implements ITimePicker {
+    config: ITimePickerConfig;
     timepicker: Timepicker;
-    events: IEventSystem<BaseItemEvent, IBaseTimepickerEventHandlersMap>;
+    events: IEventSystem<ItemEvent, ITimePickerEventHandlersMap>;
     private _popup;
-    constructor(container: any, config: ITimeInput);
+    private _isValid;
+    private _propsItem;
+    private _propsTimepicker;
+    private _props;
+    constructor(container: any, config: ITimePickerConfig);
+    setProperties(propertyConfig: ITimePickerProps): void;
+    getProperties(): ITimePickerProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
     disable(): void;
     enable(): void;
     isDisabled(): boolean;
-    validate(): boolean;
+    validate(silent?: boolean, validateValue?: string | ITimeObject): boolean;
     clearValidate(): void;
-    setValue(value: string | Date): void;
-    getValue(): string;
+    setValue(value: Date | number | string | any[] | ITimeObject): void;
+    getValue(asOBject?: boolean): ITimeObject | string | any;
+    focus(): void;
     clear(): void;
     getWidget(): Timepicker;
-    setConfig(config: ITimeInput): void;
-    protected _initView(config: ITimeInput): void;
+    protected _initView(config: ITimePickerConfig): void;
+    protected _initHandlers(): void;
     protected _getHandlers(): {
         onfocus: () => void;
+        oninput: (e: Event) => void;
         onkeyup: (e: KeyboardEvent) => void;
+        onkeydown: (e: KeyboardEvent) => void;
     };
-    protected _inputValidate(value: string): string;
     protected _draw(): any;
+    private _clear;
 }

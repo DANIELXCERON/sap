@@ -1,7 +1,7 @@
-import { DataCollection, DataEvents, DragEvents, IDataEventsHandlersMap, IDragEventsHandlersMap, IDragConfig } from "../../ts-data";
+import { DataCollection, DataEvents, DragEvents, IDataEventsHandlersMap, IDragEventsHandlersMap } from "../../ts-data";
 import { IEventSystem } from "../../ts-common/events";
-import { ISelection, MultiselectionMode } from "../../ts-list";
-export interface IDataViewConfig extends IDragConfig {
+import { ISelection, MultiselectionMode, IListConfig, IListEventHandlersMap, ListEvents } from "../../ts-list";
+export interface IDataViewConfig extends IListConfig {
     data?: DataCollection<any> | any[];
     itemsInRow?: number;
     height?: number | string;
@@ -10,16 +10,21 @@ export interface IDataViewConfig extends IDragConfig {
     template?: (item: any) => string;
     keyNavigation?: boolean | (() => boolean);
     css?: string;
-    selection?: false;
+    selection?: boolean;
     multiselection?: boolean | MultiselectionMode;
     editable?: boolean;
+    eventHandlers?: {
+        [key: string]: any;
+    };
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     editing?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     multiselectionMode?: MultiselectionMode;
 }
 export interface IDataView<T = any> {
     config: IDataViewConfig;
     data: DataCollection<T>;
-    events: IEventSystem<DataEvents | DragEvents | DataViewEvents, IDataEventsHandlersMap & IDragEventsHandlersMap & IDataViewEventHandlersMap>;
+    events: IEventSystem<DataEvents | DragEvents | ListEvents, IDataEventsHandlersMap & IDragEventsHandlersMap & IListEventHandlersMap>;
     selection: ISelection;
     paint(): void;
     destructor(): void;
@@ -27,11 +32,10 @@ export interface IDataView<T = any> {
     getFocusItem(): T;
     setFocus(id: string): void;
     getFocus(): string;
-    getFocusIndex(): number;
-    setFocusIndex(index: number): void;
-    edit(id: string): void;
-    disableSelection(): any;
-    enableSelection(): any;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
+    disableSelection(): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
+    enableSelection(): void;
 }
 export declare enum DataViewEvents {
     click = "click",
@@ -43,20 +47,8 @@ export declare enum DataViewEvents {
     afterEditEnd = "afterEditEnd",
     itemRightClick = "itemRightClick",
     itemMouseOver = "itemMouseOver",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     contextmenu = "contextmenu"
-}
-export interface IDataViewEventHandlersMap {
-    [key: string]: (...args: any[]) => any;
-    [DataViewEvents.click]: (id: string, e: Event) => any;
-    [DataViewEvents.itemMouseOver]: (id: string, e: Event) => any;
-    [DataViewEvents.doubleClick]: (id: string, e: Event) => any;
-    [DataViewEvents.itemRightClick]: (id: string, e: MouseEvent) => any;
-    [DataViewEvents.focusChange]: (focusIndex: number, id: string) => any;
-    [DataViewEvents.beforeEditStart]: (id: string) => void | boolean;
-    [DataViewEvents.afterEditStart]: (id: string) => void;
-    [DataViewEvents.beforeEditEnd]: (value: any, id: string) => void | boolean;
-    [DataViewEvents.afterEditEnd]: (value: any, id: string) => void;
-    [DataViewEvents.contextmenu]: (id: string, e: MouseEvent) => any;
 }
 export interface IDataViewItem {
     [key: string]: any;

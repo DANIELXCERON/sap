@@ -13,18 +13,21 @@ export declare class Combobox extends View implements ICombobox {
     protected _helper: Popup;
     private _keyListener;
     private _layout;
+    private _isPopupConfiqureted;
     private _state;
     private _handlers;
     constructor(element: HTMLElement | string, config: IComboboxConfig);
-    focus(): boolean;
+    focus(): void | boolean;
     enable(): void;
     disable(): void;
     isDisabled(): boolean;
-    clear(): boolean;
+    clear(): void | boolean;
     getValue<T extends boolean = false>(asArray?: T): T extends true ? string[] : string;
-    setValue(ids: string[] | string): boolean;
+    setValue(ids: string[] | string): void | boolean;
     destructor(): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     setState(state: State): void;
+    private _setValue;
     private _createLayout;
     private _initHandlers;
     private _initEvents;
@@ -33,9 +36,11 @@ export declare class Combobox extends View implements ICombobox {
     private _hideOptions;
     private _filter;
     private _findBest;
+    private _exsistId;
     private _draw;
     private _drawSelectedItems;
     private _drawImageOrIcon;
     private _getItemText;
     private _updateSelectedItem;
+    private _changePopupPosition;
 }

@@ -1,32 +1,41 @@
 import { Calendar } from "../../../ts-calendar";
 import { IEventSystem } from "../../../ts-common/events";
 import { Label } from "./helper/label";
-import { IDatepickerInput, IBaseDatepickerEventHandlersMap, BaseItemEvent } from "../types";
-export declare class DateInput extends Label {
-    config: IDatepickerInput;
+import { IDatePickerConfig, IDatePickerEventHandlersMap, ItemEvent, IDatePicker, IDatePickerProps } from "../types";
+export declare class DatePicker extends Label implements IDatePicker {
+    config: IDatePickerConfig;
     calendar: Calendar;
-    events: IEventSystem<BaseItemEvent, IBaseDatepickerEventHandlersMap>;
+    events: IEventSystem<ItemEvent, IDatePickerEventHandlersMap>;
     private _popup;
-    constructor(container: any, config: IDatepickerInput);
+    private _isValid;
+    private _propsItem;
+    private _propsCalendar;
+    private _props;
+    constructor(container: any, config: IDatePickerConfig);
+    setProperties(propertyConfig: IDatePickerProps): void;
+    getProperties(): IDatePickerProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
     disable(): void;
     enable(): void;
     isDisabled(): boolean;
-    validate(): boolean;
+    validate(silent?: boolean, validateValue?: string | Date): boolean;
     clearValidate(): void;
     setValue(value: string | Date): void;
-    getValue<T extends boolean = false>(asDateObject?: T): string;
+    getValue<T extends boolean = false>(asDateObject?: T): string | Date;
+    focus(): void;
     clear(): void;
     getWidget(): Calendar;
-    setConfig(config: IDatepickerInput): void;
-    protected _initView(config: IDatepickerInput): void;
+    protected _initView(config: IDatePickerConfig): void;
+    protected _initHandlers(): void;
     protected _getHandlers(): {
+        onblur: () => void;
         onfocus: () => void;
+        oninput: (e: Event) => void;
         onchange: (e: Event) => void;
         onkeyup: (e: KeyboardEvent) => void;
+        onkeydown: (e: KeyboardEvent) => void;
     };
-    protected _inputValidate(value: string): string;
     protected _draw(): any;
 }

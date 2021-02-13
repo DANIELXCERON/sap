@@ -1,8 +1,9 @@
 import { IEventSystem } from "../../ts-common/events";
-import { IDataCollection, IDragConfig, ICsvDriverConfig, IDataItem } from "../../ts-data";
+import { IDataCollection, IDragConfig, ICsvDriverConfig, IDataItem, IDragInfo } from "../../ts-data";
 import { IAlign } from "../../ts-common/html";
 import { Exporter } from "./Exporter";
-import { ICombobox, IComboFilterConfig } from "../../ts-combobox";
+import { IComboFilterConfig } from "../../ts-combobox";
+import { anyFunction } from "../../ts-common/types";
 export interface IGridConfig extends IDragConfig {
     columns?: ICol[];
     spans?: ISpan[];
@@ -15,7 +16,7 @@ export interface IGridConfig extends IDragConfig {
     height?: number;
     sortable?: boolean;
     rowCss?: (row: IRow) => string;
-    splitAt?: number;
+    leftSplit?: number;
     selection?: ISelectionType;
     multiselection?: boolean;
     dragItem?: IDragType;
@@ -28,6 +29,10 @@ export interface IGridConfig extends IDragConfig {
     adjust?: IAdjustBy;
     autoWidth?: boolean;
     tooltip?: boolean;
+    eventHandlers?: {
+        [key: string]: any;
+    };
+    rootParent?: string;
     $headerLevel?: number;
     $footerLevel?: number;
     $totalWidth?: number;
@@ -43,10 +48,16 @@ export interface IGridConfig extends IDragConfig {
     };
     $resizing?: string | number;
     groupTitleTemplate?: (groupName: string, groupItems: IDataItem[]) => string;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     editing?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     headerSort?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     columnsAutoWidth?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     fitToContainer?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
+    splitAt?: number;
 }
 export interface IScrollState {
     left: number;
@@ -67,6 +78,8 @@ export interface IRendererConfig extends IGridConfig {
     filterLocation?: string;
     htmlEnable?: boolean;
     content?: IContentList;
+    gridId?: string | number;
+    _events?: IEventSystem<GridSystemEvents>;
 }
 export interface IGrid {
     data: IDataCollection;
@@ -86,6 +99,9 @@ export interface IGrid {
     showColumn(colId: string | number): void;
     hideColumn(colId: string | number): void;
     isColumnHidden(colId: string | number): boolean;
+    showRow(rowId: string | number): void;
+    hideRow(rowId: string | number): void;
+    isRowHidden(rowId: string | number): boolean;
     scroll(x?: number, y?: number): void;
     scrollTo(row: string, col: string): void;
     getScrollState(): ICoords;
@@ -98,14 +114,14 @@ export interface IGrid {
     editCell(rowId: string | number, colId: string | number, editorType?: EditorType): void;
     editEnd(withoutSave?: boolean): void;
     getSortingState(): any;
+    getHeaderFilter(colId: string | number): any;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     edit(rowId: string | number, colId: string | number, editorType?: EditorType): void;
 }
 export declare type EditorType = "input" | "select" | "datePicker" | "checkbox" | "combobox";
-export interface ISelection {
-    setCell(row?: any, col?: any, ctrlUp?: boolean, shiftUp?: boolean): void;
-    getCell(): ICell;
-    getCells(): ICell[];
-    toHTML(): any | any[];
+export interface IKeyManager {
+    addHotKey(key: string, handler: anyFunction): void;
+    isFocus(): boolean;
 }
 export interface ICellRect extends ICoords, ISizes {
 }
@@ -133,13 +149,19 @@ export interface ICol {
     autoWidth?: boolean;
     align?: IAlign;
     tooltip?: boolean;
+    gravity?: number;
     $cellCss?: {
         [key: string]: string;
     };
     $uniqueData?: any[];
+    $width?: number;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     editing?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     headerSort?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     columnsAutoWidth?: boolean;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     fitToContainer?: boolean;
 }
 export declare type fixedRowContent = "inputFilter" | "selectFilter" | "comboFilter";
@@ -226,6 +248,33 @@ export declare enum GridEvents {
     afterEditEnd = "afterEditEnd",
     beforeKeyDown = "beforeKeyDown",
     afterKeyDown = "afterKeyDown",
+    beforeColumnHide = "beforeColumnHide",
+    afterColumnHide = "afterColumnHide",
+    beforeColumnShow = "beforeColumnShow",
+    afterColumnShow = "afterColumnShow",
+    beforeRowHide = "beforeRowHide",
+    afterRowHide = "afterRowHide",
+    beforeRowShow = "beforeRowShow",
+    afterRowShow = "afterRowShow",
+    beforeRowDrag = "beforeRowDrag",
+    dragRowStart = "dragRowStart",
+    dragRowOut = "dragRowOut",
+    dragRowIn = "dragRowIn",
+    canRowDrop = "canRowDrop",
+    cancelRowDrop = "cancelRowDrop",
+    beforeRowDrop = "beforeRowDrop",
+    afterRowDrop = "afterRowDrop",
+    afterRowDrag = "afterRowDrag",
+    beforeColumnDrag = "beforeColumnDrag",
+    dragColumnStart = "dragColumnStart",
+    dragColumnOut = "dragColumnOut",
+    dragColumnIn = "dragColumnIn",
+    canColumnDrop = "canColumnDrop",
+    cancelColumnDrop = "cancelColumnDrop",
+    beforeColumnDrop = "beforeColumnDrop",
+    afterColumnDrop = "afterColumnDrop",
+    afterColumnDrag = "afterColumnDrag",
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     headerInput = "headerInput"
 }
 export interface IEventHandlersMap {
@@ -240,36 +289,73 @@ export interface IEventHandlersMap {
     [GridEvents.cellClick]: (row: IRow, col: ICol, e: MouseEvent) => void;
     [GridEvents.cellRightClick]: (row: IRow, col: ICol, e: MouseEvent) => void;
     [GridEvents.cellMouseOver]: (row: IRow, col: ICol, e: MouseEvent) => void;
-    [GridEvents.cellMouseDown]: (row: IRow, col: ICol, e: MouseEvent) => void;
+    [GridEvents.cellMouseDown]: (row: IRow, col: ICol, e: MouseEvent & TouchEvent) => void;
     [GridEvents.cellDblClick]: (row: IRow, col: ICol, e: MouseEvent) => void;
     [GridEvents.headerCellClick]: (col: ICol, e: MouseEvent) => void;
     [GridEvents.footerCellClick]: (col: ICol, e: MouseEvent) => void;
     [GridEvents.headerCellMouseOver]: (col: ICol, e: MouseEvent) => void;
     [GridEvents.footerCellMouseOver]: (col: ICol, e: MouseEvent) => void;
-    [GridEvents.headerCellMouseDown]: (col: ICol, e: MouseEvent) => void;
-    [GridEvents.footerCellMouseDown]: (col: ICol, e: MouseEvent) => void;
+    [GridEvents.headerCellMouseDown]: (col: ICol, e: MouseEvent & TouchEvent) => void;
+    [GridEvents.footerCellMouseDown]: (col: ICol, e: MouseEvent & TouchEvent) => void;
     [GridEvents.headerCellDblClick]: (col: ICol, e: MouseEvent) => void;
     [GridEvents.footerCellDblClick]: (col: ICol, e: MouseEvent) => void;
     [GridEvents.headerCellRightClick]: (col: ICol, e: MouseEvent) => void;
     [GridEvents.footerCellRightClick]: (col: ICol, e: MouseEvent) => void;
-    [GridEvents.beforeEditStart]: (row: IRow, col: ICol, editorType: EditorType) => boolean;
+    [GridEvents.beforeEditStart]: (row: IRow, col: ICol, editorType: EditorType) => boolean | void;
     [GridEvents.afterEditStart]: (row: IRow, col: ICol, editorType: EditorType) => void;
-    [GridEvents.beforeEditEnd]: (value: any, row: IRow, col: ICol) => boolean;
+    [GridEvents.beforeEditEnd]: (value: any, row: IRow, col: ICol) => boolean | void;
     [GridEvents.afterEditEnd]: (value: any, row: IRow, col: ICol) => void;
-    [GridEvents.beforeKeyDown]: (e: KeyboardEvent) => boolean;
+    [GridEvents.beforeKeyDown]: (e: KeyboardEvent) => boolean | void;
     [GridEvents.afterKeyDown]: (e: KeyboardEvent) => void;
+    [GridEvents.beforeColumnHide]: (col: ICol) => boolean | void;
+    [GridEvents.afterColumnHide]: (col: ICol) => void;
+    [GridEvents.beforeColumnShow]: (col: ICol) => boolean | void;
+    [GridEvents.afterColumnShow]: (col: ICol) => void;
+    [GridEvents.beforeRowHide]: (row: IRow) => boolean | void;
+    [GridEvents.afterRowHide]: (row: IRow) => void;
+    [GridEvents.beforeRowShow]: (row: IRow) => boolean | void;
+    [GridEvents.afterRowShow]: (row: IRow) => void;
+    [GridEvents.beforeRowDrag]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [GridEvents.dragRowStart]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.dragRowOut]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.dragRowIn]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [GridEvents.canRowDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.cancelRowDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.beforeRowDrop]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [GridEvents.afterRowDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.afterRowDrag]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.beforeColumnDrag]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [GridEvents.dragColumnStart]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.dragColumnOut]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.dragColumnIn]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [GridEvents.canColumnDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.cancelColumnDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.beforeColumnDrop]: (data: IDragInfo, events: MouseEvent) => void | boolean;
+    [GridEvents.afterColumnDrop]: (data: IDragInfo, events: MouseEvent) => any;
+    [GridEvents.afterColumnDrag]: (data: IDragInfo, events: MouseEvent) => any;
     [GridEvents.headerInput]: (value: string, colId: string, filterId: fixedRowContent) => void;
 }
+export declare enum GridSystemEvents {
+    cellTouchMove = "cellTouchMove",
+    cellTouchEnd = "cellTouchEnd",
+    headerCellTouchMove = "headerCellTouchMove",
+    headerCellTouchEnd = "headerCellTouchEnd"
+}
+export interface ISystemEventHandlersMap {
+    [key: string]: (...args: any[]) => any;
+    [GridSystemEvents.cellTouchMove]: (row: IRow, col: ICol, e: TouchEvent) => void;
+    [GridSystemEvents.cellTouchEnd]: (row: IRow, col: ICol, e: TouchEvent) => void;
+    [GridSystemEvents.headerCellTouchMove]: (col: ICol, e: TouchEvent) => void;
+    [GridSystemEvents.headerCellTouchEnd]: (col: ICol, e: TouchEvent) => void;
+}
 export interface ICellContent {
+    element?: any;
     toHtml: (column: ICol, config: IRendererConfig) => any;
     match?: (obj: any, value: any) => boolean;
     destroy?: () => void;
     calculate?: (col: any[], roots: any[]) => string | number;
     validate?: (colId: string, data: any[]) => any[];
     value?: any;
-    combo?: {
-        [key: string]: ICombobox;
-    };
 }
 export interface IContentList {
     [key: string]: ICellContent;
@@ -320,4 +406,30 @@ export declare type ISelectionType = "cell" | "row" | "complex";
 export declare type IDirection = "horizontal" | "vertical";
 export declare type IDragType = "row" | "column" | "complex";
 export declare type IAdjustBy = "data" | "header" | "footer" | boolean;
+export interface ISelectionConfig {
+    disabled?: boolean;
+}
+export interface ISelection {
+    config?: ISelectionConfig;
+    setCell(row?: any, col?: any, ctrlUp?: boolean, shiftUp?: boolean): void;
+    getCell(): ICell;
+    getCells(): ICell[];
+    removeCell(rowId?: string | number, colId?: string | number): void;
+    disable(): void;
+    enable(): void;
+    toHTML(): any | any[];
+}
+export declare enum GridSelectionEvents {
+    beforeUnSelect = "beforeUnSelect",
+    afterUnSelect = "afterUnSelect",
+    beforeSelect = "beforeSelect",
+    afterSelect = "afterSelect"
+}
+export interface IGridSelectionEventsHandlersMap {
+    [key: string]: (...args: any[]) => any;
+    [GridSelectionEvents.afterSelect]: (row: IRow, col: ICol) => void;
+    [GridSelectionEvents.afterUnSelect]: (row: IRow, col: ICol) => void;
+    [GridSelectionEvents.beforeSelect]: (row: IRow, col: ICol) => boolean | void;
+    [GridSelectionEvents.beforeUnSelect]: (row: IRow, col: ICol) => boolean | void;
+}
 export {};

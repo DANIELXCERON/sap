@@ -258,7 +258,7 @@ controlForward.addEventListener("click", (e) => {
 
 ////////////////////////////// LIST QUEUE ///////////////////////////////////////////////
 /** crear nueva lista en grid_queue_container */
-var grid_queue = new sapsuite.Grid("grid_queue_container", {
+var grid_queue = new dhx.Grid("grid_queue_container", {
   columns: [
     { width: 200, id: "namefile", header: [{ text: "Nombre" }] },
     {
@@ -325,9 +325,9 @@ grid_jsonFile_btn.addEventListener("click", () => {
     .then((result) => {
       /**si no ha sido canselado */
       if (!result.canceled) {
-        if (grid_queue._currentData && grid_queue._currentData.length > 0) {
+        if (grid_queue.data._order && grid_queue.data._order.length > 0) {
           /**si hay datos en la lista borrarlos primero */
-          grid_queue._currentData.forEach((item) => {
+          grid_queue.data._order.forEach((item) => {
             grid_queue.data.remove(item.id);
           });
         }
@@ -355,7 +355,7 @@ grid_save_btn.addEventListener("click", () => {
   dialog
     .showSaveDialog(null, options)
     .then((result) => {
-      var dataFilePlayList = JSON.stringify(grid_queue._currentData);
+      var dataFilePlayList = JSON.stringify(grid_queue.data._order);
       if (!result.canceled) {
         fs.writeFile(
           result.filePath.toString(),
@@ -383,8 +383,8 @@ grid_remove_btn.addEventListener("click", function () {
 /** ver duracion de la grilla */
 grid_queue.events.on("CellMouseOver", function (row, column, e) {
   let duration = 0;
-  let numElements = grid_queue._currentData.length;
-  grid_queue._currentData.forEach((element) => {
+  let numElements = grid_queue.data._order.length;
+  grid_queue.data._order.forEach((element) => {
     duration += parseFloat(element.duration);
   });
 
@@ -398,7 +398,7 @@ grid_queue.events.on("CellMouseOver", function (row, column, e) {
 /** al hacer doble click en un item */
 grid_queue.events.on("CellDblClick", function (cell, e) {
   /** remover css de todos */
-  grid_queue._currentData.forEach((row) => {
+  grid_queue.data._order.forEach((row) => {
     grid_queue.removeRowCss(row.id, "bg_id_Next");
     grid_queue.removeRowCss(row.id, "bg_id_Current");
   });
@@ -439,12 +439,12 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
     /**pintar siguiente */
     var index = parseInt(localStorage.getItem("CurrentVideoIndex"));
 
-    if (index < grid_queue._currentData.length - 1) {
+    if (index < grid_queue.data._order.length - 1) {
       index += 1;
     } else {
       index = 0;
     }
-    let data = grid_queue._currentData[index];
+    let data = grid_queue.data._order[index];
     const NextVideo = {
       namefile: data.namefile,
       path: data.path,
@@ -454,7 +454,7 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
     };
     grid_queue.addRowCss(data.id, "bg_id_Next");
     localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
-    localStorage.setItem("DataGrid", JSON.stringify(grid_queue._currentData));
+    localStorage.setItem("DataGrid", JSON.stringify(grid_queue.data._order));
   }
 
   /**Al finalizar la reproduccion */
@@ -466,13 +466,13 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
 function NextVideo() {
   /** primero comprobar la existencia de datos */
   if (
-    grid_queue._currentData &&
+    grid_queue.data._order &&
     parseInt(localStorage.getItem("CurrentVideoIndex")) <
-      grid_queue._currentData.length
+      grid_queue.data._order.length
   ) {
     /** si el item es temporal lo elimina de la cola al finalizar */
     var temporal =
-      grid_queue._currentData[
+      grid_queue.data._order[
         parseInt(localStorage.getItem("CurrentVideoIndex"))
       ].temp;
     if (temporal) {
@@ -496,13 +496,13 @@ function NextVideo() {
 
   if (
     parseInt(localStorage.getItem("CurrentVideoIndex")) <
-    grid_queue._currentData.length - 1
+    grid_queue.data._order.length - 1
   ) {
     // no esta de ultimo
     if (parseInt(localStorage.getItem("CurrentVideoIndex")) === 0) {
       // esta de primero
       grid_queue.removeRowCss(
-        grid_queue.data.getId(grid_queue._currentData.length - 1),
+        grid_queue.data.getId(grid_queue.data._order.length - 1),
         "bg_id_Current"
       );
       grid_queue.removeRowCss(grid_queue.data.getId(0), "bg_id_Next");
@@ -532,7 +532,7 @@ function NextVideo() {
       );
     }
     grid_queue.removeRowCss(
-      grid_queue.data.getId(grid_queue._currentData.length - 1),
+      grid_queue.data.getId(grid_queue.data._order.length - 1),
       "bg_id_Next"
     );
   }
@@ -585,7 +585,7 @@ function dragOverHandler(ev) {
 
 ////////////////////////////// AD QUEUE ///////////////////////////////////////////////
 /** crear nueva lista en grid_queue_ad_container */
-var grid_ad_queue = new sapsuite.Grid("grid_queue_ad_container", {
+var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
   columns: [
     { width: 200, id: "namefile", header: [{ text: "Nombre" }] },
     {
@@ -635,7 +635,7 @@ var grid_ad_queue = new sapsuite.Grid("grid_queue_ad_container", {
 /** al hacer doble click en un item */
 grid_ad_queue.events.on("CellDblClick", function (cell, e) {
   /** remover css de todos */
-  grid_ad_queue._currentData.forEach((row) => {
+  grid_ad_queue.data._order.forEach((row) => {
     grid_ad_queue.removeRowCss(row.id, "bg_id_Next");
     grid_ad_queue.removeRowCss(row.id, "bg_id_Current");
   });
@@ -672,7 +672,7 @@ ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
   var secRemaining = videoActualTime.TiempoRestante;
 
   /**Al finalizar la reproduccion */
-  if (secRemaining == 0 && grid_ad_queue._currentData.length > 0) {
+  if (secRemaining == 0 && grid_ad_queue.data._order.length > 0) {
 
     /**va eliminando los items */
     grid_ad_queue.data.remove(grid_ad_queue.data.getId(0));
@@ -682,9 +682,9 @@ ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
 });
 
 function controlPlayerAD(){
-  if (grid_ad_queue._currentData && grid_ad_queue._currentData.length > 0){
+  if (grid_ad_queue.data._order && grid_ad_queue.data._order.length > 0){
     ipcRenderer.send("control:player", "pause");
-    var item = grid_ad_queue._currentData[0]
+    var item = grid_ad_queue.data._order[0]
     SendFileToPlay2({
       referencia: item.ref,
       url: item.path,
@@ -800,8 +800,8 @@ function filename(rutaAbsoluta) {
 }
 /**Obtiene el index para agregar de ultimo un elemento */
 function getIndexAddGrid(grid) {
-  if (grid._currentData) {
-    return grid._currentData.length;
+  if (grid.data._order) {
+    return grid.data._order.length;
   } else {
     return 0;
   }
@@ -810,7 +810,7 @@ function getIndexAddGrid(grid) {
 function SendFileToPlay(datosStream) {
   var index = grid_queue.data.getIndex(datosStream.id);
   localStorage.setItem("CurrentVideoIndex", index);
-  if (index < grid_queue._currentData.length - 1) {
+  if (index < grid_queue.data._order.length - 1) {
     localStorage.setItem("NextVideoIndex", index + 1);
   } else {
     localStorage.setItem("NextVideoIndex", 0);
@@ -825,7 +825,7 @@ function SendFileToPlay2(datosStream) {
   var index = grid_ad_queue.data.getIndex(datosStream.id);
 
   localStorage.setItem("CurrentVideoIndex2", index);
-  if (index < grid_ad_queue._currentData.length - 1) {
+  if (index < grid_ad_queue.data._order.length - 1) {
     localStorage.setItem("NextVideoIndex2", index + 1);
   } else {
     localStorage.setItem("NextVideoIndex2", 0);

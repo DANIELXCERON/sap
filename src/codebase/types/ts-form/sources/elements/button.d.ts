@@ -1,20 +1,20 @@
 import { View } from "../../../ts-common/view";
-import { IButton, IBaseButtonHandlersMap } from "../types";
+import { IButtonConfig, IButtonHandlersMap, IButtonProps, ItemEvent } from "../types";
 import { IEventSystem } from "../../../ts-common/events";
-export declare enum ButtonEvents {
-    click = "click"
-}
 export declare class Button extends View {
-    config: IButton;
-    events: IEventSystem<ButtonEvents, IBaseButtonHandlersMap>;
+    config: IButtonConfig;
+    events: IEventSystem<ItemEvent, IButtonHandlersMap>;
     private _handlers;
+    private _propsItem;
+    private _props;
     constructor(container: HTMLElement | string, config: any);
+    setProperties(propertyConfig: IButtonProps): void;
+    getProperties(): IButtonProps;
     show(): void;
     hide(init?: boolean): void;
     isVisible(): boolean;
     disable(): void;
     enable(): void;
     isDisabled(): boolean;
-    setValue(value: string): void;
     protected _draw(): any;
 }

@@ -4,3 +4,4 @@ export declare function getBlockRange(block1: ClientRect, block2: ClientRect, is
     min: number;
     max: number;
 };
+export declare function getMarginSize(config: ICellConfig, xLayout: boolean): 0 | 10;

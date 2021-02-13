@@ -7,3 +7,4 @@ export declare function isCssSupport(property: string, value: string): boolean;
 export declare function isRowEmpty(row: IRow): boolean;
 export declare function isSortable(config: IGridConfig, col: ICol): boolean;
 export declare function isAutoWidth(config: IGridConfig, col?: ICol): boolean;
+export declare function getTotalWidth(columns: ICol[]): number;

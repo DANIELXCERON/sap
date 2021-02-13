@@ -13,7 +13,10 @@ export declare class Tree<T extends object = object> extends View implements ITr
     private _isSelectionActive;
     private _root;
     private _focusId;
-    constructor(element: HTMLElement | string, config?: ITreeConfig);
+    private _right;
+    private _touch;
+    private _isDraget;
+    constructor(container: HTMLElement | string, config?: ITreeConfig);
     focusItem(id: string): void;
     destructor(): void;
     editItem(id: string, config?: IEditorConfig): void;
@@ -27,14 +30,23 @@ export declare class Tree<T extends object = object> extends View implements ITr
     expand(id: Id): void;
     expandAll(): void;
     uncheckItem(id: Id): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     close(id: Id): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     closeAll(): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     open(id: Id): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     openAll(): void;
+    /** @deprecated See a documentation: https://docs.dhtmlx.com/ */
     unCheckItem(id: Id): void;
     private _draw;
     private _initEvents;
     private _initHandlers;
+    private _dblClick;
+    private _clearTouchTimer;
+    private _dragStart;
+    private _getRightPos;
     private _drawItems;
     private _updateItemCheck;
     private _updateParents;

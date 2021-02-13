@@ -13,6 +13,7 @@ appUpdater.logger = log;
 appUpdater.logger.transports.file.level = 'info';
 log.info('Iniciando aplicación...');
 
+var cancellationToken = new CancellationToken()
 
 
 /* ruta de imagenes */
@@ -280,6 +281,7 @@ function OpenUpdatesWindow() {
     },
   });
   windowUpdates.setIcon(imgPath_icon);
+  windowUpdates.setMenu(null);
   windowUpdates.loadURL(
     url.format({
       pathname: path.join(__dirname, "updates.html"),
@@ -291,6 +293,7 @@ function OpenUpdatesWindow() {
     windowUpdates.show();
   });
   windowUpdates.on("closed", () => {
+    cancellationToken.cancel();
     windowUpdates = null;
   });
 }
@@ -307,18 +310,28 @@ appUpdater.on("update-available", (info) => {
   }
 });
 
+
+
 ipcMain.on("btnUpdates", (e, btn) => {
   switch (btn) {
     case "downloadUpdate":
-      appUpdater.downloadUpdate();
+      //Anular token de cancelación y crear uno nuevo
+      cancellationToken = null
+      cancellationToken = new CancellationToken()
+
+      //iniciar descarga de la actualización
+      appUpdater.downloadUpdate(cancellationToken);
       break;
     case "checkForUpdates":
+      //verificar actualizaciones
       appUpdater.checkForUpdates();
       break;
     case "cancel":
-      appUpdater.downloadUpdate(CancellationToken);
+      //cancelar descarga
+      cancellationToken.cancel();
       break;
     case "quitAndInstall":
+      //salir e instalar
       appUpdater.quitAndInstall(true, true)
       break;
   }

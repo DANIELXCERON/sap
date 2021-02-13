@@ -1,34 +1,13 @@
-import { ISelection } from "../../ts-list";
-import { View } from "../../ts-common/view";
-import { DataCollection, DataEvents, DragEvents, IDataEventsHandlersMap, IDragEventsHandlersMap } from "../../ts-data";
-import { IEventSystem } from "../../ts-common/events";
-import { IDataViewConfig, DataViewEvents, IDataViewEventHandlersMap, IDataView } from "./types";
-export declare class DataView extends View implements IDataView {
+import { VNode } from "../../ts-common/dom";
+import { List } from "../../ts-list";
+import { IHandlers } from "../../ts-common/types";
+import { IDataViewConfig, IDataView } from "./types";
+export declare class DataView extends List implements IDataView {
     config: IDataViewConfig;
-    data: DataCollection;
-    events: IEventSystem<DataEvents | DragEvents | DataViewEvents, IDataEventsHandlersMap & IDragEventsHandlersMap & IDataViewEventHandlersMap>;
-    selection: ISelection;
-    private _handlers;
-    private _navigationDestructor;
-    private _documentClickDestuctor;
-    private _focusIndex;
-    private _widgetInFocus;
-    private _edited;
-    private _disabledSelection;
     constructor(node: HTMLElement | string, config?: IDataViewConfig);
-    disableSelection(): void;
-    enableSelection(): void;
-    editItem(id: string): void;
-    getFocusItem(): import("../../ts-data").IDataItem;
-    setItemInRow(amount: any): void;
-    setFocus(id: string): void;
-    getFocus(): string;
-    destructor(): void;
-    getFocusIndex(): number;
-    setFocusIndex(index: number): void;
-    edit(id: string): void;
-    private _setFocusIndex;
-    private _renderItem;
-    private _draw;
-    private _getHotkeys;
+    showItem(id: string): void;
+    protected _didRedraw(vm: any): void;
+    protected _renderItem(item: any, index: number): VNode;
+    protected _renderList(): VNode;
+    protected _getHotkeys(): IHandlers;
 }
