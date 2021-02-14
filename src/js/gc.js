@@ -110,43 +110,8 @@ function saveAsGC() {
 }
 
 /** Editor de texto Enriquecido */
-const locale = {
-  es: {
-    apply: "Aplicar",
-    undo: "Deshacer",
-    redo: "Rehacer",
-    selectFontFamily: "Fuente",
-    selectFontSize: "Tamaño de fuente",
-    selectFormat: "Estilo",
-    selectTextColor: "Color de texto",
-    selectTextBackground: "Color de fondo",
-    markBold: "Bold",
-    markItalic: "Italic",
-    markStrike: "Strike",
-    markUnderline: "Subrayar",
-    alignLeft: "Alinear a la izquierda",
-    alignCenter: "Alinear al centro",
-    alignRight: "Alinear a la derecha",
-    addLink: "Añadir enlace",
-    clearFormat: "Formato claro",
-    fullscreen: "Pantalla completa",
-    removeLink: "Remover enlace",
-    edit: "Editar",
-    h1: "Título 1",
-    h2: "Título 2",
-    h3: "Título 3",
-    h4: "Título 4",
-    h5: "Título 5",
-    h6: "Título 6",
-    p: "Texto normal",
-    blockquote: "Cotización en bloque",
-    stats: "Estadísticas",
-    chars: "caracteres",
-    charsExlSpace: "Caracteres sin espacios ",
-    words: "palabras" 
-  }
-};
-dhx.i18n.setLocale("richtext", locale["es"]);
+
+dhx.i18n.setLocale("richtext", LOCALE["es"]);
 const richtext = new dhx.Richtext("richtext", {
   toolbarBlocks: [
     "undo",

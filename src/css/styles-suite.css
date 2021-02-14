@@ -11,6 +11,9 @@
 .dhx_grid-cell .dhx_cell-content {
   color: #ecf0f1;
 }
+
+
+
 /*FORM*/
 .my_form_css,
 .my_form_css,
@@ -18,13 +21,75 @@
   background: #34495e;
 }
 
+
+/*general*/
 .dhx_label {
   color: #ecf0f1;
 }
+.dhx_input {
+  color: #ecf0f1;
+  background-color: #34495e;
+}
+.dhx_input__icon {
+  color: #ecf0f1;
+}
+.dhx_button--view_link {
+  color: #ecf0f1;
+}
+
+
+/*combobox*/
 .dhx_combobox-tag {
-  border: 1px solid #34495e;
+  border: 1px solid #ecf0f1;
   background-color: #3498db;
 }
 .dhx_combobox-tag__value {
   color: #ecf0f1;
+}
+.dhx_combobox-input-box {
+  background-color: #34495e;
+}
+.dhx_combobox-tag__action {
+  color: #34495e;
+}
+.dhx_combobox-tag__action:hover {
+  color: #ecf0f1;
+}
+.dhx_combobox-input__icon {
+  color: #ecf0f1;
+}
+
+
+/*timepicker*/
+.dhx_timepicker {
+  background-color: #34495e;
+}
+.dhx_timepicker-input,
+.dhx_timepicker-delimer {
+  color: #ecf0f1;
+}
+
+/*calendar*/
+.dhx_calendar {
+  background-color: #34495e;
+}
+.dhx_calendar-month, .dhx_calendar-year {
+  color: #ecf0f1;
+}
+.dhx_calendar-week-number, .dhx_calendar-weekday {
+  color: #ecf0f1;
+}
+.dhx_calendar-day {
+  color: #ecf0f1;
+}
+.dhx_calendar-day--weekend {
+  color: #3498db;
+}
+
+.dhx_button--view_link.dhx_button--color_secondary {
+  color: #ecf0f1;
+}
+.dhx_button--view_link.dhx_button--color_secondary:hover {
+  color: #34495e;
+  background-color: #ecf0f1;
 }
