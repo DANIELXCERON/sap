@@ -205,7 +205,7 @@ function openVideoWindow2() {
 function openGCWindow() {
   GCWindow = new BrowserWindow({
     show: false,
-    width: 630,
+    width: 16+1020,
     height: 580,
     title: "Generador de caracteres",
     webviewTag: true,

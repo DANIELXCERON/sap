@@ -2,8 +2,6 @@ const { ipcRenderer } = require("electron");
 const { dialog, app } = require("electron").remote;
 const fs = require("fs");
 
-const BtnGenerarGC = document.querySelector("#BtnGenerarGC");
-const BtnPreviewGCtextStyle = document.querySelector("#BtnPreviewGCtextStyle");
 // const textFormGC = document.querySelector("#textFormGC");
 const CssPerFormGC = document.querySelector("#CssPerFormGC");
 const SpeedGC = document.querySelector("#SpeedGC");
@@ -21,14 +19,12 @@ SpeedGC.addEventListener("change", (event) => {
 /** barra de menu */
 /** cargar gc file */
 ipcRenderer.on("openGC", () => {
-  dialog
-    .showOpenDialog({
+  dialog.showOpenDialog({
       title: "Abrir GC",
       buttonLabel: "Abrir",
       properties: ["openFile"],
       filters: [{ name: "SGC", extensions: ["sgc"] }],
-    })
-    .then((result) => {
+    }).then((result) => {
       /**si no ha sido cancelado */
       if (!result.canceled) {
         /**se guarda la ruta del archivo sgc guardado */
@@ -37,14 +33,11 @@ ipcRenderer.on("openGC", () => {
         fetch(result.filePaths[0])
           .then((results) => results.json())
           .then(function (gcContent) {
-            document.querySelector(
-              "#editor-container > div.ql-editor"
-            ).innerHTML = gcContent.textoGC.slice(24, -7);
+            richtext.setValue(gcContent.textoGC.slice(24, -7), 'html');
             CssPerFormGC.value = gcContent.textoGC.slice(13, 22);
           });
       }
-    })
-    .catch((err) => {
+    }).catch((err) => {
       console.log(err);
     });
 });
@@ -53,12 +46,7 @@ ipcRenderer.on("openGC", () => {
 ipcRenderer.on("saveGC", () => {
   if (sessionStorage.getItem("sgc-path")) {
     const datosGC = {
-      textoGC:
-        '<spam class="' +
-        CssPerFormGC.value +
-        '">' +
-        document.querySelector("#editor-container > div.ql-editor").innerHTML +
-        "</spam>",
+      textoGC: `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
     };
 
     var fileGcContent = JSON.stringify(datosGC);
@@ -87,19 +75,8 @@ ipcRenderer.on("saveAsGC", () => {
 
 function saveAsGC() {
   const options = {
-    defaultPath:
-      app.getPath("documents") +
-      "/" +
-      document
-        .querySelector("#editor-container > div.ql-editor")
-        .innerText.slice(0, 25)
-        .replace(/(\r\n|\n|\r)/gm, ""),
-    title:
-      "Guarda GC " +
-      document
-        .querySelector("#editor-container > div.ql-editor")
-        .innerText.slice(0, 20) +
-      "...",
+    defaultPath: `${app.getPath("documents")}/${richtext.getValue('text').slice(0, 25).replace(/(\r\n|\n|\r)/gm, "")}`,
+    title: `Guarda GC ${richtext.getValue('text').slice(0, 20)}...`,
     buttonLabel: "Guardar",
     filters: [
       { name: "SGC", extensions: ["sgc"] },
@@ -107,17 +84,9 @@ function saveAsGC() {
     ],
   };
 
-  dialog
-    .showSaveDialog(null, options)
-    .then((result) => {
+  dialog.showSaveDialog(null, options).then((result) => {
       const datosGC = {
-        textoGC:
-          '<spam class="' +
-          CssPerFormGC.value +
-          '">' +
-          document.querySelector("#editor-container > div.ql-editor")
-            .innerHTML +
-          "</spam>",
+        textoGC: `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
       };
 
       var fileGcContent = JSON.stringify(datosGC);
@@ -135,74 +104,100 @@ function saveAsGC() {
           });
         });
       }
-    })
-    .catch((err) => {
+    }).catch((err) => {
       console.log(err);
     });
 }
 
-BtnGenerarGC.addEventListener("click", (e) => {
-  e.preventDefault();
-  const datosGC = {
-    textoGC:
-      '<spam class="' +
-      CssPerFormGC.value +
-      '">' +
-      document.querySelector("#editor-container > div.ql-editor").innerHTML +
-      "</spam>",
-  };
-  ipcRenderer.send("datos:gc", datosGC);
-});
-
-BtnPreviewGCtextStyle.addEventListener("click", (e) => {
-  // remover clase animacion
-  GCTextPreview.classList.remove("moviendoGC");
-
-  // Vista previa
-  GCTextPreview.innerHTML =
-    '<spam class="' +
-    CssPerFormGC.value +
-    '">' +
-    document.querySelector("#editor-container > div.ql-editor").innerHTML +
-    "</spam>";
-
-  /**se calcula el tiempo de desplazamiento en bace
-   * a la longitud del texto y a la velocidad
-   * condigurada
-   */
-  GCTextPreview.style.cssText =
-    "animation-duration:" +
-    Math.floor(
-      (5 * (marcoPreview.clientWidth + GCTextPreview.clientWidth)) /
-        (SpeedGC.value * 100)
-    ) +
-    "s;";
-
-  // agregar animacion css
-  CSSAnimations.get("moviendoGC").setKeyframe("0%", {
-    left: marcoPreview.clientWidth + "px",
-  });
-  CSSAnimations.get("moviendoGC").setKeyframe("100%", {
-    left: -GCTextPreview.clientWidth + "px",
-  });
-  // agregar clase de animacion
-  GCTextPreview.classList.add("moviendoGC");
-});
-
 /** Editor de texto Enriquecido */
+const locale = {
+  es: {
+    apply: "Aplicar",
+    undo: "Deshacer",
+    redo: "Rehacer",
+    selectFontFamily: "Fuente",
+    selectFontSize: "Tamaño de fuente",
+    selectFormat: "Estilo",
+    selectTextColor: "Color de texto",
+    selectTextBackground: "Color de fondo",
+    markBold: "Bold",
+    markItalic: "Italic",
+    markStrike: "Strike",
+    markUnderline: "Subrayar",
+    alignLeft: "Alinear a la izquierda",
+    alignCenter: "Alinear al centro",
+    alignRight: "Alinear a la derecha",
+    addLink: "Añadir enlace",
+    clearFormat: "Formato claro",
+    fullscreen: "Pantalla completa",
+    removeLink: "Remover enlace",
+    edit: "Editar",
+    h1: "Título 1",
+    h2: "Título 2",
+    h3: "Título 3",
+    h4: "Título 4",
+    h5: "Título 5",
+    h6: "Título 6",
+    p: "Texto normal",
+    blockquote: "Cotización en bloque",
+    stats: "Estadísticas",
+    chars: "caracteres",
+    charsExlSpace: "Caracteres sin espacios ",
+    words: "palabras" 
+  }
+};
+dhx.i18n.setLocale("richtext", locale["es"]);
+const richtext = new dhx.Richtext("richtext", {
+  toolbarBlocks: [
+    "undo",
+    "style",
+    "decoration",
+    "colors",
+    "clear",
+    "stats"
+  ]
+});
 
-// Agregar fuentes a la lista blanca
-var Font = Quill.import("formats/font");
-Font.whitelist = ["lato", "comfortaa", "jua", "poppins", "roboto"];
-Quill.register(Font, true);
-// Agregar tamaños
-var SizeStyle = Quill.import("attributors/style/size");
-Quill.register(SizeStyle, true);
+richtext.toolbar.data.add({
+  type: "button",
+  value: "Play",
+  id: "play"
+}, 2);
 
-var quill = new Quill("#editor-container", {
-  modules: {
-    toolbar: "#toolbar-container",
-    syntax: false,
-  },
-  theme: "snow",
+richtext.toolbar.data.add({
+  type: "button",
+  value: "Preview",
+  id: "Preview"
+}, 3);
+
+richtext.toolbar.events.on("click", function(id) {
+  if (id === "play") {
+    const datosGC = {
+      textoGC: `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
+    };
+    ipcRenderer.send("datos:gc", datosGC);
+  }
+  if (id === "Preview") {
+    // remover clase animacion
+    GCTextPreview.classList.remove("moviendoGC");
+
+    // Vista previa
+    GCTextPreview.innerHTML = `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
+
+    /**se calcula el tiempo de desplazamiento en bace
+     * a la longitud del texto y a la velocidad
+     * condigurada
+     */
+    GCTextPreview.style.cssText = `animation-duration:${Math.floor( (5 * (marcoPreview.clientWidth + GCTextPreview.clientWidth)) / (SpeedGC.value * 100))}s;`;
+
+    // agregar animacion css
+    CSSAnimations.get("moviendoGC").setKeyframe("0%", {
+      left: marcoPreview.clientWidth + "px",
+    });
+    CSSAnimations.get("moviendoGC").setKeyframe("100%", {
+      left: -GCTextPreview.clientWidth + "px",
+    });
+    // agregar clase de animacion
+    GCTextPreview.classList.add("moviendoGC");
+  }
 });

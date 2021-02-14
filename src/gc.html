@@ -15,8 +15,8 @@
     <link rel="stylesheet" type="text/css" href="./css/pro.css" />
     <link rel="stylesheet" href="./codebase/suite.css">
 
-    <!--Quill Rich Text Editor-->
-    <link rel="stylesheet" href="./quill/css/quill.snow.css" />
+    <!--DHTMLX Rich Text Editor-->
+    <link rel="stylesheet" href="./codebase/richtext.css" />
 </head>
 
 <body>
@@ -41,57 +41,12 @@
                 </form>
             </div>
             <div class="col-md-12">
-                <div id="toolbar-container">
-                  <select class="ql-font">
-                    <option selected>Arial</option>
-                    <option value="roboto">Roboto</option>
-                    <option value="lato">Lato</option>
-                    <option value="comfortaa">Comfortaa</option>
-                    <option value="jua">Jua</option>
-                    <option value="poppins">Poppins</option>
-                  </select>
-                  <span class="ql-formats">
-                    <button class="ql-bold"></button>
-                    <button class="ql-italic"></button>
-                    <button class="ql-underline"></button>
-                    <button class="ql-strike"></button>
-                  </span>
-                  <span class="ql-formats">
-                    <select class="ql-size">
-                      <option selected>Normal</option>
-                      <option value="10px">10</option>
-                      <option value="20px">20</option>
-                      <option value="25px">25</option>
-                      <option value="30px">30</option>
-                      <option value="35px">35</option>
-                      <option value="40px">40</option>
-                      <option value="45px">45</option>
-                      <option value="50px">50</option>
-                      <option value="60px">60</option>
-                    </select>
-                  </span>
-                  <span class="ql-formats">
-                    <select class="ql-color"></select>
-                    <select class="ql-background"></select>
-                  </span>
-                  <span class="ql-formats">
-                    <button class="ql-script" value="sub"></button>
-                    <button class="ql-script" value="super"></button>
-                  </span>
-                  <span class="ql-formats">
-                    <button class="ql-clean"></button>
-                  </span>
-                </div>
-                <!-- <textarea type="text" id="textFormGC" class="form-control" cols="50" rows="6" spellcheck="true">texto de prueba</textarea> -->
-                <div id="editor-container"></div>
+              <!-- component container -->
+              <div style="height: 270px;" id="richtext"></div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <button type="button" id="BtnGenerarGC" class="btn
-                    btn-primary mb-2"><span class="material-icons">play_arrow</span></button>
-                <button type="button" id="BtnPreviewGCtextStyle" class="btn
-                    btn-success mb-2"><span class="material-icons">preview</span></button>
             </div>
         </div>
     </div>
@@ -99,8 +54,8 @@
     <!-- SCRIPTS -->
     <!-- JQuery -->
     <script>window.$ = window.jQuery = require('jquery');</script>
-    <!--Quill Rich Text Editor-->
-    <script type="text/javascript" src="./quill/js/quill.min.js"></script>
+    <!--DHTMLX Rich Text Editor-->
+    <script type="text/javascript" src="./codebase/richtext.js"></script>
     <!-- Bootstrap tooltips -->
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="./js/min/bootstrap.min.js"></script>
