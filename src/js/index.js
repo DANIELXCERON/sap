@@ -6,6 +6,7 @@ const { ipcRenderer } = require("electron");
 const { shell } = require("electron");
 const https = require("https");
 
+
 /** Mis modulos */
 const nTF = require("../src/js/modules/nice-time-format");
 const getTime = require("../src/js/modules/reloj");

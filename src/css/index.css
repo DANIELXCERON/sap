@@ -4,34 +4,40 @@ body {
     /* overflow: hidden; */
 }
 
+.block-header {
+    background: #F7F7F7;
+    color: #131c21;
+    border: 1px solid #dfdfdf
+}
+
+[data-theme="dark"] .block-header {
+    background: #131c21;
+    color: #eee;
+    border: 1px solid #eee;
+}
+
 
 /** Personalizacion de celdas de la grilla*/
-
 .bg_id_Block {
     background: #34495e;
     color: #eee;
 }
-
 .bg_id_Next {
     background: #27ae60;
     color: #eee;
 }
-
 .bg_id_Current {
     background: #2980b9;
     color: #eee;
 }
-
 .bg_id_Scheduler {
     background: #b92929;
     color: #eee;
 }
-
 .bg_id_invalid {
     background: #f1c40f;
     color: #333;
 }
-
 .bg_id_event {
     background: #0fe9f1;
     color: #333;

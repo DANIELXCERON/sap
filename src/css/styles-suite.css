@@ -1,95 +1,99 @@
+:root {
+  --color-1: #131c21;
+  --color-2: #ecf0f1;
+  --color-3: #3498db;
+}
+
+
 /*GRID*/
-.my_grid_css .dhx_grid-header-cell {
-  background: #34495e;
-  border-color: #ecf0f1;
-  color: #ecf0f1;
+[data-theme="dark"] .my_grid_css .dhx_grid-header-cell {
+  background: var(--color-1);
+  border-color: var(--color-2);
+  color: var(--color-2);
 }
-.dhx_data-wrap,
-.dhx_grid-body {
-  background-color: #34495e;
+[data-theme="dark"] .dhx_data-wrap,
+[data-theme="dark"] .dhx_grid-body {
+  background-color: var(--color-1);
 }
-.dhx_grid-cell .dhx_cell-content {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_grid-cell .dhx_cell-content {
+  color: var(--color-2);
 }
-
-
 
 /*FORM*/
-.my_form_css,
-.my_form_css,
-.dhx_layout-cell {
-  background: #34495e;
+[data-theme="dark"] .my_form_css,
+[data-theme="dark"] .my_form_css,
+[data-theme="dark"] .dhx_layout-cell {
+  background: var(--color-1);
 }
-
 
 /*general*/
-.dhx_label {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_label {
+  color: var(--color-2);
 }
-.dhx_input {
-  color: #ecf0f1;
-  background-color: #34495e;
+[data-theme="dark"] .dhx_input {
+  color: var(--color-2);
+  background-color: var(--color-1);
 }
-.dhx_input__icon {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_input__icon {
+  color: var(--color-2);
 }
-.dhx_button--view_link {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_button--view_link {
+  color: var(--color-2);
 }
-
 
 /*combobox*/
-.dhx_combobox-tag {
-  border: 1px solid #ecf0f1;
-  background-color: #3498db;
+[data-theme="dark"] .dhx_combobox-tag {
+  border: 1px solid var(--color-2);
+  background-color: var(--color-3);
 }
-.dhx_combobox-tag__value {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_combobox-tag__value {
+  color: var(--color-2);
 }
-.dhx_combobox-input-box {
-  background-color: #34495e;
+[data-theme="dark"] .dhx_combobox-input-box {
+  background-color: var(--color-1);
 }
-.dhx_combobox-tag__action {
-  color: #34495e;
+[data-theme="dark"] .dhx_combobox-tag__action {
+  color: var(--color-1);
 }
-.dhx_combobox-tag__action:hover {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_combobox-tag__action:hover {
+  color: var(--color-2);
 }
-.dhx_combobox-input__icon {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_combobox-input__icon {
+  color: var(--color-2);
 }
-
 
 /*timepicker*/
-.dhx_timepicker {
-  background-color: #34495e;
+[data-theme="dark"] .dhx_timepicker {
+  background-color: var(--color-1);
 }
-.dhx_timepicker-input,
-.dhx_timepicker-delimer {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_timepicker-input,
+[data-theme="dark"] .dhx_timepicker-delimer {
+  color: var(--color-2);
 }
 
 /*calendar*/
-.dhx_calendar {
-  background-color: #34495e;
+[data-theme="dark"] .dhx_calendar {
+  background-color: var(--color-1);
 }
-.dhx_calendar-month, .dhx_calendar-year {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_calendar-month,
+[data-theme="dark"] .dhx_calendar-year {
+  color: var(--color-2);
 }
-.dhx_calendar-week-number, .dhx_calendar-weekday {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_calendar-week-number,
+[data-theme="dark"] .dhx_calendar-weekday {
+  color: var(--color-2);
 }
-.dhx_calendar-day {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_calendar-day {
+  color: var(--color-2);
 }
-.dhx_calendar-day--weekend {
-  color: #3498db;
+[data-theme="dark"] .dhx_calendar-day--weekend {
+  color: var(--color-3);
 }
 
-.dhx_button--view_link.dhx_button--color_secondary {
-  color: #ecf0f1;
+[data-theme="dark"] .dhx_button--view_link.dhx_button--color_secondary {
+  color: var(--color-2);
 }
-.dhx_button--view_link.dhx_button--color_secondary:hover {
-  color: #34495e;
-  background-color: #ecf0f1;
+[data-theme="dark"] .dhx_button--view_link.dhx_button--color_secondary:hover {
+  color: var(--color-1);
+  background-color: var(--color-2);
 }

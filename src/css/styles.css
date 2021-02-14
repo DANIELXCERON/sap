@@ -1,7 +1,7 @@
 /* representaicion de fondo transparente cuadricula estilo photoshop */
 
 #videoPlayerPreView,
-.ql-editor,
+.dhx_richtext-editor,
 #marcoPreview {
     background-image: url("../img/1x/bg-container-video-8.png");
     background-color: white;
