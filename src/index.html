@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,10 +21,10 @@
 </head>
 
 <body>
-    <div class="container-fluid px-2">
-        <div class="block-header p-1 sticky-top">
+    <div class="container-fluid">
+        <div class="sticky-top">
             <div class="row">
-                <div class="col-2 my-1">
+                <div class="col-2">
                     <div class="btn-group mx-auto" role="group">
                         <!--Control de reproduccion-->
                         <button id="controlPlay" type="button" class="btn btn-success">
@@ -37,7 +37,7 @@
                             <span class="material-icons">forward_10</span></button>
                     </div>
                 </div>
-                <div class="col-10 my-auto">
+                <div class="col-10">
                     <div class="barraDeProgreso">
                         <div id="timeDisplay" class="my-1">
                             00:00:00 / 00:00:00 | 00:00:00/00:00:00
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-10 my-auto">
+                <div class="col-10">
                     <div class="window-title"></div>
                 </div>
             </div>
@@ -58,30 +58,30 @@
         
 
         <div class="row">
-            <div class="ml-1 my-2" style="font-size: 1.3rem;">
+            <div>
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="LC-Violet nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                        <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
                             <span class="material-icons">queue</span>
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="LC-Iris nav-link" id="profile1-tab" data-bs-toggle="tab" href="#profile1" role="tab" aria-controls="profile1" aria-selected="false">
+                        <a class="nav-link" id="profile1-tab" data-bs-toggle="tab" href="#profile1" role="tab" aria-controls="profile1" aria-selected="false">
                             <span class="material-icons">picture_in_picture</span>
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="LC-Mango nav-link" id="profile3-tab" data-bs-toggle="tab" href="#profile3" role="tab" aria-controls="profile3" aria-selected="false">
+                        <a class="nav-link" id="profile3-tab" data-bs-toggle="tab" href="#profile3" role="tab" aria-controls="profile3" aria-selected="false">
                             <span class="material-icons">live_tv</span>
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="LC-Rose nav-link" id="profile3-tab" data-bs-toggle="tab" href="#profile4" role="tab" aria-controls="profile4" aria-selected="false">
+                        <a class="nav-link" id="profile3-tab" data-bs-toggle="tab" href="#profile4" role="tab" aria-controls="profile4" aria-selected="false">
                             <span class="material-icons">schedule</span>
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="LC-Caribbean nav-link" id="profile2-tab" data-bs-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false">
+                        <a class="nav-link" id="profile2-tab" data-bs-toggle="tab" href="#profile2" role="tab" aria-controls="profile2" aria-selected="false">
                             <span class="material-icons">settings</span>
                         </a>
                     </li>
@@ -89,18 +89,17 @@
             </div>
             <div class="col-md-11">
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active my-2" id="home" role="tabpanel" aria-labelledby="home-tab">
-
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row">
-                            <div class="col-4 form-inline">
+                            <div class="form-inline">
                                 <div class="btn-group">
-                                    <button id="grid_jsonFile_btn" class="btn btn-primary mb-2">
+                                    <button id="grid_jsonFile_btn" class="btn btn-primary">
 										<span class="material-icons">playlist_add</span>
 									</button>
-                                    <button id="grid_save_btn" class="btn btn-primary mb-2">
+                                    <button id="grid_save_btn" class="btn btn-primary">
 										<span class="material-icons">save</span>
 									</button>
-                                    <button id="grid_remove_btn" class="btn btn-danger mb-2">
+                                    <button id="grid_remove_btn" class="btn btn-danger">
 										<span class="material-icons">delete_forever</span>
 									</button>
                                 </div>
@@ -109,24 +108,19 @@
 
                         <div class="row">
                             <div class="col-6">
-                                <p>
-                                    Programa
-                                </p>
+                                <p>Programa</p>
                                 <div id="grid_queue_container" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);"></div>
                                 <span id="DurationListViewDOM"></span>
                             </div>
                             <div class="col-6">
-                                <p>
-                                    Publicidad
-                                </p>
-                                <div class="col-12 my-auto">
+                                <p>Publicidad</p>
+                                <div class="col-12">
                                     <div class="barraDeProgreso">
-                                        <div id="timeDisplayAD" class="my-1">
+                                        <div id="timeDisplayAD">
                                             00:00:00 / 00:00:00 | 00:00:00/00:00:00
                                         </div>
-                                        <div class="progress my-1">
-                                            <div id="progressBarDomAD" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                                            </div>
+                                        <div class="progress">
+                                            <div id="progressBarDomAD" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -136,14 +130,14 @@
 
                     </div>
 
-                    <div class="tab-pane fade my-2" id="profile1" role="tabpanel" aria-labelledby="profile1-tab">
-
-                        <button id="abrirArchivo" class="btn btn-success mb-2"><span
-								class="material-icons">insert_drive_file</span></button>
+                    <div class="tab-pane fade" id="profile1" role="tabpanel" aria-labelledby="profile1-tab">
+                        <button id="abrirArchivo" class="btn btn-success">
+                            <span class="material-icons">insert_drive_file</span>
+                        </button>
                         <div id="tbodyPlayList" class="mx-0 py-1 row row-cols-md-3"></div>
                     </div>
 
-                    <div class="tab-pane fade my-2" id="profile2" role="tabpanel" aria-labelledby="profile2-tab">
+                    <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile2-tab">
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="SafeAreaSwitch">
                             <label class="custom-control-label" for="SafeAreaSwitch">Safe Area</label>
@@ -155,61 +149,58 @@
                         </div>
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="darkSwitch">
-                            <label class="custom-control-label" for="darkSwitch"><span
-									class="material-icons">settings_brightness</span></label>
+                            <label class="custom-control-label" for="darkSwitch">
+                                <span class="material-icons">settings_brightness</span>
+                            </label>
                         </div>
-
                     </div>
-
-                    <div class="tab-pane fade my-2" id="profile3" role="tabpanel" aria-labelledby="profile3-tab">
-
+                    <div class="tab-pane fade" id="profile3" role="tabpanel" aria-labelledby="profile3-tab">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="controlPlay btn-group" role="group">
-                                    <button id="LiveStreamVimeo" class="btn btn-success mb-2"><span class="material-icons">live_tv</span></button>
-                                    <button id="detenerWebVideo" class="btn btn-danger mb-2"><span class="material-icons">pan_tool</span></button>
+                                    <button id="LiveStreamVimeo" class="btn btn-success"><span class="material-icons">live_tv</span></button>
+                                    <button id="detenerWebVideo" class="btn btn-danger"><span class="material-icons">pan_tool</span></button>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <form id="formAnyone" class="form-inline" role="form">
-                                    <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fas fa-rocket"></i>
+                                            <div class="input-group-text">
+                                                <i class="fas fa-rocket"></i>
                                             </div>
                                         </div>
 <!-- <input type="url" id="ulrany" class="form-control" placeholder="url livestream" value="https://mdstrm.com/live-stream/57d2ebe8fd61d8f9327f8ad1?jsapi=true&autoplay=true"> -->
 <input type="url" id="ulrany" class="form-control" placeholder="url livestream" value="https://player-cdn.logicideas.media/embed/LI29a62fa1">
                                     </div>
-                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                    <button type="submit" class="btn btn-primary">Abrir</button>
                                 </form>
                                 <form id="formLiveStream" class="form-inline" role="form">
-                                    <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fab fa-vimeo"></i>
+                                            <div class="input-group-text">
+                                                <i class="fab fa-vimeo"></i>
                                             </div>
                                         </div>
-                                        <input type="url" id="ulrls" class="form-control" placeholder="url
-												livestream" value="https://livestream.com/accounts/28238881/events/8574038">
+<input type="url" id="ulrls" class="form-control" placeholder="url livestream" value="https://livestream.com/accounts/28238881/events/8574038">
                                     </div>
-                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                    <button type="submit" class="btn btn-primary">Abrir</button>
                                 </form>
                                 <form id="formFaceBook" class="form-inline" role="form">
-                                    <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fab fa-facebook"></i></div>
+                                            <div class="input-group-text">
+                                                <i class="fab fa-facebook"></i>
+                                            </div>
                                         </div>
-                                        <input type="url" id="urlfb" class="form-control" placeholder="url
-												facebook" value="https://www.facebook.com/PUBGLITE.LATAM.OFFICIAL/videos/224458685414701">
+<input type="url" id="urlfb" class="form-control" placeholder="url facebook" value="https://www.facebook.com/PUBGLITE.LATAM.OFFICIAL/videos/224458685414701">
                                     </div>
-                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                    <button type="submit" class="btn btn-primary">Abrir</button>
                                 </form>
                                 <form id="formSetAspectRatio" class="form-inline" role="form">
-                                    <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <span class="material-icons">aspect_ratio</span>
@@ -219,39 +210,36 @@
                                     </div>
                                 </form>
                                 <form id="formYouTube" class="form-inline" role="form">
-                                    <div class="input-group mb-2 mr-sm-2">
+                                    <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fab fa-youtube"></i></div>
+                                            <div class="input-group-text">
+                                                <i class="fab fa-youtube"></i>
+                                            </div>
                                         </div>
-                                        <input type="text" id="urlYT" class="form-control" placeholder="url
-												facebook" value="Ga540v27NpE">
+<input type="text" id="urlYT" class="form-control" placeholder="url facebook" value="Ga540v27NpE">
                                         <input type="number" id="StartTime" class="form-control" value="0">
                                     </div>
-                                    <button type="submit" class="btn btn-primary mb-2">Abrir</button>
+                                    <button type="submit" class="btn btn-primary">Abrir</button>
                                 </form>
                             </div>
-                            <div class="col-md-6">
-                                <!-- <webview id="test" src="https://www.facebook.com/" style="height: 534px;"></webview> -->
-                            </div>
                         </div>
-
                     </div>
-                    <div class="tab-pane fade my-2" id="profile4" role="tabpanel" aria-labelledby="profile4-tab">
+                    <div class="tab-pane fade" id="profile4" role="tabpanel" aria-labelledby="profile4-tab">
                         <div class="row">
-                            <div class="ml-1" style="font-size: 1.3rem;">
+                            <div>
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a class="LC-Violet nav-link active" id="scheduler-list-tab" data-bs-toggle="tab" href="#scheduler-list" role="tab" aria-controls="scheduler-list" aria-selected="true">
+                                        <a class="nav-link active" id="scheduler-list-tab" data-bs-toggle="tab" href="#scheduler-list" role="tab" aria-controls="scheduler-list" aria-selected="true">
                                             <i class="fas fa-list"></i>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="LC-Lavender nav-link" id="scheduler-events-tab" data-bs-toggle="tab" href="#scheduler-events" role="tab" aria-controls="scheduler-events" aria-selected="false">
+                                        <a class="nav-link" id="scheduler-events-tab" data-bs-toggle="tab" href="#scheduler-events" role="tab" aria-controls="scheduler-events" aria-selected="false">
                                             <i class="far fa-calendar"></i>
                                         </a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="LC-Caribbean nav-link" id="scheduler-promo-tab" data-bs-toggle="tab" href="#scheduler-promo" role="tab" aria-controls="scheduler-promo" aria-selected="false">
+                                        <a class="nav-link" id="scheduler-promo-tab" data-bs-toggle="tab" href="#scheduler-promo" role="tab" aria-controls="scheduler-promo" aria-selected="false">
                                             <i class="fas fa-ad"></i>
                                         </a>
                                     </li>
@@ -267,13 +255,13 @@
                                         </p>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button id="jsonFile_btn_scheluder_list" class="btn btn-primary mb-2">
+                                                <button id="jsonFile_btn_scheluder_list" class="btn btn-primary">
 													<span class="material-icons">playlist_add</span>
 												</button>
-                                                <button id="save_btn_scheluder_list" class="btn btn-primary mb-2">
+                                                <button id="save_btn_scheluder_list" class="btn btn-primary">
 													<span class="material-icons">save</span>
 												</button>
-                                                <button id="remove_btn_scheluder_list" class="btn btn-danger mb-2">
+                                                <button id="remove_btn_scheluder_list" class="btn btn-danger">
 													<span class="material-icons">delete_forever</span>
 												</button>
                                             </div>
@@ -295,13 +283,13 @@
 
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button id="jsonFile_btn_scheluder_event" class="btn btn-primary mb-2">
+                                                <button id="jsonFile_btn_scheluder_event" class="btn btn-primary">
 													<span class="material-icons">playlist_add</span>
 												</button>
-                                                <button id="save_btn_scheluder_event" class="btn btn-primary mb-2">
+                                                <button id="save_btn_scheluder_event" class="btn btn-primary">
 													<span class="material-icons">save</span>
 												</button>
-                                                <button id="remove_btn_scheluder_event" class="btn btn-danger mb-2">
+                                                <button id="remove_btn_scheluder_event" class="btn btn-danger">
 													<span class="material-icons">delete_forever</span>
 												</button>
                                             </div>
@@ -322,13 +310,13 @@
                                         </p>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button id="jsonFile_btn_scheluder_ad" class="btn btn-primary mb-2">
+                                                <button id="jsonFile_btn_scheluder_ad" class="btn btn-primary">
 													<span class="material-icons">playlist_add</span>
 												</button>
-                                                <button id="save_btn_scheluder_ad" class="btn btn-primary mb-2">
+                                                <button id="save_btn_scheluder_ad" class="btn btn-primary">
 													<span class="material-icons">save</span>
 												</button>
-                                                <button id="remove_btn_scheluder_ad" class="btn btn-danger mb-2">
+                                                <button id="remove_btn_scheluder_ad" class="btn btn-danger">
 													<span class="material-icons">delete_forever</span>
 												</button>
                                             </div>

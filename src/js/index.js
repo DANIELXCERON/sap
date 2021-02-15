@@ -13,6 +13,7 @@ const getTime = require("../src/js/modules/reloj");
 const progressBar = require("../src/js/modules/progress-bar.js");
 const PlayListDB = require("../src/js/modules/playlist-db");
 
+
 /** icono de la aplicacion */
 const iconPath = (__dirname, "../src/img/logo-icon.png");
 
@@ -844,3 +845,4 @@ function SendFileToPlay2(datosStream) {
 
   ipcRenderer.send("datos:stream2", datosStream);
 }
+
