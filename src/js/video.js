@@ -179,7 +179,7 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
     case "youtube":
       marcoVideoWebview.innerHTML = `
       <webview id="wv1"
-        src="https://www.youtube.com/embed/${datosStream.url}?autoplay=1&start=${datosStream.in}&cc_load_policy=1" allowfullscreen>
+        src="https://www.youtube.com/embed/${datosStream.url}?autoplay=1&cc_load_policy=1" allowfullscreen>
       </webview>
       `;
       break;

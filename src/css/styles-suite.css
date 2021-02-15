@@ -73,7 +73,7 @@
 [data-theme="dark"] .dhx_list-item--focus,
 [data-theme="dark"] .dhx_list-item--selected:hover,
 [data-theme="dark"] .dhx_list-item:hover {
-  background-color: var(--color-3);
+  background-color: var(--color-1);
 }
 [data-theme="dark"] .dhx_list-item--selected {
   background-color: var(--color-1);

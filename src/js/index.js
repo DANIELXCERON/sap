@@ -79,11 +79,13 @@ const controlPlay = document.querySelector("#controlPlay");
 const controlPause = document.querySelector("#controlPause");
 const controlStop = document.querySelector("#controlStop");
 const controlForward = document.querySelector("#controlForward");
+
 const formLiveStream = document.querySelector("#formLiveStream");
 const formAnyone = document.querySelector("#formAnyone");
 const formFaceBook = document.querySelector("#formFaceBook");
 const formYouTube = document.querySelector("#formYouTube");
 const formSetAspectRatio = document.querySelector("#formSetAspectRatio");
+
 const ViewGraSwitch = document.querySelector("#ViewGraSwitch");
 const SafeAreaSwitch = document.querySelector("#SafeAreaSwitch");
 const DurationListViewDOM = document.querySelector("#DurationListViewDOM");
@@ -197,45 +199,108 @@ detenerWebVideo.addEventListener("click", (e) => {
   ipcRenderer.send("datos:stream", datosStream);
   e.preventDefault();
 });
+
+
+const config = {
+  css: "dhx_widget--bg_white dhx_widget--bordered",
+  padding: 40,
+  width: 450,
+  rows: [
+      {
+          type: "select",
+          name: "select",
+          value: "anyone",
+          placeholder: "i am select",
+          label: "select",
+          labelWidth: "100px",
+          labelPosition: "left",
+          disabled: false,
+          hidden: false,
+          helpMessage: "",
+          preMessage: "",
+          successMessage: "",
+          errorMessage: "",
+          options: [
+              {
+                  value: "anyone",
+                  content: "anyone"
+              },
+              {
+                  value: "livestream",
+                  content: "livestream"
+              },
+              {
+                  value: "facebook",
+                  content: "facebook"
+              },
+              {
+                  value: "youtube",
+                  content: "youtube"
+              }
+          ],
+      },
+      {
+          type: "input",
+          label: "Name",
+          labelPosition: "left",
+          icon: " ",
+          labelWidth: "130px",
+          name: "input",
+          value: "https://player-cdn.logicideas.media/embed/LI29a62fa1",
+      },
+  ]
+};
+
+const formLive = new dhx.Form("formLive", config);
+
+document.querySelector("#set_value").addEventListener("click", function() {
+  const datosStream = {
+    referencia: formLive.getValue().select,
+    url: formLive.getValue().input,
+  };
+  ipcRenderer.send("datos:stream", datosStream);
+});
+
+
 /** Entradas de formulario para la pestaña live stream */
-formLiveStream.addEventListener("submit", (e) => {
-  const ulrls = document.querySelector("#ulrls").value;
-  const datosStream = {
-    referencia: "livestream",
-    url: ulrls,
-  };
-  ipcRenderer.send("datos:stream", datosStream);
-  e.preventDefault();
-});
-formAnyone.addEventListener("submit", (e) => {
-  const ulrany = document.querySelector("#ulrany").value;
-  const datosStream = {
-    referencia: "anyone",
-    url: ulrany,
-  };
-  ipcRenderer.send("datos:stream", datosStream);
-  e.preventDefault();
-});
-formFaceBook.addEventListener("submit", (e) => {
-  const urldefb = document.querySelector("#urlfb").value;
-  const datosStream = {
-    referencia: "facebook",
-    url: urldefb,
-  };
-  ipcRenderer.send("datos:stream", datosStream);
-  e.preventDefault();
-});
-formYouTube.addEventListener("submit", (e) => {
-  const urlYT = document.querySelector("#urlYT").value;
-  const StartTime = document.querySelector("#StartTime").value;
-  const datosStream = {
-    referencia: "youtube",
-    url: urlYT,
-    in: StartTime,
-  };
-  ipcRenderer.send("datos:stream", datosStream);
-  e.preventDefault();
-});
+// formLiveStream.addEventListener("submit", (e) => {
+//   const ulrls = document.querySelector("#ulrls").value;
+//   const datosStream = {
+//     referencia: "livestream",
+//     url: ulrls,
+//   };
+//   ipcRenderer.send("datos:stream", datosStream);
+//   e.preventDefault();
+// });
+// formAnyone.addEventListener("submit", (e) => {
+//   const ulrany = document.querySelector("#ulrany").value;
+//   const datosStream = {
+//     referencia: "anyone",
+//     url: ulrany,
+//   };
+//   ipcRenderer.send("datos:stream", datosStream);
+//   e.preventDefault();
+// });
+// formFaceBook.addEventListener("submit", (e) => {
+//   const urldefb = document.querySelector("#urlfb").value;
+//   const datosStream = {
+//     referencia: "facebook",
+//     url: urldefb,
+//   };
+//   ipcRenderer.send("datos:stream", datosStream);
+//   e.preventDefault();
+// });
+// formYouTube.addEventListener("submit", (e) => {
+//   const urlYT = document.querySelector("#urlYT").value;
+//   const StartTime = document.querySelector("#StartTime").value;
+//   const datosStream = {
+//     referencia: "youtube",
+//     url: urlYT,
+//     in: StartTime,
+//   };
+//   ipcRenderer.send("datos:stream", datosStream);
+//   e.preventDefault();
+// });
 
 /** entrada para setear el aspec ration en live stream de facebook
  * cuando la horientacion del video es vertical
