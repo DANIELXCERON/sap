@@ -1,0 +1,22 @@
+:root {
+  --color-1: #2c3e50;
+  --color-2: #ecf0f1;
+  --color-3: #3498db;
+}
+
+/*TOOLBAR*/
+[data-theme="dark"] .dhx_widget.dhx_widget--bg_gray {
+  background-color: var(--color-1);
+}
+[data-theme="dark"] .dhx_toolbar-button__icon {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_toolbar-button {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_toolbar-button__caret {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_button--view_flat.dhx_button--color_primary {
+  background-color: var(--color-3);
+}

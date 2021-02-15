@@ -162,8 +162,7 @@ const richtext = new dhx.Richtext("richtext", {
     "style",
     "decoration",
     "colors",
-    "clear",
-    "stats"
+    "clear"
   ]
 });
 

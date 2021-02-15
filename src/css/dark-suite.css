@@ -1,0 +1,126 @@
+:root {
+  --color-1: #2c3e50;
+  --color-2: #ecf0f1;
+  --color-3: #3498db;
+}
+
+/*GRID*/
+[data-theme="dark"] .my_grid_css .dhx_grid-header-cell {
+  background: var(--color-1);
+  border-color: var(--color-2);
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_data-wrap,
+[data-theme="dark"] .dhx_grid-body {
+  background-color: var(--color-1);
+}
+[data-theme="dark"] .dhx_grid-cell .dhx_cell-content {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_grid-header-cell--sortable:hover:after,
+[data-theme="dark"] .dhx_grid-header-cell--sorted:after {
+  background-color: var(--color-1);
+}
+[data-theme="dark"] .dhx_grid-sort-icon {
+  color: var(--color-2);
+}
+
+/*FORM*/
+[data-theme="dark"] .my_form_css,
+[data-theme="dark"] .my_form_css,
+[data-theme="dark"] .dhx_layout-cell {
+  background: var(--color-1);
+}
+
+/*general*/
+[data-theme="dark"] .dhx_label {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_input {
+  color: var(--color-2);
+  background-color: var(--color-1);
+}
+[data-theme="dark"] .dhx_input__icon {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_button--view_link {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_popup {
+  border: 1px solid var(--color-2);
+  background: var(--color-1);
+  color: var(--color-2);
+}
+
+/*combobox*/
+[data-theme="dark"] .dhx_combobox-tag {
+  border: 1px solid var(--color-2);
+  background-color: var(--color-3);
+}
+[data-theme="dark"] .dhx_combobox-tag__value {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_combobox-input-box {
+  background-color: var(--color-1);
+}
+[data-theme="dark"] .dhx_combobox-tag__action {
+  color: var(--color-1);
+}
+[data-theme="dark"] .dhx_combobox-tag__action:hover {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_combobox-input__icon {
+  color: var(--color-2);
+}
+
+/*list*/
+[data-theme="dark"] .dhx_list {
+  background-color: var(--color-1);
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_list-item--focus,
+[data-theme="dark"] .dhx_list-item--selected:hover,
+[data-theme="dark"] .dhx_list-item:hover {
+  background-color: var(--color-1);
+}
+[data-theme="dark"] .dhx_list-item--selected {
+  background-color: var(--color-1);
+  box-shadow: inset 2px 0 0 0 var(--color-3);
+}
+
+/*timepicker*/
+[data-theme="dark"] .dhx_timepicker {
+  background-color: var(--color-1);
+  border: 1px solid var(--color-2);
+}
+[data-theme="dark"] .dhx_timepicker-input,
+[data-theme="dark"] .dhx_timepicker-delimer {
+  color: var(--color-2);
+}
+
+/*calendar*/
+[data-theme="dark"] .dhx_calendar {
+  background-color: var(--color-1);
+  border: 1px solid var(--color-2);
+}
+[data-theme="dark"] .dhx_calendar-month,
+[data-theme="dark"] .dhx_calendar-year {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_calendar-week-number,
+[data-theme="dark"] .dhx_calendar-weekday {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_calendar-day {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_calendar-day--weekend {
+  color: var(--color-3);
+}
+[data-theme="dark"] .dhx_button--view_link.dhx_button--color_secondary {
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_button--view_link.dhx_button--color_secondary:hover {
+  color: var(--color-1);
+  background-color: var(--color-2);
+}
