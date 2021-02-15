@@ -52,6 +52,19 @@
   <script type="text/javascript" src="./js/dark-mode-listen.js"></script>
 
   <script>
+    /** icono de la aplicacion */
+    const iconPath = (__dirname, "../src/img/logo-icon.png");
+
+    /** barra de titulo personalizada */
+    const customTitlebar = require("custom-electron-titlebar");
+    var titlebar = new customTitlebar.Titlebar({
+      backgroundColor: customTitlebar.Color.fromHex("#333"),
+      // icon: iconPath,
+      menu: null,
+      minimizable: false,
+      maximizable: false,
+    });
+
     const { app } = require('electron').remote;
     const remote = require('electron').remote;
     const { ipcRenderer } = require("electron");

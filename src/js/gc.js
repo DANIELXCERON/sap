@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-const { dialog, app } = require("electron").remote;
+const { dialog, app, Menu } = require("electron").remote;
 const fs = require("fs");
 
 // const textFormGC = document.querySelector("#textFormGC");
@@ -16,34 +16,82 @@ SpeedGC.addEventListener("change", (event) => {
   localStorage.setItem("SpeedGC", SpeedGC.value);
 });
 
-/** barra de menu */
-/** cargar gc file */
-ipcRenderer.on("openGC", () => {
-  dialog.showOpenDialog({
-      title: "Abrir GC",
-      buttonLabel: "Abrir",
-      properties: ["openFile"],
-      filters: [{ name: "SGC", extensions: ["sgc"] }],
-    }).then((result) => {
-      /**si no ha sido cancelado */
-      if (!result.canceled) {
-        /**se guarda la ruta del archivo sgc guardado */
-        sessionStorage.setItem("sgc-path", result.filePaths[0].toString());
-        /**luego carga los nuevos datos */
-        fetch(result.filePaths[0])
-          .then((results) => results.json())
-          .then(function (gcContent) {
-            richtext.setValue(gcContent.textoGC.slice(24, -7), 'html');
-            CssPerFormGC.value = gcContent.textoGC.slice(13, 22);
-          });
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
+/** icono de la aplicacion */
+const iconPath = (__dirname, "../src/img/logo-icon.png");
+
+/**Menu del CG */
+const GCWindowMenu = [
+  {
+    label: "Archivo",
+    submenu: [
+      {
+        label: "Abrir...",
+        accelerator: "Ctrl+O",
+        click() {
+          openFileGC();
+        },
+      },
+      {
+        label: "Guardar",
+        accelerator: "Ctrl+S",
+        click() {
+          saveGC();
+        },
+      },
+      {
+        label: "Guardar como...",
+        accelerator: "Ctrl+Shift+S",
+        click() {
+          saveAsGC();
+        },
+      },
+    ],
+  },
+];
+GCWindowMenu.push({
+  label: "dev",
+    click(item, focusedWindow) {
+      focusedWindow.toggleDevTools();
+    },
 });
 
+/** barra de titulo personalizada */
+const customTitlebar = require("custom-electron-titlebar");
+var titlebar = new customTitlebar.Titlebar({
+  backgroundColor: customTitlebar.Color.fromHex("#333"),
+  // icon: iconPath,
+  menu: Menu.buildFromTemplate(GCWindowMenu)
+});
+
+
+/** barra de menu */
+/** cargar gc file */
+function openFileGC(){
+  dialog.showOpenDialog({
+    title: "Abrir GC",
+    buttonLabel: "Abrir",
+    properties: ["openFile"],
+    filters: [{ name: "SGC", extensions: ["sgc"] }],
+  }).then((result) => {
+    /**si no ha sido cancelado */
+    if (!result.canceled) {
+      /**se guarda la ruta del archivo sgc guardado */
+      sessionStorage.setItem("sgc-path", result.filePaths[0].toString());
+      /**luego carga los nuevos datos */
+      fetch(result.filePaths[0])
+        .then((results) => results.json())
+        .then(function (gcContent) {
+          richtext.setValue(gcContent.textoGC.slice(24, -7), 'html');
+          CssPerFormGC.value = gcContent.textoGC.slice(13, 22);
+        });
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
+}
+
 /** guardar gc file */
-ipcRenderer.on("saveGC", () => {
+function saveGC(){
   if (sessionStorage.getItem("sgc-path")) {
     const datosGC = {
       textoGC: `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
@@ -66,13 +114,9 @@ ipcRenderer.on("saveGC", () => {
   } else {
     saveAsGC();
   }
-});
+}
 
 /** guardar como... */
-ipcRenderer.on("saveAsGC", () => {
-  saveAsGC();
-});
-
 function saveAsGC() {
   const options = {
     defaultPath: `${app.getPath("documents")}/${richtext.getValue('text').slice(0, 25).replace(/(\r\n|\n|\r)/gm, "")}`,

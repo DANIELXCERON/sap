@@ -76,7 +76,7 @@ function openMainWindow() {
     show: false,
     width: 1100,
     height: 680,
-    // frame: false,
+    frame: false,
     title: `${app.getName()} ${app.getVersion()}`,
     webPreferences: {
       webviewTag: true,
@@ -115,7 +115,6 @@ function openMainWindow() {
     mainWindow = null;
   });
 }
-
 
 // Ventana de video
 function openVideoWindow() {
@@ -208,6 +207,7 @@ function openGCWindow() {
     width: 16+1020,
     height: 580,
     title: "Generador de caracteres",
+    frame: false,
     webviewTag: true,
     webPreferences: {
       nodeIntegration: true,
@@ -215,7 +215,6 @@ function openGCWindow() {
     },
   });
   GCWindow.setIcon(imgPath_icon);
-  GCWindow.setMenu(Menu.buildFromTemplate(GCWindowMenu));
   GCWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "gc.html"),
@@ -263,7 +262,6 @@ function OpenAboutWindow() {
   });
 }
 
-
 // Ventana de Actualizacion
 function OpenUpdatesWindow() {
   windowUpdates = new BrowserWindow({
@@ -274,7 +272,7 @@ function OpenUpdatesWindow() {
     width: 500,
     height: 400,
     resizable: true,
-    frame: true,
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
@@ -471,36 +469,6 @@ const MainWindowMenu = [
   },
 ];
 
-// Menu del GC
-const GCWindowMenu = [
-  {
-    label: "Archivo",
-    submenu: [
-      {
-        label: "Abrir...",
-        accelerator: "Ctrl+O",
-        click() {
-          GCWindow.webContents.send("openGC");
-        },
-      },
-      {
-        label: "Guardar",
-        accelerator: "Ctrl+S",
-        click() {
-          GCWindow.webContents.send("saveGC");
-        },
-      },
-      {
-        label: "Guardar como...",
-        accelerator: "Ctrl+Shift+S",
-        click() {
-          GCWindow.webContents.send("saveAsGC");
-        },
-      },
-    ],
-  },
-];
-
 // Herramientas para desarrolladores en entornos de desarrollo
 // if (app.isPackaged === false) {
   //si la app no esta empaquetada
@@ -519,16 +487,4 @@ const GCWindowMenu = [
       },
     },
   );
-  
-  GCWindowMenu.push({
-    label: "dev",
-    submenu: [
-      {
-        label: "toggle Dev Tools",
-        click(item, focusedWindow) {
-          focusedWindow.toggleDevTools();
-        },
-      },
-    ],
-  });
 // }

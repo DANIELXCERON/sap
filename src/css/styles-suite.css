@@ -4,7 +4,6 @@
   --color-3: #3498db;
 }
 
-
 /*GRID*/
 [data-theme="dark"] .my_grid_css .dhx_grid-header-cell {
   background: var(--color-1);
@@ -40,6 +39,10 @@
 [data-theme="dark"] .dhx_button--view_link {
   color: var(--color-2);
 }
+[data-theme="dark"]  .dhx_popup {
+  border: 1px solid var(--color-2);
+  background: var(--color-1);
+}
 
 /*combobox*/
 [data-theme="dark"] .dhx_combobox-tag {
@@ -62,9 +65,25 @@
   color: var(--color-2);
 }
 
+/*list*/
+[data-theme="dark"] .dhx_list {
+  background-color: var(--color-1);
+  color: var(--color-2);
+}
+[data-theme="dark"] .dhx_list-item--focus,
+[data-theme="dark"] .dhx_list-item--selected:hover,
+[data-theme="dark"] .dhx_list-item:hover {
+  background-color: var(--color-3);
+}
+[data-theme="dark"] .dhx_list-item--selected {
+  background-color: var(--color-1);
+  box-shadow: inset 2px 0 0 0 var(--color-3);
+}
+
 /*timepicker*/
 [data-theme="dark"] .dhx_timepicker {
   background-color: var(--color-1);
+  border: 1px solid var(--color-2);
 }
 [data-theme="dark"] .dhx_timepicker-input,
 [data-theme="dark"] .dhx_timepicker-delimer {
@@ -74,6 +93,7 @@
 /*calendar*/
 [data-theme="dark"] .dhx_calendar {
   background-color: var(--color-1);
+  border: 1px solid var(--color-2);
 }
 [data-theme="dark"] .dhx_calendar-month,
 [data-theme="dark"] .dhx_calendar-year {
@@ -89,7 +109,6 @@
 [data-theme="dark"] .dhx_calendar-day--weekend {
   color: var(--color-3);
 }
-
 [data-theme="dark"] .dhx_button--view_link.dhx_button--color_secondary {
   color: var(--color-2);
 }

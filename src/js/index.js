@@ -13,8 +13,7 @@ const getTime = require("../src/js/modules/reloj");
 const progressBar = require("../src/js/modules/progress-bar.js");
 const PlayListDB = require("../src/js/modules/playlist-db");
 
-/** icono de la aplicacion */
-const iconPath = (__dirname, "../src/img/logo-icon.png");
+
 
 /**definir idioma para suite dhmtlx */
 const lang = app.getLocale()
@@ -22,12 +21,18 @@ dhx.i18n.setLocale("calendar", LOCALE[lang]);
 dhx.i18n.setLocale("timepicker", LOCALE[lang]);
 dhx.i18n.setLocale("combobox", LOCALE[lang]);
 
+
+/** icono de la aplicacion */
+const iconPath = (__dirname, "../src/img/logo-icon.png");
+
 /** barra de titulo personalizada */
-// const customTitlebar = require("custom-electron-titlebar");
-// new customTitlebar.Titlebar({
-//   backgroundColor: customTitlebar.Color.fromHex("#333"),
-//   icon: iconPath,
-// });
+const customTitlebar = require("custom-electron-titlebar");
+var titlebar = new customTitlebar.Titlebar({
+  backgroundColor: customTitlebar.Color.fromHex("#333"),
+  icon: iconPath,
+  enableMnemonics: true,
+
+});
 
 /** Barra de estado*/
 function StatusBar(item) {
