@@ -1,41 +1,35 @@
-/* estilo quill editor enriquecido*/
-#editor-container {
-    height: 200px;
-    /* background-color: #eee; */
-  }
-
 /*ventana de edicion*/
 #marcoPreview {
-    width: 100%;
-    height: 60px;
-    overflow: hidden;
+  width: 100%;
+  height: 60px;
+  overflow: hidden;
 }
 
 #GCTextPreview {
-    position: relative;
-    top: 8px;
-    inline-size: max-content;
+  position: relative;
+  top: 8px;
+  inline-size: max-content;
 }
 
 html,
 body {
-    overflow-x: hidden;
-    margin: 0px;
-    padding: 0px;
-    font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
+  margin: 0px;
+  padding: 0px;
+  font-family: "Roboto", sans-serif;
 }
 
 .moviendoGC {
-    animation-name: moviendoGC;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+  animation-name: moviendoGC;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
 }
 
 @keyframes moviendoGC {
-    from {
-        left: 0px;
-    }
-    to {
-        left: 0px;
-    }
+  from {
+    left: 0px;
+  }
+  to {
+    left: 0px;
+  }
 }

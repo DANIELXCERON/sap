@@ -1,22 +1,3 @@
-/*Fuente personalizada*/
-@import url("https://fonts.googleapis.com/css2?family=Comfortaa&family=Jua&family=Lato&family=Poppins&family=Roboto&display=swap");
-
-.ql-font-comfortaa {
-  font-family: "Comfortaa", cursive;
-}
-.ql-font-jua {
-  font-family: "Jua", sans-serif;
-}
-.ql-font-lato {
-  font-family: "Lato", sans-serif;
-}
-.ql-font-poppins {
-  font-family: "Poppins", sans-serif;
-}
-.ql-font-roboto {
-  font-family: "Roboto", sans-serif;
-}
-
 /* Estilos para el texto*/
 .GCStyle-0 {
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);
@@ -55,6 +36,7 @@
   padding: 1px 5px 1px 5px;
   border-radius: 0.1rem;
 }
+
 /*TEXO ENRIQUECIDO*/
 /*eliminar saltos de linea*/
 h1,
@@ -62,4 +44,3 @@ h2,
 p {
   display: inline;
 }
-
