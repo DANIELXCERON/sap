@@ -17,6 +17,13 @@
 [data-theme="dark"] .dhx_grid-cell .dhx_cell-content {
   color: var(--color-2);
 }
+[data-theme="dark"] .dhx_grid-header-cell--sortable:hover:after,
+[data-theme="dark"] .dhx_grid-header-cell--sorted:after {
+  background-color: var(--color-1);
+}
+[data-theme="dark"] .dhx_grid-sort-icon {
+  color: var(--color-2);
+}
 
 /*FORM*/
 [data-theme="dark"] .my_form_css,
@@ -39,7 +46,7 @@
 [data-theme="dark"] .dhx_button--view_link {
   color: var(--color-2);
 }
-[data-theme="dark"]  .dhx_popup {
+[data-theme="dark"] .dhx_popup {
   border: 1px solid var(--color-2);
   background: var(--color-1);
   color: var(--color-2);
