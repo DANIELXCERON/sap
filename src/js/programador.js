@@ -724,9 +724,15 @@ function loadListProgram(item) {
         .then((results) => results.json())
         .then(function (list) {
             // selección de cortinilla
-            console.log(list)
             // aqui un forEach(element => console.log(element));
-            list.forEach(element => console.log(element.settled));
+            list.forEach(element => {
+                if (element.settled === "inicio"){
+                    console.log(element.path)
+                }
+                // if (element.settled === "fin"){
+                //     console.log(element.path)
+                // }
+            });
 
 
             // agregar de forma randon
