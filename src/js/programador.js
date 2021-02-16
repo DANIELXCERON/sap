@@ -717,12 +717,18 @@ function ejecuteInstant(item) {
     }
 }
 
-/**cargar item de la lista en cola (Programas TV) */
+/**cargar item de la lista en cola (Programas) */
 function loadListProgram(item) {
     /** obtener datos de la lista al cargar */
     fetch(item.path)
         .then((results) => results.json())
         .then(function (list) {
+            // selección de cortinilla
+            console.log(list)
+            // aqui un forEach(element => console.log(element));
+            list.forEach(element => console.log(element.settled));
+
+
             // agregar de forma randon
             // var cell = list[nTF.randomNumber(list.length - 1)]
             // agregar de forma ordenada
@@ -738,11 +744,10 @@ function loadListProgram(item) {
             }else{
                 index = 0
             }
-
             var cell = list[index]
+            // 
             //guarda en sesion storage el index del item que se agrego a cola
             sessionStorage.setItem(item.item, index);
-
             const NextVideo = {
                 namefile: "[P] " + cell.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                 ref: cell.ref,
