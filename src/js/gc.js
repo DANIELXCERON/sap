@@ -2,71 +2,80 @@ const { ipcRenderer } = require("electron");
 const { dialog, app, Menu } = require("electron").remote;
 const fs = require("fs");
 
-// const textFormGC = document.querySelector("#textFormGC");
-const CssPerFormGC = document.querySelector("#CssPerFormGC");
-const SpeedGC = document.querySelector("#SpeedGC");
 const GCTextPreview = document.querySelector("#GCTextPreview");
 const marcoPreview = document.querySelector("#marcoPreview");
-
-// setear input de velocidad a la guardada en localStorage
-SpeedGC.value = localStorage.getItem("SpeedGC");
-// cada vez que se hace un cambio
-SpeedGC.addEventListener("change", (event) => {
-  // guardar ese cambio
-  localStorage.setItem("SpeedGC", SpeedGC.value);
-});
 
 /** icono de la aplicacion */
 const iconPath = (__dirname, "../src/img/logo-icon.png");
 
-/**Menu del CG */
-const GCWindowMenu = [
-  {
-    label: "Archivo",
-    submenu: [
-      {
-        label: "Abrir...",
-        accelerator: "Ctrl+O",
-        click() {
-          openFileGC();
-        },
-      },
-      {
-        label: "Guardar",
-        accelerator: "Ctrl+S",
-        click() {
-          saveGC();
-        },
-      },
-      {
-        label: "Guardar como...",
-        accelerator: "Ctrl+Shift+S",
-        click() {
-          saveAsGC();
-        },
-      },
-    ],
-  },
-];
-GCWindowMenu.push({
-  label: "dev",
-    click(item, focusedWindow) {
-      focusedWindow.toggleDevTools();
-    },
-});
+
 
 /** barra de titulo personalizada */
 const customTitlebar = require("custom-electron-titlebar");
 var titlebar = new customTitlebar.Titlebar({
   backgroundColor: customTitlebar.Color.fromHex("#333"),
-  // icon: iconPath,
-  menu: Menu.buildFromTemplate(GCWindowMenu)
+  // icon: iconPath,Menu.getApplicationMenu()
+  menu: Menu.getApplicationMenu()
 });
 
+var formGC = new dhx.Form("formGC", {
+  css: "my_form_css",
+  padding: 20,
+  rows: [
+    {
+      type: "slider",
+      name: "speed",
+      label: "Velocidad",
+      labelPosition: "left",
+      helpMessage: "Velocidad de desplazamiento del texto",
+      min: 1,
+      max: 10,
+      value: 5,
+    },
+    {
+      type: "select",
+      name: "css",
+      value: "GCStyle-3",
+      label: "CSS",
+      labelPosition: "left",
+      helpMessage: "Selccione un estilo css",
+      options: [
+          {
+              value: "GCStyle-0",
+              content: "GCStyle-0"
+          },
+          {
+              value: "GCStyle-1",
+              content: "GCStyle-1"
+          },
+          {
+              value: "GCStyle-2",
+              content: "GCStyle-2"
+          },
+          {
+              value: "GCStyle-3",
+              content: "GCStyle-3"
+          },
+          {
+              value: "GCStyle-4",
+              content: "GCStyle-4"
+          }
+      ],
+  },
+  ]
+});
+
+// setear input de velocidad al guardar en localStorage
+formGC.setValue({"speed": parseInt(localStorage.getItem("SpeedGC"))});
+// cada vez que se hace un cambio
+formGC.getItem("speed").events.on("change", function () {
+  // guardar ese cambio
+  localStorage.setItem("SpeedGC", arguments[0][0]);
+});
 
 /** barra de menu */
 /** cargar gc file */
-function openFileGC(){
+ipcRenderer.on("openFileGC", () => {
   dialog.showOpenDialog({
     title: "Abrir GC",
     buttonLabel: "Abrir",
@@ -82,19 +91,19 @@ function openFileGC(){
         .then((results) => results.json())
         .then(function (gcContent) {
           richtext.setValue(gcContent.textoGC.slice(24, -7), 'html');
-          CssPerFormGC.value = gcContent.textoGC.slice(13, 22);
+          formGC.setValue({"css": gcContent.textoGC.slice(13, 22)});
         });
     }
   }).catch((err) => {
     console.log(err);
   });
-}
+})
 
 /** guardar gc file */
-function saveGC(){
+ipcRenderer.on("saveGC", () => {
   if (sessionStorage.getItem("sgc-path")) {
     const datosGC = {
-      textoGC: `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
+      textoGC: `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
     };
 
     var fileGcContent = JSON.stringify(datosGC);
@@ -114,9 +123,12 @@ function saveGC(){
   } else {
     saveAsGC();
   }
-}
+})
 
 /** guardar como... */
+ipcRenderer.on("saveAsGC", () => {
+  saveAsGC()
+})
 function saveAsGC() {
   const options = {
     defaultPath: `${app.getPath("documents")}/${richtext.getValue('text').slice(0, 25).replace(/(\r\n|\n|\r)/gm, "")}`,
@@ -130,7 +142,7 @@ function saveAsGC() {
 
   dialog.showSaveDialog(null, options).then((result) => {
       const datosGC = {
-        textoGC: `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
+        textoGC: `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
       };
 
       var fileGcContent = JSON.stringify(datosGC);
@@ -177,11 +189,10 @@ richtext.toolbar.data.add({
   value: "Preview",
   id: "Preview"
 }, 3);
-
 richtext.toolbar.events.on("click", function(id) {
   if (id === "play") {
     const datosGC = {
-      textoGC: `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
+      textoGC: `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
     };
     ipcRenderer.send("datos:gc", datosGC);
   }
@@ -190,13 +201,13 @@ richtext.toolbar.events.on("click", function(id) {
     GCTextPreview.classList.remove("moviendoGC");
 
     // Vista previa
-    GCTextPreview.innerHTML = `<spam class="${CssPerFormGC.value}">${richtext.getValue('html')}</spam>`,
+    GCTextPreview.innerHTML = `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
 
     /**se calcula el tiempo de desplazamiento en bace
      * a la longitud del texto y a la velocidad
      * condigurada
      */
-    GCTextPreview.style.cssText = `animation-duration:${Math.floor( (5 * (marcoPreview.clientWidth + GCTextPreview.clientWidth)) / (SpeedGC.value * 100))}s;`;
+    GCTextPreview.style.cssText = `animation-duration:${Math.floor( (5 * (marcoPreview.clientWidth + GCTextPreview.clientWidth)) / (formGC.getValue().speed * 100))}s;`;
 
     // agregar animacion css
     CSSAnimations.get("moviendoGC").setKeyframe("0%", {

@@ -73,7 +73,6 @@ if (!localStorage.getItem("SpeedGC")) {
 /** Elementos del DOM */
 const MainWindowTitlebar = document.querySelector(".window-title");
 const abrirArchivo = document.querySelector("#abrirArchivo");
-const LiveStreamVimeo = document.querySelector("#LiveStreamVimeo");
 const detenerWebVideo = document.querySelector("#detenerWebVideo");
 const controlPlay = document.querySelector("#controlPlay");
 const controlPause = document.querySelector("#controlPause");
@@ -179,13 +178,6 @@ SafeAreaSwitch.addEventListener("change", () => {
 });
 
 /** botones de la pestaña live stream */
-LiveStreamVimeo.addEventListener("click", (e) => {
-  const datosStream = {
-    referencia: "Capturadora",
-  };
-  ipcRenderer.send("datos:stream", datosStream);
-  e.preventDefault();
-});
 detenerWebVideo.addEventListener("click", (e) => {
   const datosStream = {
     referencia: "stopStream",

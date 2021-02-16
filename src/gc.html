@@ -4,8 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" type="text/css" href="./bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+    <!--Estilos para barra de titulo-->
+    <link rel="stylesheet" type="text/css" href="./css/titlebar.css" />
+    
     <link rel="stylesheet" type="text/css" href="./css/gc-style.css" />
     <link rel="stylesheet" type="text/css" href="./css/gc-window.css" />
     <link rel="stylesheet" type="text/css" href="./css/dark-mode.css" />
@@ -13,11 +17,13 @@
     <link rel="stylesheet" type="text/css" href="./material-icons/material-icons.css" />
     <!--Font Awesome pro-->
     <link rel="stylesheet" type="text/css" href="./font-awesome/pro.css" />
-    <link rel="stylesheet" href="./codebase/suite.css">
 
     <!--DHTMLX Rich Text Editor-->
     <link rel="stylesheet" href="./codebase/richtext.css" />
     <link rel="stylesheet" href="./css/dark-rich-text.css">
+    <!-- dhtmlx -->
+    <link rel="stylesheet" href="./codebase/suite.css">
+    <link rel="stylesheet" href="./css/dark-suite.css">
 </head>
 
 <body>
@@ -32,40 +38,33 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <form id="formGC" role="form">
-                    <div class="form-group">
-                        <label for="SpeedGC">Velocidad</label>
-                        <input type="number" id="SpeedGC" class="form-control" value="5" min="1" max="10" step=".1">
-                        <label for="CssPerFormGC">CSS Personalizado</label>
-                        <input type="text" id="CssPerFormGC" class="form-control" value="GCStyle-0">
-                    </div>
-                </form>
+                <div id="formGC"></div>
             </div>
             <div class="col-md-12">
-              <!-- component container -->
-              <div style="height: 270px;" id="richtext"></div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
+                <div id="richtext" style="height: 270px;"></div>
             </div>
         </div>
     </div>
 
     <!-- SCRIPTS -->
-    <script src="./js/locale.js"></script>
-    <script type="text/javascript" src="./codebase/suite.js"></script>
+
     <!-- JQuery -->
+    <script src="./js/locale.js"></script>
+
     <script>window.$ = window.jQuery = require('jquery');</script>
+    
+    <!--DHTMLX suite-->
+    <script type="text/javascript" src="./codebase/suite.js"></script>
     <!--DHTMLX Rich Text Editor-->
     <script type="text/javascript" src="./codebase/richtext.js"></script>
-    <!-- Bootstrap tooltips -->
+
     <!-- Bootstrap core JavaScript -->
     <script type="text/javascript" src="./bootstrap/bootstrap.min.js"></script>
     
     <script type="text/javascript" src="./js/css-animations.js"></script>
-    <script type="text/javascript" src="./js/gc.js"></script>
     <script type="text/javascript" src="./js/dark-mode-listen.js"></script>
+    <script type="text/javascript" src="./js/gc.js"></script>
+
 </body>
 
 </html>

@@ -94,7 +94,6 @@ function openMainWindow() {
       slashes: true,
     })
   );
-
   // Menu
   const mainMenu = Menu.buildFromTemplate(MainWindowMenu);
   // Establecer el menú en la ventana principal
@@ -215,6 +214,10 @@ function openGCWindow() {
     },
   });
   GCWindow.setIcon(imgPath_icon);
+  // Menu
+  const mainMenu = Menu.buildFromTemplate(GCWindowMenu);
+  // Establecer el menú en la ventana principal
+  Menu.setApplicationMenu(mainMenu);
   GCWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "gc.html"),
@@ -468,6 +471,35 @@ const MainWindowMenu = [
     ],
   },
 ];
+/**Menu del CG */
+const GCWindowMenu = [
+  {
+    label: "Archivo",
+    submenu: [
+      {
+        label: "Abrir...",
+        accelerator: "Ctrl+O",
+        click() {
+          GCWindow.webContents.send("openFileGC");
+        },
+      },
+      {
+        label: "Guardar",
+        accelerator: "Ctrl+S",
+        click() {
+          GCWindow.webContents.send("saveGC");
+        },
+      },
+      {
+        label: "Guardar como...",
+        accelerator: "Ctrl+Shift+S",
+        click() {
+          GCWindow.webContents.send("saveAsGC");
+        },
+      },
+    ],
+  },
+];
 
 // Herramientas para desarrolladores en entornos de desarrollo
 // if (app.isPackaged === false) {
@@ -487,4 +519,10 @@ const MainWindowMenu = [
       },
     },
   );
+  GCWindowMenu.push({
+    label: "dev",
+      click(item, focusedWindow) {
+        focusedWindow.toggleDevTools();
+      },
+  });
 // }
