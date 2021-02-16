@@ -1419,6 +1419,7 @@ function validContent(content) {
 
 function seeMessage(text) {
     dhx.message({
+        css: "dhx_message--success",
         text: text,
         expire: 3000,
         icon: "dxi dxi-close",

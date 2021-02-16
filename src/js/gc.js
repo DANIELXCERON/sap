@@ -8,8 +8,6 @@ const marcoPreview = document.querySelector("#marcoPreview");
 /** icono de la aplicacion */
 const iconPath = (__dirname, "../src/img/logo-icon.png");
 
-
-
 /** barra de titulo personalizada */
 const customTitlebar = require("custom-electron-titlebar");
 var titlebar = new customTitlebar.Titlebar({
@@ -17,61 +15,8 @@ var titlebar = new customTitlebar.Titlebar({
   // icon: iconPath,Menu.getApplicationMenu()
   menu: Menu.getApplicationMenu()
 });
-
-var formGC = new dhx.Form("formGC", {
-  css: "my_form_css",
-  padding: 20,
-  rows: [
-    {
-      type: "slider",
-      name: "speed",
-      label: "Velocidad",
-      labelPosition: "left",
-      helpMessage: "Velocidad de desplazamiento del texto",
-      min: 1,
-      max: 10,
-      value: 5,
-    },
-    {
-      type: "select",
-      name: "css",
-      value: "GCStyle-3",
-      label: "CSS",
-      labelPosition: "left",
-      helpMessage: "Selccione un estilo css",
-      options: [
-          {
-              value: "GCStyle-0",
-              content: "GCStyle-0"
-          },
-          {
-              value: "GCStyle-1",
-              content: "GCStyle-1"
-          },
-          {
-              value: "GCStyle-2",
-              content: "GCStyle-2"
-          },
-          {
-              value: "GCStyle-3",
-              content: "GCStyle-3"
-          },
-          {
-              value: "GCStyle-4",
-              content: "GCStyle-4"
-          }
-      ],
-  },
-  ]
-});
-
-// setear input de velocidad al guardar en localStorage
-formGC.setValue({"speed": parseInt(localStorage.getItem("SpeedGC"))});
-// cada vez que se hace un cambio
-formGC.getItem("speed").events.on("change", function () {
-  // guardar ese cambio
-  localStorage.setItem("SpeedGC", arguments[0][0]);
-});
+const lang = app.getLocale();
+dhx.i18n.setLocale("richtext", LOCALE[lang]);
 
 /** barra de menu */
 /** cargar gc file */
@@ -165,9 +110,62 @@ function saveAsGC() {
     });
 }
 
+var formGC = new dhx.Form("formGC", {
+  css: "my_form_css",
+  padding: 20,
+  rows: [
+    {
+      type: "slider",
+      name: "speed",
+      label: "Velocidad",
+      helpMessage: "Velocidad de desplazamiento del texto",
+      min: 1,
+      max: 10,
+      value: 5,
+    },
+    {
+      type: "select",
+      name: "css",
+      value: "GCStyle-3",
+      label: "CSS",
+      helpMessage: "Selccione un estilo css",
+      options: [
+          {
+              value: "GCStyle-0",
+              content: "GCStyle-0"
+          },
+          {
+              value: "GCStyle-1",
+              content: "GCStyle-1"
+          },
+          {
+              value: "GCStyle-2",
+              content: "GCStyle-2"
+          },
+          {
+              value: "GCStyle-3",
+              content: "GCStyle-3"
+          },
+          {
+              value: "GCStyle-4",
+              content: "GCStyle-4"
+          }
+      ],
+  },
+  ]
+});
+
+// setear input de velocidad al guardar en localStorage
+formGC.setValue({"speed": parseInt(localStorage.getItem("SpeedGC"))});
+// cada vez que se hace un cambio
+formGC.getItem("speed").events.on("change", function () {
+  // guardar ese cambio
+  localStorage.setItem("SpeedGC", arguments[0][0]);
+});
+
 /** Editor de texto Enriquecido */
 
-dhx.i18n.setLocale("richtext", LOCALE["es"]);
+
 const richtext = new dhx.Richtext("richtext", {
   toolbarBlocks: [
     "undo",
@@ -189,6 +187,7 @@ richtext.toolbar.data.add({
   value: "Preview",
   id: "Preview"
 }, 3);
+
 richtext.toolbar.events.on("click", function(id) {
   if (id === "play") {
     const datosGC = {
