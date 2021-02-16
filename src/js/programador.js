@@ -104,12 +104,11 @@ save_btn_scheluder_list.addEventListener("click", () => {
         if (!result.canceled) {
             fs.writeFile(result.filePath.toString(), dataSchedulerList, function (err) {
                 if (err) throw err;
-                dhx.message({
-                    text: "Lista guardada con exito",
-                    expire: 3000,
-                    icon: "dxi dxi-close",
-                    position: "bottom-left",
-                });
+                iziToast.show({
+                    title: "Lista guardada con exito",
+                    message: "",
+                    color: "green", // blue, red, green, yellow
+                  });
             });
         }
     }).catch((err) => {
@@ -279,12 +278,11 @@ function drop_scheduler_list(ev) {
             if (validExts(file.name, ["json", "plst"])) {
                 const formData = form_scheduler_list.getValue();
                 if (!formData.playTime) {
-                    dhx.message({
-                        text: "Primero selecciona una hora de inicio",
-                        expire: 5000,
-                        icon: "dxi dxi-close",
-                        position: "bottom-left",
-                    });
+                    iziToast.show({
+                        title: "Primero selecciona una hora de inicio",
+                        message: "",
+                        color: "red", // blue, red, green, yellow
+                      });
                     return
                 }
 
@@ -312,12 +310,11 @@ function drop_scheduler_list(ev) {
                     });
 
             } else {
-                dhx.message({
-                    text: "Archivo no válido",
-                    expire: 3000,
-                    icon: "dxi dxi-close",
-                    position: "bottom-left",
-                });
+                iziToast.show({
+                    title: "Archivo no válido",
+                    message: "",
+                    color: "red", // blue, red, green, yellow
+                  });
             }
         }
     }
@@ -773,11 +770,10 @@ function drop_scheduler_event(ev) {
     const formData = form_scheduler_events.getValue();
     // validar datos del formulario
     if (!formData.playDateRange) {
-        dhx.message({
-            text: "Debe seleccionar un rango de fecha",
-            expire: 5000,
-            icon: "dxi dxi-close",
-            position: "bottom-left",
+        iziToast.show({
+          title: "Debe seleccionar un rango de fecha",
+          message: "",
+          color: "red", // blue, red, green, yellow
         });
         return
     }
@@ -897,11 +893,10 @@ function drop_scheduler_event(ev) {
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
             } else {
-                dhx.message({
-                    text: "Archivo no válido",
-                    expire: 3000,
-                    icon: "dxi dxi-close",
-                    position: "bottom-left",
+                iziToast.show({
+                  title: "Archivo no válido",
+                  message: "",
+                  color: "red", // blue, red, green, yellow
                 });
             }
         }
@@ -1186,11 +1181,10 @@ function drop_scheduler_ad(ev) {
     ev.preventDefault();
     const formData = form_ad.getValue();
     if (!formData.playDateRange) {
-        dhx.message({
-            text: "Debe seleccionar un rango de fechas",
-            expire: 5000,
-            icon: "dxi dxi-close",
-            position: "bottom-left",
+        iziToast.show({
+          title: "Debe seleccionar un rango de fechas",
+          message: "",
+          color: "red", // blue, red, green, yellow
         });
         return
     }
@@ -1252,11 +1246,10 @@ function drop_scheduler_ad(ev) {
                 grid_scheduler_ad.data.add(data, getIndexAddGrid(grid_scheduler_ad));
 
             } else {
-                dhx.message({
-                    text: "Archivo no válido",
-                    expire: 3000,
-                    icon: "dxi dxi-close",
-                    position: "bottom-left",
+                iziToast.show({
+                  title: "Archivo no válido",
+                  message: "",
+                  color: "red", // blue, red, green, yellow
                 });
             }
         }
@@ -1418,13 +1411,11 @@ function validContent(content) {
 }
 
 function seeMessage(text) {
-    dhx.message({
-        css: "dhx_message--success",
-        text: text,
-        expire: 3000,
-        icon: "dxi dxi-close",
-        position: "bottom-right",
-    });
+    iziToast.show({
+        title: text,
+        message: "",
+        color: "blue", // blue, red, green, yellow
+      });
 }
 
 /** guardar programacion */

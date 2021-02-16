@@ -2,6 +2,7 @@
   --color-1: #2c3e50;
   --color-2: #ecf0f1;
   --color-3: #3498db;
+  --color-4: #95a5a6;
 }
 
 /*TOOLBAR*/
@@ -19,4 +20,8 @@
 }
 [data-theme="dark"] .dhx_button--view_flat.dhx_button--color_primary {
   background-color: var(--color-3);
+}
+[data-theme="dark"] .dhx_toolbar-button--disabled *,
+[data-theme="dark"] .dhx_toolbar-button:disabled * {
+  color: var(--color-4);
 }

@@ -57,11 +57,10 @@ ipcRenderer.on("saveGC", () => {
       fileGcContent,
       function (err) {
         if (err) throw err;
-        dhx.message({
-          text: "GC guardado con exito",
-          expire: 3000,
-          icon: "dxi dxi-close",
-          position: "bottom-right",
+        iziToast.show({
+          title: "GC guardado con exito",
+          message: "",
+          color: "green", // blue, red, green, yellow
         });
       }
     );
@@ -97,11 +96,10 @@ function saveAsGC() {
 
         fs.writeFile(result.filePath.toString(), fileGcContent, function (err) {
           if (err) throw err;
-          dhx.message({
-            text: "GC guardado con exito",
-            expire: 3000,
-            icon: "dxi dxi-close",
-            position: "bottom-right",
+          iziToast.show({
+            title: "GC guardado con exito",
+            message: "",
+            color: "green", // blue, red, green, yellow
           });
         });
       }
