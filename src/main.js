@@ -3,18 +3,14 @@ const electron = require("electron");
 
 const url = require("url");
 const path = require("path");
-
 const log = require('electron-log');
 
 // https://www.electron.build/auto-update
 const {autoUpdater: appUpdater, CancellationToken} = require("electron-updater");
-
 appUpdater.logger = log;
 appUpdater.logger.transports.file.level = 'info';
 log.info('Iniciando aplicación...');
-
 var cancellationToken = new CancellationToken()
-
 
 /* ruta de imagenes */
 // icono de la app
@@ -95,7 +91,7 @@ function openMainWindow() {
     })
   );
   // Menu
-  const mainMenu = Menu.buildFromTemplate(MainWindowMenu);
+  var mainMenu = Menu.buildFromTemplate(MainWindowMenu);
   // Establecer el menú en la ventana principal
   Menu.setApplicationMenu(mainMenu);
 
@@ -112,6 +108,44 @@ function openMainWindow() {
   });
   mainWindow.on("closed", () => {
     mainWindow = null;
+  });
+}
+
+// Ventana GC
+function openGCWindow() {
+  GCWindow = new BrowserWindow({
+    show: false,
+    width: 16+1020,
+    height: 580,
+    title: "Generador de caracteres",
+    frame: false,
+    webviewTag: true,
+    webPreferences: {
+      nodeIntegration: true,
+      enableRemoteModule: true,
+    },
+  });
+  GCWindow.setIcon(imgPath_icon);
+
+  GCWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "gc.html"),
+      protocol: "file",
+      slashes: true,
+    })
+  );
+
+  // Menu
+  const gcMenu = Menu.buildFromTemplate(GCWindowMenu);
+  // Establecer el menú en la ventana
+  // Menu.setApplicationMenu(gcMenu);
+  GCWindow.setMenu(null);
+
+  GCWindow.once("ready-to-show", () => {
+    GCWindow.show();
+  });
+  GCWindow.on("closed", () => {
+    GCWindow = null;
   });
 }
 
@@ -183,8 +217,7 @@ function openVideoWindow2() {
   });
 
   videoWindow.setIcon(imgPath_icon);
-  videoWindow.setMenu(null);
-
+  videoWindow.setMenu(null)
   videoWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "video.html"),
@@ -199,39 +232,7 @@ function openVideoWindow2() {
     videoWindow = null;
   });
 }
-// Ventana GC
-function openGCWindow() {
-  GCWindow = new BrowserWindow({
-    show: false,
-    width: 16+1020,
-    height: 580,
-    title: "Generador de caracteres",
-    frame: false,
-    webviewTag: true,
-    webPreferences: {
-      nodeIntegration: true,
-      enableRemoteModule: true,
-    },
-  });
-  GCWindow.setIcon(imgPath_icon);
-  // Menu
-  const mainMenu = Menu.buildFromTemplate(GCWindowMenu);
-  // Establecer el menú en la ventana principal
-  Menu.setApplicationMenu(mainMenu);
-  GCWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "gc.html"),
-      protocol: "file",
-      slashes: true,
-    })
-  );
-  GCWindow.once("ready-to-show", () => {
-    GCWindow.show();
-  });
-  GCWindow.on("closed", () => {
-    GCWindow = null;
-  });
-}
+
 // Ventana acerca de
 function OpenAboutWindow() {
   windowAcercaDe = new BrowserWindow({
