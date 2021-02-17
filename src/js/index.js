@@ -433,6 +433,18 @@ grid_queue.events.on("CellDblClick", function (cell, e) {
 
 ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
 
+
+  // cuando falte 1 segundo para terminar
+  var r = 1;
+  var sr = videoActualTime.TiempoRestante;
+  if (r + 0.3 >= sr && sr >= r) {
+    // reproducir transición 
+    ipcRenderer.send("datos:stream", {
+      referencia: "videobanner",
+      url: "D:/USER/Desktop/Graficas/transitions/Logo transicion fondo azul 1080 60.webm",
+    });
+  }
+
   /** Bara de progreso */
   let barvalue = progressBar.setBar(
     videoActualTime.TiempoTranscurrido,
@@ -446,9 +458,9 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
   timeDisplay.innerHTML = `
   ${nTF.secToHHMMSS(videoActualTime.TiempoTranscurrido)}
   /
-  ${nTF.secToHHMMSS(videoActualTime.TiempoDuracion)} | ${nTF.secToHHMMSS(
-    videoActualTime.TiempoRestante
-  )}/${nTF.secToHHMMSS(videoActualTime.TiempoRelojFin)}
+  ${nTF.secToHHMMSS(videoActualTime.TiempoDuracion)} | ${nTF.secToHHMMSS(videoActualTime.TiempoRestante)}
+  /
+  ${nTF.secToHHMMSS(videoActualTime.TiempoRelojFin)}
   `;
 
   /**ejecutar al faltar 2 segundos */
@@ -686,6 +698,9 @@ function convertList(item){
 }
 
 ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
+
+
+
 
   addCurtains()
 
