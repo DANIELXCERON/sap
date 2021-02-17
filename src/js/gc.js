@@ -13,7 +13,7 @@ const customTitlebar = require("custom-electron-titlebar");
 var titlebar = new customTitlebar.Titlebar({
   backgroundColor: customTitlebar.Color.fromHex("#333"),
   // icon: iconPath,Menu.getApplicationMenu()
-  menu: Menu.getApplicationMenu()
+  // menu: Menu.getApplicationMenu()
 });
 const lang = app.getLocale();
 dhx.i18n.setLocale("richtext", LOCALE[lang]);

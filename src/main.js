@@ -138,8 +138,7 @@ function openGCWindow() {
   // Menu
   const gcMenu = Menu.buildFromTemplate(GCWindowMenu);
   // Establecer el menú en la ventana
-  // Menu.setApplicationMenu(gcMenu);
-  GCWindow.setMenu(null);
+  Menu.setApplicationMenu(gcMenu);
 
   GCWindow.once("ready-to-show", () => {
     GCWindow.show();
@@ -217,7 +216,7 @@ function openVideoWindow2() {
   });
 
   videoWindow.setIcon(imgPath_icon);
-  videoWindow.setMenu(null)
+  videoWindow.setMenu(null);
   videoWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "video.html"),
