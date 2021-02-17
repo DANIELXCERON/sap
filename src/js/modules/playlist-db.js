@@ -69,5 +69,6 @@ module.exports = {
   ReproducirVideo,
   ReproducirLoop,
   ReproducirBanner,
+  TransitionVideo,
   eliminarVideo,
 };

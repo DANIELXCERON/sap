@@ -204,6 +204,7 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       vPLuno.src = datosStream.url;
       vPLuno.currentTime = datosStream.in;
       vPLuno.load();
+      vPLuno.style.cssText = "display: block;"
       break;
     case "videoloop": //reproduce video loop
       videoplayerloop.src = datosStream.url;
@@ -219,6 +220,7 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
     case "stopStream": //detiene stream web y reanuda video local
       marcoVideoWebview.innerHTML = "";
       vPLuno.play();
+      vPLuno.style.cssText = "display: block;"
       break;
     case "ocultar-mostrar-video-loop": //oculta o muestra video loop
       if (datosStream.valor == "ocultar") {
