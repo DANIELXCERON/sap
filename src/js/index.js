@@ -112,15 +112,15 @@ window.addEventListener("load", () => {
     var grid_queue_data = JSON.parse(localStorage.getItem("DataGrid"));
     grid_queue.data.add(grid_queue_data);
   }
-  if (localStorage.getItem("NextVideoData")) {
-    var dataVideoCurrent = JSON.parse(localStorage.getItem("DataVideoCurrent"));
+  // if (localStorage.getItem("NextVideoData")) {
+  //   var dataVideoCurrent = JSON.parse(localStorage.getItem("DataVideoCurrent"));
 
-    ipcRenderer.send("datos:stream", {
-      referencia: "file-video",
-      url: dataVideoCurrent.srcVideoCurrent,
-      in: dataVideoCurrent.TiempoTranscurrido,
-    });
-  }
+  //   ipcRenderer.send("datos:stream", {
+  //     referencia: "file-video",
+  //     url: dataVideoCurrent.srcVideoCurrent,
+  //     in: dataVideoCurrent.TiempoTranscurrido,
+  //   });
+  // }
 });
 
 // ocultar mostrar Video Loop & Banner
@@ -465,8 +465,12 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
   var remaining = 2;
   var secRemaining = videoActualTime.TiempoRestante;
   if (remaining + 0.3 >= secRemaining && secRemaining >= remaining) {
+
+
     /**pintar siguiente */
-    var index = parseInt(localStorage.getItem("CurrentVideoIndex"));
+    // var index = parseInt(localStorage.getItem("CurrentVideoIndex"));
+    /**NEW METOD */
+    var index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
 
     if (index < grid_queue.data._order.length - 1) {
       index += 1;
@@ -482,7 +486,7 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
       id: data.id,
     };
     grid_queue.addRowCss(data.id, "bg_id_Next");
-    localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
+    // localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
     localStorage.setItem("DataGrid", JSON.stringify(grid_queue.data._order));
   }
 
@@ -494,26 +498,40 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
 
 function NextVideo() {
   /** primero comprobar la existencia de datos */
-  if (
-    grid_queue.data._order &&
-    parseInt(localStorage.getItem("CurrentVideoIndex")) <
-      grid_queue.data._order.length
-  ) {
+  // if (grid_queue.data._order && parseInt(localStorage.getItem("CurrentVideoIndex")) < grid_queue.data._order.length) {
+  //   /** si el item es temporal lo elimina de la cola al finalizar */
+  //   if (grid_queue.data._order[parseInt(localStorage.getItem("CurrentVideoIndex"))].temp) {
+  //     /**lo borra de la lista */
+  //     grid_queue.data.remove(grid_queue.data.getId(parseInt(localStorage.getItem("CurrentVideoIndex"))));
+  //   }
+  // }
+
+  /**NEW METOD */
+  var index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
+
+  if (grid_queue.data._order && index < grid_queue.data._order.length) {
     /** si el item es temporal lo elimina de la cola al finalizar */
-    var temporal =
-      grid_queue.data._order[
-        parseInt(localStorage.getItem("CurrentVideoIndex"))
-      ].temp;
-    if (temporal) {
-      grid_queue.data.remove(
-        grid_queue.data.getId(
-          parseInt(localStorage.getItem("CurrentVideoIndex"))
-        )
-      );
+    if (grid_queue.data._order[index].temp) {
+      /**lo borra de la lista */
+      grid_queue.data.remove(grid_queue.data.getId(index));
     }
   }
 
-  var item = JSON.parse(localStorage.getItem("NextVideoData"));
+  // var item = JSON.parse(localStorage.getItem("NextVideoData"));
+  // StatusBar(item);
+
+  // SendFileToPlay({
+  //   referencia: item.ref,
+  //   url: item.path,
+  //   in: item.in,
+  //   id: item.id,
+  // });
+  
+  // var item = grid_queue.data._order[parseInt(localStorage.getItem("CurrentVideoIndex"))+1]
+
+  /**NEW METOD */
+  var item = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))+1]
+
   StatusBar(item);
 
   SendFileToPlay({
@@ -523,48 +541,28 @@ function NextVideo() {
     id: item.id,
   });
 
-  if (
-    parseInt(localStorage.getItem("CurrentVideoIndex")) <
-    grid_queue.data._order.length - 1
-  ) {
+
+
+  if (index < grid_queue.data._order.length - 1) {
     // no esta de ultimo
-    if (parseInt(localStorage.getItem("CurrentVideoIndex")) === 0) {
+    if (index === 0) {
       // esta de primero
-      grid_queue.removeRowCss(
-        grid_queue.data.getId(grid_queue.data._order.length - 1),
-        "bg_id_Current"
-      );
+      grid_queue.removeRowCss(grid_queue.data.getId(grid_queue.data._order.length - 1),"bg_id_Current");
       grid_queue.removeRowCss(grid_queue.data.getId(0), "bg_id_Next");
     } else {
       // esta en el medio
-      grid_queue.removeRowCss(
-        grid_queue.data.getId(
-          parseInt(localStorage.getItem("CurrentVideoIndex")) - 1
-        ),
-        "bg_id_Current"
-      );
-      grid_queue.removeRowCss(
-        grid_queue.data.getId(
-          parseInt(localStorage.getItem("NextVideoIndex")) - 1
-        ),
-        "bg_id_Next"
-      );
+      grid_queue.removeRowCss(grid_queue.data.getId(index - 1),"bg_id_Current");
+      grid_queue.removeRowCss(grid_queue.data.getId(parseInt(localStorage.getItem("NextVideoIndex")) - 1),"bg_id_Next");
     }
   } else {
     // esta de ultimo
-    if (parseInt(localStorage.getItem("CurrentVideoIndex"))) {
-      grid_queue.removeRowCss(
-        grid_queue.data.getId(
-          parseInt(localStorage.getItem("CurrentVideoIndex")) - 1
-        ),
-        "bg_id_Current"
-      );
+    if (index) {
+      grid_queue.removeRowCss(grid_queue.data.getId(index - 1),"bg_id_Current");
     }
-    grid_queue.removeRowCss(
-      grid_queue.data.getId(grid_queue.data._order.length - 1),
-      "bg_id_Next"
-    );
+    grid_queue.removeRowCss(grid_queue.data.getId(grid_queue.data._order.length - 1),"bg_id_Next");
   }
+
+  
 }
 
 /**Drop & Drag Files */
@@ -875,7 +873,10 @@ function getIndexAddGrid(grid) {
 /**envia a reproductor 1 */
 function SendFileToPlay(datosStream) {
   var index = grid_queue.data.getIndex(datosStream.id);
+  /**guardar index del item a reproducir */
   localStorage.setItem("CurrentVideoIndex", index);
+  /**guardar id del item a reproducir */
+  localStorage.setItem("CurrentVideoID", datosStream.id);
   if (index < grid_queue.data._order.length - 1) {
     localStorage.setItem("NextVideoIndex", index + 1);
   } else {
