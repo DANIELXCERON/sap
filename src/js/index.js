@@ -74,6 +74,7 @@ if (!localStorage.getItem("SpeedGC")) {
 const MainWindowTitlebar = document.querySelector(".window-title");
 const abrirArchivo = document.querySelector("#abrirArchivo");
 const detenerWebVideo = document.querySelector("#detenerWebVideo");
+const iniciarWebVideo = document.querySelector("#iniciarWebVideo");
 const controlPlay = document.querySelector("#controlPlay");
 const controlPause = document.querySelector("#controlPause");
 const controlStop = document.querySelector("#controlStop");
@@ -123,10 +124,7 @@ window.addEventListener("load", () => {
 });
 
 // ocultar mostrar Video Loop & Banner
-window.addEventListener("load", () => {
-  ViewGraSwitch &&
-    (initHiden(),
-    ViewGraSwitch.addEventListener("change", () => {
+window.addEventListener("load", () => { ViewGraSwitch &&(initHiden(),ViewGraSwitch.addEventListener("change", () => {
       resetHiden();
     }));
 });
@@ -178,12 +176,18 @@ SafeAreaSwitch.addEventListener("change", () => {
 });
 
 /** botones de la pestaña live stream */
-detenerWebVideo.addEventListener("click", (e) => {
+detenerWebVideo.addEventListener("click", () => {
   const datosStream = {
     referencia: "stopStream",
   };
   ipcRenderer.send("datos:stream", datosStream);
-  e.preventDefault();
+});
+iniciarWebVideo.addEventListener("click", () => {
+  const datosStream = {
+    referencia: formLive.getValue().server,
+    url: formLive.getValue().url,
+  };
+  ipcRenderer.send("datos:stream", datosStream);
 });
 
 var formLive = new dhx.Form("formLive", {
@@ -236,13 +240,7 @@ var formLive = new dhx.Form("formLive", {
       },
   ]
 });
-document.querySelector("#set_value").addEventListener("click", function() {
-  const datosStream = {
-    referencia: formLive.getValue().server,
-    url: formLive.getValue().url,
-  };
-  ipcRenderer.send("datos:stream", datosStream);
-});
+
 /** entrada para setear la escala en live stream de facebook
  * cuando la orientación del video es vertical
  */
@@ -441,7 +439,7 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
     // reproducir transición 
     ipcRenderer.send("datos:stream", {
       referencia: "videobanner",
-      url: "D:/USER/Desktop/Graficas/transitions/Logo transicion fondo azul 1080 60.webm",
+      url: localStorage.getItem("transition"),
     });
   }
 
@@ -821,6 +819,7 @@ function generarHtmlPlaylist(videos) {
      <button type="button" class="btn btn-success mb-2" onclick="ReproducirVideoDeLaLista('${videos._id}');" ><span class="material-icons">play_arrow</span></button>
      <button type="button" class="btn btn-primary mb-2" onclick="ReproducirComoLoop('${videos._id}');" ><span class="material-icons">loop</span></button>
      <button type="button" class="btn btn-outline-primary mb-2" onclick="ReproducirComoBanner('${videos._id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
+     <button type="button" class="btn btn-outline-primary mb-2" onclick="Transition('${videos._id}');" >Transition</button>
      <p class="card-text"><small class="text-muted">${videos.ruta}</small></p>
   </div>
   </div>
@@ -843,6 +842,10 @@ function ReproducirComoLoop(id) {
 
 function ReproducirComoBanner(id) {
   PlayListDB.ReproducirBanner(id);
+}
+
+function Transition(id) {
+  PlayListDB.TransitionVideo(id);
 }
 
 function cargarPlayListMain() {

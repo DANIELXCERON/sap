@@ -53,6 +53,12 @@ function ReproducirBanner(ruta) {
   });
 }
 
+function TransitionVideo(ruta) {
+  bd.findOne({ _id: ruta }, { ruta: 1 }, function (error, record) {
+    localStorage.setItem("transition",record.ruta)
+  });
+}
+
 function eliminarVideo(id) {
   bd.remove({ _id: id }, {}, function (error, numeroRegistrosEliminados) { });
 }
