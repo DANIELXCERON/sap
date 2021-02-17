@@ -723,15 +723,25 @@ function loadListProgram(item) {
     fetch(item.path)
         .then((results) => results.json())
         .then(function (list) {
-            // selección de cortinilla
-            // aqui un forEach(element => console.log(element));
-            list.forEach(element => {
-                if (element.settled === "inicio"){
-                    console.log(element.path)
+            /**Se carga los datos de las cortinilla de entrada y salida
+             * en el localStorage con CurtainIn y CurtainOut
+             * para la tandas de anuncios cada vez que se agrega una lista
+             * en events (lista de videos uno a uno)
+             */
+            list.forEach(dataVideo => {
+                if(dataVideo.curtain){
+                    localStorage.removeItem("CurtainIn");
+                    localStorage.removeItem("CurtainOut");
+                    switch (dataVideo.curtain) {
+                        case "inicio":
+                            localStorage.setItem("CurtainIn",JSON.stringify(dataVideo));
+                          break;
+                        case "fin":
+                            localStorage.setItem("CurtainOut",JSON.stringify(dataVideo));
+                          break;
+                        default:
+                    }
                 }
-                // if (element.settled === "fin"){
-                //     console.log(element.path)
-                // }
             });
 
 
@@ -1161,10 +1171,10 @@ function loadListAd(item) {
                 random: 0,
                 temp: true,
             }
-            /**si el tiempo restante es menor a 10 min la publicidad se agrega en cola de programa
+            /**si el tiempo restante es menor a 1 min la publicidad se agrega en cola de programa
              * si no lo es entonces se agrega a la cola de publicidad
             */
-            if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < 600){
+            if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (1 * 60)){
                 try {
                     grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
                 } catch (error) { console.error("[ADD] error pasable ;)", error) }
@@ -1172,11 +1182,12 @@ function loadListAd(item) {
                 grid_queue.data.add(NextVideo, parseInt(localStorage.getItem("NextVideoIndex")));
                 localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
             }else{
-                grid_ad_queue.data.add(NextVideo, 0);
+                grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));             
                 controlPlayerAD();
             }
         });
 }
+
 
 /**cargar graficos banner*/
 function loadGraphics(ref, url) {

@@ -23,6 +23,7 @@ function loadConfig() {
     if (localStorage.getItem("CurrentLoopVideoPath")) {
       videoplayerloop.src = localStorage.getItem("CurrentLoopVideoPath");
       videoplayerloop.load();
+      videoplayerloop.style.cssText = "display: block;"
     }
 
     var JSON_config = JSON.parse(localStorage.getItem("JSON_config"));
@@ -34,7 +35,7 @@ function loadConfig() {
   }
 }
 
-//guardar estado del reproductor
+//guardar estado del reproductor 1
 localStorage.setItem("playerStatus", "onpause"); // al iniciar indicar que esta en pausa
 vPLuno.onpause = (event) => {
   localStorage.setItem("playerStatus", "onpause");
@@ -47,6 +48,21 @@ vPLuno.onended = (event) => {
 };
 vPLuno.onerror = function (event) {
   localStorage.setItem("playerStatus", "error");
+};
+
+//guardar estado del reproductor 2
+localStorage.setItem("playerStatus2", "onpause"); // al iniciar indicar que esta en pausa
+vPLdos.onpause = (event) => {
+  localStorage.setItem("playerStatus2", "onpause");
+};
+vPLdos.onplay = (event) => {
+  localStorage.setItem("playerStatus2", "onplay");
+};
+vPLdos.onended = (event) => {
+  localStorage.setItem("playerStatus2", "onended");
+};
+vPLdos.onerror = function (event) {
+  localStorage.setItem("playerStatus2", "error");
 };
 
 // obtener datos del video 1 actual cada vez que cambia el tiempo del video
@@ -193,10 +209,12 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       videoplayerloop.src = datosStream.url;
       videoplayerloop.load();
       localStorage.setItem("CurrentLoopVideoPath", datosStream.url);
+      videoplayerloop.style.cssText = "display: block;"
       break;
     case "videobanner": //reproduce video banner
       videoPlayerBanner.src = datosStream.url;
       videoPlayerBanner.load();
+      videoPlayerBanner.style.cssText = "display: block;"
       break;
     case "stopStream": //detiene stream web y reanuda video local
       marcoVideoWebview.innerHTML = "";
@@ -357,7 +375,8 @@ ipcRenderer.on("datos:stream2", (e, datosStream) => {
       vPLdos.src = datosStream.url;
       vPLdos.currentTime = datosStream.in;
       vPLdos.load();
-      vPLuno.style.opacity = "0";
+      vPLuno.style.cssText = "display: none;"
+      vPLdos.style.cssText = "display: block;"
       break;
   }
 });
@@ -367,7 +386,7 @@ ipcRenderer.on("control:player", (e, control) => {
   switch (control) {
     case "play":
       vPLuno.play();
-      vPLuno.style.opacity = "1";
+      vPLuno.style.cssText = "display: block;"
       break;
     case "pause":
       vPLuno.pause();
@@ -375,6 +394,7 @@ ipcRenderer.on("control:player", (e, control) => {
     case "stop":
       vPLuno.pause();
       vPLuno.currentTime = 0;
+      vPLuno.style.cssText = "display: none;"
       break;
     case "forward":
       vPLuno.currentTime += 5;
@@ -387,6 +407,7 @@ ipcRenderer.on("control:player2", (e, control) => {
   switch (control) {
     case "play":
       vPLdos.play();
+      vPLdos.style.cssText = "display: block;"
       break;
     case "pause":
       vPLdos.pause();
@@ -394,7 +415,7 @@ ipcRenderer.on("control:player2", (e, control) => {
     case "stop":
       vPLdos.pause();
       vPLdos.currentTime = 0;
-      vPLdos.src = "";
+      vPLdos.style.cssText = "display: none;"
       break;
     case "forward":
       vPLdos.currentTime += 5;
@@ -407,4 +428,5 @@ videoPlayerBanner.onended = function () {
   /**simplemente termina el video */
   videoPlayerBanner.src = "";
   videoPlayerBanner.load();
+  videoPlayerBanner.style.cssText = "display: none;"
 };

@@ -377,7 +377,11 @@ grid_save_btn.addEventListener("click", () => {
           dataFilePlayList,
           function (err) {
             if (err) throw err;
-            console.log("PlayList Grid Guardada");
+            iziToast.show({
+              title: "PlayList Grid Guardada",
+              message: "",
+              color: "green", // blue, red, green, yellow
+            });
           }
         );
       }
@@ -648,31 +652,45 @@ var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
   // editable:true,
   // adjust: true,
 });
-/** al hacer doble click en un item */
-grid_ad_queue.events.on("CellDblClick", function (cell, e) {
-  /** remover css de todos */
-  grid_ad_queue.data._order.forEach((row) => {
-    grid_ad_queue.removeRowCss(row.id, "bg_id_Next");
-    grid_ad_queue.removeRowCss(row.id, "bg_id_Current");
-  });
 
-  /**enviar a reproducir */
-  SendFileToPlay2({
-    referencia: cell.ref,
-    url: cell.path,
-    in: cell.in,
-    id: cell.id,
-  });
-});
+/**Agrregar cortinillas */
+var n = 0
+function addCurtains(){
+  n += 1
+  console.log(n)
+  if (grid_ad_queue.data._order && grid_ad_queue.data._order.length === 0){
+    n = 0
+  }
+  if (n === 1){
+    // agrega la cortinilla de entrada de primero
+    grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainIn"))), 0);
+  }
+  if (n === 10) {
+    // agrega la cortinilla de salida de último
+    grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainOut"))), getIndexAddGrid(grid_ad_queue));
+  }
+}
+function convertList(item){
+  const NextVideo = {
+      namefile: `[${item.curtain}] ${item.namefile} | ${getTime.gT("hms24")}`,
+      ref: item.ref,
+      path: item.path,
+      duration: item.duration,
+      startTime: "00:00:00",
+      in: item.in,
+      custom: "bg_id_curtain",
+      random: 0,
+      temp: true,
+  }
+  return NextVideo
+}
 
 ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
 
+  addCurtains()
+
   /** Bara de progreso */
-  let barvalue = progressBar.setBar(
-    videoActualTime.TiempoTranscurrido,
-    videoActualTime.TiempoDuracion,
-    false
-  );
+  let barvalue = progressBar.setBar(videoActualTime.TiempoTranscurrido,videoActualTime.TiempoDuracion,false);
   progressBarDomAD.style.width = `${barvalue.progressBar}%`;
   progressBarDomAD.style.backgroundColor = `${barvalue.bgColor}`;
 
@@ -685,11 +703,10 @@ ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
   )}/${nTF.secToHHMMSS(videoActualTime.TiempoRelojFin)}
   `;
 
-  var secRemaining = videoActualTime.TiempoRestante;
+
 
   /**Al finalizar la reproduccion */
-  if (secRemaining == 0 && grid_ad_queue.data._order.length > 0) {
-
+  if (videoActualTime.TiempoRestante == 0 && grid_ad_queue.data._order.length > 0) {
     /**va eliminando los items */
     grid_ad_queue.data.remove(grid_ad_queue.data.getId(0));
 
@@ -697,17 +714,32 @@ ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
   }
 });
 
+/**controla los dos players pausando, deteniendo y reproduciendo */
 function controlPlayerAD(){
   if (grid_ad_queue.data._order && grid_ad_queue.data._order.length > 0){
+
+
+
+
+
     ipcRenderer.send("control:player", "pause");
+
+
+
+
+    /**obtine el primer video de la segunda lista de reproduccion grid_ad_queue
+     * luego lo envia a reproduccir SendFileToPlay2()
+    */
+
     var item = grid_ad_queue.data._order[0]
     SendFileToPlay2({
       referencia: item.ref,
       url: item.path,
       in: item.in,
       id: item.id,
-    }); 
+    });
   }else{
+    // continua principal y detiene el secundario
     ipcRenderer.send("control:player", "play");
     ipcRenderer.send("control:player2", "stop");
   }
