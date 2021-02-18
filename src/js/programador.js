@@ -1334,14 +1334,16 @@ function RelojProgramador() {
             //Datos del video actual
             let itemCurrent = grid_queue.data._order[index]
 
-            //mensaje de error
-            console.error("video error" , item.path)
+            
 
             /**elimina marcas anteriores */
-            // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Next");
-            // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Current");
+            grid_queue.removeRowCss(itemCurrent.id, "bg_id_Next");
+            grid_queue.removeRowCss(itemCurrent.id, "bg_id_Current");
+            
             //marca el video invalido
             grid_queue.addRowCss(itemCurrent.id, "bg_id_invalid");
+            //mensaje de error
+            console.error("video error" , itemCurrent.path)
 
             /**enviar a reproducir */
             SendFileToPlay({
