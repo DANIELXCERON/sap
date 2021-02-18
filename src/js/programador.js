@@ -1329,29 +1329,34 @@ function RelojProgramador() {
         try {
             //indice del video actual
             let index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))
-            //datos del proximo video
-            let itemNext = grid_queue.data._order[index+1]
             //Datos del video actual
             let itemCurrent = grid_queue.data._order[index]
-
-            
-
             /**elimina marcas anteriores */
-            // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Next");
-            // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Current");
-            
+            grid_queue.removeRowCss(itemCurrent.id, "bg_id_Next");
+            grid_queue.removeRowCss(itemCurrent.id, "bg_id_Current");
             //marca el video invalido
             grid_queue.addRowCss(itemCurrent.id, "bg_id_invalid");
             //mensaje de error
             console.error("video error" , itemCurrent.path)
 
+
+            //datos del siguiente video
+            let nextIndex;
+            if (index === grid_queue.data._order.length) {
+              nextIndex = 0;
+            } else {
+              nextIndex = index + 1;
+            }
+            
             /**enviar a reproducir */
+            var itemNext = grid_queue.data._order[nextIndex];
             SendFileToPlay({
                 referencia: itemNext.ref,
                 url: itemNext.path,
                 in: itemNext.in,
                 id: itemNext.id,
             });
+            
         } catch (error) {}
     }
     setTimeout(function () {
