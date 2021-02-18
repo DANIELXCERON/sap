@@ -468,8 +468,6 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
 
 
     /**pintar siguiente */
-    // var index = parseInt(localStorage.getItem("CurrentVideoIndex"));
-    /**NEW METOD */
     var index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
 
     if (index < grid_queue.data._order.length - 1) {
@@ -497,7 +495,6 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
 });
 
 function NextVideo() {
-  /**NEW METOD */
   //obtiene index del actual
   var index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
 
@@ -509,7 +506,6 @@ function NextVideo() {
     item = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))+1]
   }
   
-  /**NEW METOD */
   if (grid_queue.data._order && index < grid_queue.data._order.length) {
     grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"),"bg_id_Current");
     grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"),"bg_id_Next");
