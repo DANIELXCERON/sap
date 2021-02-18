@@ -497,40 +497,29 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
 });
 
 function NextVideo() {
-  /** primero comprobar la existencia de datos */
-  // if (grid_queue.data._order && parseInt(localStorage.getItem("CurrentVideoIndex")) < grid_queue.data._order.length) {
-  //   /** si el item es temporal lo elimina de la cola al finalizar */
-  //   if (grid_queue.data._order[parseInt(localStorage.getItem("CurrentVideoIndex"))].temp) {
-  //     /**lo borra de la lista */
-  //     grid_queue.data.remove(grid_queue.data.getId(parseInt(localStorage.getItem("CurrentVideoIndex"))));
-  //   }
-  // }
-
   /**NEW METOD */
+  //obtiene index del actual
   var index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
 
+  /**item siguiente*/
+  // como es el último vuelve al primer item con index 0
+  var item = grid_queue.data._order[0]
+  if (index < grid_queue.data._order.length - 1) {
+    //si no es el ultimo suma 1
+    item = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))+1]
+  }
+  
+  /**NEW METOD */
   if (grid_queue.data._order && index < grid_queue.data._order.length) {
+    grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"),"bg_id_Current");
+    grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"),"bg_id_Next");
+  
     /** si el item es temporal lo elimina de la cola al finalizar */
     if (grid_queue.data._order[index].temp) {
       /**lo borra de la lista */
       grid_queue.data.remove(grid_queue.data.getId(index));
     }
   }
-
-  // var item = JSON.parse(localStorage.getItem("NextVideoData"));
-  // StatusBar(item);
-
-  // SendFileToPlay({
-  //   referencia: item.ref,
-  //   url: item.path,
-  //   in: item.in,
-  //   id: item.id,
-  // });
-  
-  // var item = grid_queue.data._order[parseInt(localStorage.getItem("CurrentVideoIndex"))+1]
-
-  /**NEW METOD */
-  var item = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))+1]
 
   StatusBar(item);
 
@@ -540,28 +529,6 @@ function NextVideo() {
     in: item.in,
     id: item.id,
   });
-
-
-
-  if (index < grid_queue.data._order.length - 1) {
-    // no esta de ultimo
-    if (index === 0) {
-      // esta de primero
-      grid_queue.removeRowCss(grid_queue.data.getId(grid_queue.data._order.length - 1),"bg_id_Current");
-      grid_queue.removeRowCss(grid_queue.data.getId(0), "bg_id_Next");
-    } else {
-      // esta en el medio
-      grid_queue.removeRowCss(grid_queue.data.getId(index - 1),"bg_id_Current");
-      grid_queue.removeRowCss(grid_queue.data.getId(parseInt(localStorage.getItem("NextVideoIndex")) - 1),"bg_id_Next");
-    }
-  } else {
-    // esta de ultimo
-    if (index) {
-      grid_queue.removeRowCss(grid_queue.data.getId(index - 1),"bg_id_Current");
-    }
-    grid_queue.removeRowCss(grid_queue.data.getId(grid_queue.data._order.length - 1),"bg_id_Next");
-  }
-
   
 }
 
@@ -872,16 +839,9 @@ function getIndexAddGrid(grid) {
 }
 /**envia a reproductor 1 */
 function SendFileToPlay(datosStream) {
-  var index = grid_queue.data.getIndex(datosStream.id);
-  /**guardar index del item a reproducir */
-  localStorage.setItem("CurrentVideoIndex", index);
   /**guardar id del item a reproducir */
   localStorage.setItem("CurrentVideoID", datosStream.id);
-  if (index < grid_queue.data._order.length - 1) {
-    localStorage.setItem("NextVideoIndex", index + 1);
-  } else {
-    localStorage.setItem("NextVideoIndex", 0);
-  }
+
   try {
     grid_queue.addRowCss(datosStream.id, "bg_id_Current");
   } catch (error) {}
