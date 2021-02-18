@@ -1170,17 +1170,12 @@ function loadListAd(item) {
                 random: 0,
                 temp: true,
             }
-            /**si el tiempo restante es menor a 1 min la publicidad se agrega en cola de programa
+            /**si el tiempo restante es menor a 8 min la publicidad se agrega en cola de programa
              * si no lo es entonces se agrega a la cola de publicidad
             */
-            if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (1 * 60)){
-                // try {
-                //     grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
-                // } catch (error) { console.error("[ADD] error pasable ;)", error) }
-
+            if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (8 * 60)){
                 // se agrega adelante del video actualmente en reproduccion
                 grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1 );
-                // localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
             }else{
                 grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));             
                 controlPlayerAD();
