@@ -1330,15 +1330,15 @@ function RelojProgramador() {
             //indice del video actual
             let index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))
             //datos del proximo video
-            let item = grid_queue.data._order[index+1]
+            let itemNext = grid_queue.data._order[index+1]
             //Datos del video actual
             let itemCurrent = grid_queue.data._order[index]
 
             
 
             /**elimina marcas anteriores */
-            grid_queue.removeRowCss(itemCurrent.id, "bg_id_Next");
-            grid_queue.removeRowCss(itemCurrent.id, "bg_id_Current");
+            // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Next");
+            // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Current");
             
             //marca el video invalido
             grid_queue.addRowCss(itemCurrent.id, "bg_id_invalid");
@@ -1347,10 +1347,10 @@ function RelojProgramador() {
 
             /**enviar a reproducir */
             SendFileToPlay({
-                referencia: item.ref,
-                url: item.path,
-                in: item.in,
-                id: item.id,
+                referencia: itemNext.ref,
+                url: itemNext.path,
+                in: itemNext.in,
+                id: itemNext.id,
             });
         } catch (error) {}
     }
