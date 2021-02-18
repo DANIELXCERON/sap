@@ -222,7 +222,6 @@ function loadListQueue(item) {
         });
     }
     /**cargar los nuevos datos */
-    // grid_queue.data.load(item.path);
     /** obtener datos de la lista al cargar */
     fetch(item.path)
         .then((results) => results.json())
@@ -250,19 +249,6 @@ function loadListQueue(item) {
             if (item.trueRandom === true){
                 grid_queue.data.sort({ by: "random", dir: "asc" });
             }
-            
-
-            // /**si el siguiente video es igual al primer item de la lista */
-            // let index = 0;
-            // if (localStorage.getItem("NextVideoData") && (grid_queue.data._order[0].path === JSON.parse(localStorage.getItem("NextVideoData")).path)) {
-            //     index++
-            //     /** el index del video actual pasa a ser el anterior al siguiente*/
-            //     localStorage.setItem("CurrentVideoIndex", index - 1);
-            // }
-            // /** el index del video actual pasa a ser el anterior al siguiente*/
-            // localStorage.setItem("CurrentVideoIndex", grid_queue.data._order.length - 1);
-            // /** el siguiente video pasa a ser el siguiente de la lista (index++ o index = 0) */
-            // localStorage.setItem("NextVideoIndex", index);
         });
 }
 
@@ -328,9 +314,7 @@ function drop_scheduler_list(ev) {
     }
 }
 
-function drag_scheduler_list(ev) {
-    ev.preventDefault();
-}
+function drag_scheduler_list(ev) {ev.preventDefault();}
 /** Drop & Drag Files, Ends*/
 
 ///////////////////////////////////////// * END LIST * //////////////////////////////////////////////////
@@ -423,9 +407,9 @@ jsonFile_btn_scheluder_event.addEventListener("click", () => {
         var pathListJson = result.filePaths[0];
         grid_scheduler_event.data.load(pathListJson);
     })
-        .catch((err) => {
-            console.log(err);
-        });
+    .catch((err) => {
+        console.log(err);
+    });
 });
 /** Boton guardar lista */
 save_btn_scheluder_event.addEventListener("click", () => {
@@ -573,7 +557,6 @@ function ejecute_scheduler_event() {
     /**programacion local */
     // si hay lista y datos en ella
     if (grid_scheduler_event.data._order && grid_scheduler_event.data._order.length > 0) {
-
         // recorrer cada item
         grid_scheduler_event.data._order.forEach((item) => {
             // rango de fecha y hora
@@ -632,18 +615,13 @@ function ejecuteAdd(item) {
                 in: 0,
                 custom: "bg_id_Scheduler",
                 temp: item.temp,
-            },
-                // parseInt(localStorage.getItem("NextVideoIndex"))
-                grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1
-            );
+            }, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
           break;
         case 'datos:plst':
             loadListProgram(item)
           break;
         default:
-
     }
-
 }
 
 function ejecuteInstant(item) {
@@ -696,8 +674,6 @@ function loadListProgram(item) {
     fetch(item.path)
         .then((results) => results.json())
         .then(function (list) {
-
-            var skipIndex = []
             /**Se carga los datos de las cortinilla de entrada y salida
              * en el localStorage con CurtainIn y CurtainOut
              * para la tandas de anuncios cada vez que se agrega una lista
@@ -724,9 +700,6 @@ function loadListProgram(item) {
 
             var cell = list[getValidIndexList(list, false, item, [a,b])];
 
-
-            console.log(cell)
-
             const NextVideo = {
                 namefile: "[P] " + cell.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                 ref: cell.ref,
@@ -738,50 +711,12 @@ function loadListProgram(item) {
                 random: 0,
                 temp: true,
             }
-            // try {
-            //     grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
-            // } catch (error) { console.error("[P] error pasable ;)", error) }
 
             //agrega el video +1 index despues del actual en reproduccion
             grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
             // localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
             return NextVideo.path
         });
-}
-
-/**obtine que item agregar de acuerdo a los parametros
- * item: Array of Objects (archivo de lista)
- * list: Array of Objects (cada video del archivo de lista)
- * random: Boolean
- * skipIndex: Array [1,2] (dos de los index que se quieren omitir)
- */
-function getValidIndexList(list,random,item,skipIndex){
-    do {
-        var index
-        if (random){
-            // agregar de forma randon
-            index = nTF.randomNumber(list.length - 1)
-        }else{
-            // agregar de forma ordenada
-            if (sessionStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
-                // lee el index del ultimo item que se agrego de una lista especifica
-                index = parseInt(sessionStorage.getItem(item.item))
-                if (index < list.length - 1){ // mientras que el index este dentro de la lista
-                    index += 1
-                }else{
-                    index = 0
-                }
-            }else{
-                index = 0
-            }
-        }
-        sessionStorage.setItem(item.item, index);
-        //si el index resultante contiene el skipIndex
-        var even = (element) => element === index;
-    } while (skipIndex.some(even));
-
-    sessionStorage.setItem(item.item, index);
-    return index
 }
 
 /**Drop & Drag Files */
@@ -804,9 +739,6 @@ function drop_scheduler_event(ev) {
             let file = ev.dataTransfer.items[i].getAsFile();
             // si la extencion es
             if (validExts(file.name, ["sgc"])) { // generador de caracteres
-                // fetch(file.path)
-                // .then((results) => results.json())
-                // .then(function (contentGC) { });
                 if (formData.playDateRange !== "") {
                     var validDateRange;
 
@@ -832,8 +764,6 @@ function drop_scheduler_event(ev) {
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
-
-
             } else if (validExts(file.name, ["mp4", "mov"])) { // Archivo de video normal
                 if (formData.playDateRange !== "") {
                     var validDateRange;
@@ -1135,54 +1065,32 @@ function ejecute_scheduler_ad() {
 /**cargar item de la lista en cola */
 function loadListAd(item) {
     /** obtener datos de la lista al cargar */
-    fetch(item.path)
-        .then((results) => results.json())
-        .then(function (list) {
-            // agregar de forma randon
-            // var cell = list[nTF.randomNumber(list.length - 1)]
+    fetch(item.path).then((results) => results.json()).then(function (list) {
+        var cell = list[getValidIndexList(list,false,item,[-1,-1])]
 
-            // agregar de forma ordenada
-            var index
-            if (sessionStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
-                // lee el index del ultimo item que se agrego de una lista especifica
-                index = parseInt(sessionStorage.getItem(item.item))
-                if (index < list.length - 1){ // mientras que el index este dentro del tamaño de la lista
-                    index += 1
-                }else{
-                    index = 0
-                }
-            }else{
-                index = 0
-            }
-
-            var cell = list[index]
-            //guarda en sesion storage el index del item que se agrego a cola
-            sessionStorage.setItem(item.item, index);
-
-            const NextVideo = {
-                namefile: "[AD] " + cell.namefile + " | " +  item.interval + " | " + getTime.gT("hms24"),
-                ref: cell.ref,
-                path: cell.path,
-                duration: cell.duration,
-                startTime: "00:00:00",
-                in: 0,
-                custom: "bg_id_Scheduler",
-                random: 0,
-                temp: true,
-            }
-            /**si el tiempo restante es menor a 8 min la publicidad se agrega en cola de programa
-             * si no lo es entonces se agrega a la cola de publicidad
-            */
-            if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (8 * 60)){
-                // se agrega adelante del video actualmente en reproduccion
-                grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1 );
-            }else{
-                grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));             
-                controlPlayerAD();
-            }
-        });
+        const NextVideo = {
+            namefile: "[AD] " + cell.namefile + " | " +  item.interval + " | " + getTime.gT("hms24"),
+            ref: cell.ref,
+            path: cell.path,
+            duration: cell.duration,
+            startTime: "00:00:00",
+            in: 0,
+            custom: "bg_id_Scheduler",
+            random: 0,
+            temp: true,
+        }
+        /**si el tiempo restante es menor a 8 min la publicidad se agrega en cola de programa
+         * si no lo es entonces se agrega a la cola de publicidad
+        */
+        if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (8 * 60)){
+            // se agrega adelante del video actualmente en reproduccion
+            grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1 );
+        }else{
+            grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));             
+            controlPlayerAD();
+        }
+    });
 }
-
 
 /**cargar graficos banner*/
 function loadGraphics(ref, url) {
@@ -1285,7 +1193,7 @@ function drag_scheduler_ad(ev) {ev.preventDefault();}
 /** Drop & Drag Files, Ends*/
 ///////////////////////////////////////// * END AD * //////////////////////////////////////////////////
 
-//////////////////////////////////////// * INTERNET * /////////////////////////////////////////////////
+//////////////////////////////////////// * INTERNET TEST* /////////////////////////////////////////////////
 function fromHttpJson_event() {
     /** programacion desde internet */
     var JsonFromURL = "https://ategaitana.com/tv/status.json";
@@ -1336,7 +1244,40 @@ function fromHttpJson_event() {
 }
 //////////////////////////////////////// * END INTERNET * /////////////////////////////////////////////
 
+/**obtine que item agregar de acuerdo a los parametros
+ * item: Array of Objects (archivo de lista)
+ * list: Array of Objects (cada video del archivo de lista)
+ * random: Boolean
+ * skipIndex: Array [1,2] (dos de los index que se quieren omitir)
+ */
+function getValidIndexList(list,random,item,skipIndex){
+    do {
+        var index
+        if (random){
+            // agregar de forma randon
+            index = nTF.randomNumber(list.length - 1)
+        }else{
+            // agregar de forma ordenada
+            if (sessionStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
+                // lee el index del ultimo item que se agrego de una lista especifica
+                index = parseInt(sessionStorage.getItem(item.item))
+                if (index < list.length - 1){ // mientras que el index este dentro de la lista
+                    index += 1
+                }else{
+                    index = 0
+                }
+            }else{
+                index = 0
+            }
+        }
+        sessionStorage.setItem(item.item, index);
+        //si el index resultante contiene el skipIndex
+        var even = (element) => element === index;
+    } while (skipIndex.some(even));
 
+    sessionStorage.setItem(item.item, index);
+    return index
+}
 
 /**devuelve true si la fecha actual
  * se encuentra en el rango de
@@ -1374,32 +1315,32 @@ function validExts(nameFile, exts) {
 }
 /**Iniciar Reloj Programador */
 RelojProgramador();
-
 function RelojProgramador() {
 
     /**Iniciar ejecucion de programadores */
-    ejecute_scheduler_event();
     ejecute_scheduler_list();
     ejecute_scheduler_ad();
+    ejecute_scheduler_event();
     /**desde internet */
     // fromHttpJson_event(); //deshabilitado por el momento
 
     /**si el reproducctor genera algun error pasar al siguiente */
     if (localStorage.getItem("playerStatus") === "error") {
         try {
-            /**indice del proximo video */
-            let index = parseInt(localStorage.getItem("CurrentVideoIndex"))
-            /**datos del proximo video */
+            //indice del video actual
+            let index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))
+            //datos del proximo video
             let item = grid_queue.data._order[index+1]
+            //Datos del video actual
             let itemCurrent = grid_queue.data._order[index]
 
-            /**mensaje de error */
+            //mensaje de error
             console.error("video error" , item.path)
 
             /**elimina marcas anteriores */
             // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Next");
             // grid_queue.removeRowCss(itemCurrent.id, "bg_id_Current");
-            /**marca el video invalido */
+            //marca el video invalido
             grid_queue.addRowCss(itemCurrent.id, "bg_id_invalid");
 
             /**enviar a reproducir */
@@ -1411,8 +1352,6 @@ function RelojProgramador() {
             });
         } catch (error) {}
     }
-
-
     setTimeout(function () {
         RelojProgramador();
     }, 800);
