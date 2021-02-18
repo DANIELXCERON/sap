@@ -622,17 +622,21 @@ var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
 var n = 0
 function addCurtains(){
   n += 1
-  console.log(n)
+
+  if (n === 1) {
+    // agrega la cortinilla de entrada de primero
+    if(localStorage.getItem("CurtainIn")){
+      grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainIn"))), 0);
+    }
+  }
+  if (n === 5) {
+    // agrega la cortinilla de salida de último
+    if(localStorage.getItem("CurtainOut")){
+      grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainOut"))), getIndexAddGrid(grid_ad_queue));
+    }
+  }
   if (grid_ad_queue.data._order && grid_ad_queue.data._order.length === 0){
     n = 0
-  }
-  if (n === 1){
-    // agrega la cortinilla de entrada de primero
-    grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainIn"))), 0);
-  }
-  if (n === 10) {
-    // agrega la cortinilla de salida de último
-    grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainOut"))), getIndexAddGrid(grid_ad_queue));
   }
 }
 function convertList(item){
@@ -651,9 +655,6 @@ function convertList(item){
 }
 
 ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
-
-
-
 
   addCurtains()
 
@@ -687,13 +688,7 @@ function controlPlayerAD(){
   if (grid_ad_queue.data._order && grid_ad_queue.data._order.length > 0){
 
 
-
-
-
     ipcRenderer.send("control:player", "pause");
-
-
-
 
     /**obtine el primer video de la segunda lista de reproduccion grid_ad_queue
      * luego lo envia a reproduccir SendFileToPlay2()

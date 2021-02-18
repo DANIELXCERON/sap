@@ -252,17 +252,17 @@ function loadListQueue(item) {
             }
             
 
-            /**si el siguiente video es igual al primer item de la lista */
-            let index = 0;
-            if (localStorage.getItem("NextVideoData") && (grid_queue.data._order[0].path === JSON.parse(localStorage.getItem("NextVideoData")).path)) {
-                index++
-                /** el index del video actual pasa a ser el anterior al siguiente*/
-                localStorage.setItem("CurrentVideoIndex", index - 1);
-            }
-            /** el index del video actual pasa a ser el anterior al siguiente*/
-            localStorage.setItem("CurrentVideoIndex", grid_queue.data._order.length - 1);
-            /** el siguiente video pasa a ser el siguiente de la lista (index++ o index = 0) */
-            localStorage.setItem("NextVideoIndex", index);
+            // /**si el siguiente video es igual al primer item de la lista */
+            // let index = 0;
+            // if (localStorage.getItem("NextVideoData") && (grid_queue.data._order[0].path === JSON.parse(localStorage.getItem("NextVideoData")).path)) {
+            //     index++
+            //     /** el index del video actual pasa a ser el anterior al siguiente*/
+            //     localStorage.setItem("CurrentVideoIndex", index - 1);
+            // }
+            // /** el index del video actual pasa a ser el anterior al siguiente*/
+            // localStorage.setItem("CurrentVideoIndex", grid_queue.data._order.length - 1);
+            // /** el siguiente video pasa a ser el siguiente de la lista (index++ o index = 0) */
+            // localStorage.setItem("NextVideoIndex", index);
         });
 }
 
@@ -560,34 +560,6 @@ var form_scheduler_events = new dhx.Form("form_container", {
     },
     ],
 });
-form_scheduler_events.events.on("ButtonClick", function (id, e) {
-    const formData = form_scheduler_events.getValue();
-
-    if (formData.playDateRange !== "") {
-        var validDateRange;
-
-        if (formData.playDateRange[0] && formData.playDateRange[1]) {
-            validDateRange = formData.playDateRange;
-        } else {
-            validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
-        }
-
-        const data = {
-            item: formData.item,
-            interval: formData.interval,
-            playTime: formData.playTime + ":00",
-            stopTime: formData.stopTime + ":00",
-            instant: formData.instant,
-            type: "",
-            playDateRange: validDateRange,
-            playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
-            playDay: formData.playDay,
-            itemPath: formData.itemPath,
-            temp: true,
-        };
-        grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
-    }
-});
 
 grid_scheduler_event.events.on("CellDblClick", function (cell, e) {
     if (cell.instant) {
@@ -661,7 +633,8 @@ function ejecuteAdd(item) {
                 custom: "bg_id_Scheduler",
                 temp: item.temp,
             },
-                parseInt(localStorage.getItem("NextVideoIndex"))
+                // parseInt(localStorage.getItem("NextVideoIndex"))
+                grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1
             );
           break;
         case 'datos:plst':
@@ -723,47 +696,37 @@ function loadListProgram(item) {
     fetch(item.path)
         .then((results) => results.json())
         .then(function (list) {
+
+            var skipIndex = []
             /**Se carga los datos de las cortinilla de entrada y salida
              * en el localStorage con CurtainIn y CurtainOut
              * para la tandas de anuncios cada vez que se agrega una lista
              * en events (lista de videos uno a uno)
              */
+            var n = 0
+            var a,b
             list.forEach(dataVideo => {
                 if(dataVideo.curtain){
-                    localStorage.removeItem("CurtainIn");
-                    localStorage.removeItem("CurtainOut");
                     switch (dataVideo.curtain) {
                         case "inicio":
                             localStorage.setItem("CurtainIn",JSON.stringify(dataVideo));
+                            a = n
                           break;
                         case "fin":
                             localStorage.setItem("CurtainOut",JSON.stringify(dataVideo));
+                            b = n
                           break;
                         default:
                     }
                 }
+                n += 1
             });
 
+            var cell = list[getValidIndexList(list, false, item, [a,b])];
 
-            // agregar de forma randon
-            // var cell = list[nTF.randomNumber(list.length - 1)]
-            // agregar de forma ordenada
-            var index
-            if (sessionStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
-                // lee el index del ultimo item que se agrego de una lista especifica
-                index = parseInt(sessionStorage.getItem(item.item))
-                if (index < list.length - 1){ // mientras que el index este dentro del tamaño de la lista
-                    index += 1
-                }else{
-                    index = 0
-                }
-            }else{
-                index = 0
-            }
-            var cell = list[index]
-            // 
-            //guarda en sesion storage el index del item que se agrego a cola
-            sessionStorage.setItem(item.item, index);
+
+            console.log(cell)
+
             const NextVideo = {
                 namefile: "[P] " + cell.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                 ref: cell.ref,
@@ -775,14 +738,50 @@ function loadListProgram(item) {
                 random: 0,
                 temp: true,
             }
-            try {
-                grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
-            } catch (error) { console.error("[P] error pasable ;)", error) }
+            // try {
+            //     grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
+            // } catch (error) { console.error("[P] error pasable ;)", error) }
 
-            grid_queue.data.add(NextVideo, parseInt(localStorage.getItem("NextVideoIndex")));
-            localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
+            //agrega el video +1 index despues del actual en reproduccion
+            grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
+            // localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
             return NextVideo.path
         });
+}
+
+/**obtine que item agregar de acuerdo a los parametros
+ * item: Array of Objects (archivo de lista)
+ * list: Array of Objects (cada video del archivo de lista)
+ * random: Boolean
+ * skipIndex: Array [1,2] (dos de los index que se quieren omitir)
+ */
+function getValidIndexList(list,random,item,skipIndex){
+    do {
+        var index
+        if (random){
+            // agregar de forma randon
+            index = nTF.randomNumber(list.length - 1)
+        }else{
+            // agregar de forma ordenada
+            if (sessionStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
+                // lee el index del ultimo item que se agrego de una lista especifica
+                index = parseInt(sessionStorage.getItem(item.item))
+                if (index < list.length - 1){ // mientras que el index este dentro de la lista
+                    index += 1
+                }else{
+                    index = 0
+                }
+            }else{
+                index = 0
+            }
+        }
+        sessionStorage.setItem(item.item, index);
+        //si el index resultante contiene el skipIndex
+        var even = (element) => element === index;
+    } while (skipIndex.some(even));
+
+    sessionStorage.setItem(item.item, index);
+    return index
 }
 
 /**Drop & Drag Files */
@@ -1175,12 +1174,13 @@ function loadListAd(item) {
              * si no lo es entonces se agrega a la cola de publicidad
             */
             if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (1 * 60)){
-                try {
-                    grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
-                } catch (error) { console.error("[ADD] error pasable ;)", error) }
+                // try {
+                //     grid_queue.removeRowCss(JSON.parse(localStorage.getItem("NextVideoData")).id, "bg_id_Next");
+                // } catch (error) { console.error("[ADD] error pasable ;)", error) }
 
-                grid_queue.data.add(NextVideo, parseInt(localStorage.getItem("NextVideoIndex")));
-                localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
+                // se agrega adelante del video actualmente en reproduccion
+                grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1 );
+                // localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
             }else{
                 grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));             
                 controlPlayerAD();
