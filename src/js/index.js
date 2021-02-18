@@ -105,22 +105,24 @@ window.addEventListener("load", () => {
   }
   /** Cargar ultima lista queue y ultimo video */
 
+  //ruta del archivo slst
   if (localStorage.getItem("slst-path")) {
     loadFileSLST(localStorage.getItem("slst-path"));
   }
+  //ultima lista
   if (localStorage.getItem("DataGrid")) {
-    var grid_queue_data = JSON.parse(localStorage.getItem("DataGrid"));
-    grid_queue.data.add(grid_queue_data);
+    grid_queue.data.add(JSON.parse(localStorage.getItem("DataGrid")));
   }
-  // if (localStorage.getItem("NextVideoData")) {
-  //   var dataVideoCurrent = JSON.parse(localStorage.getItem("DataVideoCurrent"));
+  //ultimo video
+  if (localStorage.getItem("DataVideoCurrent")) {
+    var dataVideoCurrent = JSON.parse(localStorage.getItem("DataVideoCurrent"));
 
-  //   ipcRenderer.send("datos:stream", {
-  //     referencia: "file-video",
-  //     url: dataVideoCurrent.srcVideoCurrent,
-  //     in: dataVideoCurrent.TiempoTranscurrido,
-  //   });
-  // }
+    ipcRenderer.send("datos:stream", {
+      referencia: "file-video",
+      url: dataVideoCurrent.srcVideoCurrent,
+      in: dataVideoCurrent.TiempoTranscurrido,
+    });
+  }
 });
 
 // ocultar mostrar Video Loop & Banner
@@ -467,24 +469,16 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
   if (remaining + 0.3 >= secRemaining && secRemaining >= remaining) {
 
 
-    /**pintar siguiente */
+    /**pintar siguiente item de .bg_id_Next*/
     var index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
-
     if (index < grid_queue.data._order.length - 1) {
       index += 1;
     } else {
       index = 0;
     }
     let data = grid_queue.data._order[index];
-    const NextVideo = {
-      namefile: data.namefile,
-      path: data.path,
-      ref: data.ref,
-      in: data.in,
-      id: data.id,
-    };
     grid_queue.addRowCss(data.id, "bg_id_Next");
-    // localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
+
     localStorage.setItem("DataGrid", JSON.stringify(grid_queue.data._order));
   }
 
