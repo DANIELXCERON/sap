@@ -246,19 +246,29 @@ function openVideoWindow2() {
 
 function videoWindowIPC(){
   ipcMain.on("datos:stream", (e, datosStream) => {
-    videoWindow.webContents.send("datos:stream", datosStream);
+    if (videoWindow){
+      videoWindow.webContents.send("datos:stream", datosStream);
+    }
   });
   ipcMain.on("datos:stream2", (e, datosStream) => {
-    videoWindow.webContents.send("datos:stream2", datosStream);
+    if (videoWindow){
+      videoWindow.webContents.send("datos:stream2", datosStream);
+    }
   });
   ipcMain.on("datos:gc", (e, datosGC) => {
-    videoWindow.webContents.send("datos:gc", datosGC);
+    if (videoWindow){
+      videoWindow.webContents.send("datos:gc", datosGC);
+    }
   });
   ipcMain.on("control:player", (e, control) => {
-    videoWindow.webContents.send("control:player", control);
+    if (videoWindow){
+      videoWindow.webContents.send("control:player", control);
+    }
   });
   ipcMain.on("control:player2", (e, control) => {
-    videoWindow.webContents.send("control:player2", control);
+    if (videoWindow){
+      videoWindow.webContents.send("control:player2", control); 
+    }
   });
 }
 
@@ -303,19 +313,29 @@ function openPreviewWindow() {
   });
   //////////////////////////////////////// Ipc Renderer Events
   ipcMain.on("datos:stream", (e, datosStream) => {
-    previewWindow.webContents.send("datos:stream", datosStream);
+    if (previewWindow){
+      previewWindow.webContents.send("datos:stream", datosStream);
+    }
   });
   ipcMain.on("datos:stream2", (e, datosStream) => {
-    previewWindow.webContents.send("datos:stream2", datosStream);
+    if (previewWindow){
+      previewWindow.webContents.send("datos:stream2", datosStream);
+    }
   });
   ipcMain.on("datos:gc", (e, datosGC) => {
-    previewWindow.webContents.send("datos:gc", datosGC);
+    if (previewWindow){
+      previewWindow.webContents.send("datos:gc", datosGC);
+    }
   });
   ipcMain.on("control:player", (e, control) => {
-    previewWindow.webContents.send("control:player", control);
+    if (previewWindow){
+      previewWindow.webContents.send("control:player", control);
+    }
   });
   ipcMain.on("control:player2", (e, control) => {
-    previewWindow.webContents.send("control:player2", control);
+    if (previewWindow){
+      previewWindow.webContents.send("control:player2", control); 
+    }
   });
   ////////////////////////////////////////
 }
@@ -510,12 +530,14 @@ const MainWindowMenu = [
         },
       },
       {
-        label: "preview",
+        label: "Preview",
         click() {
           if (previewWindow) {
             previewWindow.focus();
           } else {
-            openPreviewWindow();
+            if(videoWindow){
+              openPreviewWindow();
+            }
           }
         },
       },

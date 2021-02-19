@@ -14,21 +14,34 @@ const GCText = document.querySelector("#GCText");
 const body = document.querySelector("body");
 const RelojDOM = document.querySelector("#clock");
 
-// Inicia reloj de la ventana de video
-loadConfig();
 
+loadConfig();
 function loadConfig() {
   try {
-    /** cargar video loop agregado por ultima vez */
+
+    // Cargar ultimo video
+    if(localStorage.getItem("DataVideoCurrent")){
+      var data = JSON.parse(localStorage.getItem("DataVideoCurrent"))
+      vPLuno.src = data.srcVideoCurrent;
+      vPLuno.currentTime = data.TiempoTranscurrido + 0.390;
+      vPLuno.load();
+      vPLuno.style.cssText = "display: block;"
+    }
+
+
+    //cargar video loop agregado por ultima vez
     if (localStorage.getItem("CurrentLoopVideoPath")) {
       videoplayerloop.src = localStorage.getItem("CurrentLoopVideoPath");
       videoplayerloop.load();
       videoplayerloop.style.cssText = "display: block;"
     }
 
+    // Inicia reloj de la ventana de video
     var JSON_config = JSON.parse(localStorage.getItem("JSON_config"));
     getTime.startClock([JSON_config.clock.format], RelojDOM);
-  } catch (error) {
+
+
+  } catch (error) { // si hay error volver a cargar
     setTimeout(function () {
       loadConfig();
     }, 1000);

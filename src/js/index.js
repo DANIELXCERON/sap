@@ -114,15 +114,17 @@ window.addEventListener("load", () => {
     grid_queue.data.add(JSON.parse(localStorage.getItem("DataGrid")));
   }
   //ultimo video
-  if (localStorage.getItem("DataVideoCurrent")) {
-    var dataVideoCurrent = JSON.parse(localStorage.getItem("DataVideoCurrent"));
+  // if (localStorage.getItem("DataVideoCurrent")) {
+  //   var dataVideoCurrent = JSON.parse(localStorage.getItem("DataVideoCurrent"));
 
-    ipcRenderer.send("datos:stream", {
-      referencia: "file-video",
-      url: dataVideoCurrent.srcVideoCurrent,
-      in: dataVideoCurrent.TiempoTranscurrido,
-    });
-  }
+  //   ipcRenderer.send("datos:stream", {
+  //     referencia: "file-video",
+  //     url: dataVideoCurrent.srcVideoCurrent,
+  //     in: dataVideoCurrent.TiempoTranscurrido,
+  //   });
+  // }
+
+  
 });
 
 // ocultar mostrar Video Loop & Banner
