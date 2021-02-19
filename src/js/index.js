@@ -859,3 +859,34 @@ function SendFileToPlay2(datosStream) {
 
   ipcRenderer.send("datos:stream2", datosStream);
 }
+
+////////////////////
+
+//Cargar el estilo del tema
+var theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : 'dark';
+$('head').append('<link rel="stylesheet" href="./css/themes/' + theme + '/theme.css"/>');
+
+function changeTheme(newTheme) {
+  $('link[href="./css/themes/' + theme + '/theme.css"]').remove();
+  var head= document.getElementsByTagName('head')[0];
+  var link= document.createElement('link');
+  link.rel= "stylesheet";
+  link.href= "./css/themes/" + newTheme + "/theme.css";
+  head.appendChild(link);
+  theme = newTheme;
+}
+
+//Opciones de tema a la configuración
+var themes = ['acri', 'dark', 'rachni'];
+
+$.each(themes, function(i) {
+  var $selected = '';
+
+  if(themes[i] == theme) {
+    $selected = 'selected';
+  }
+
+  $('#alt-main-config-content #theme').append('<option name="' + themes[i] + '"' + $selected + '>' + themes[i] + '</option>');
+});
+
+//////////////////
