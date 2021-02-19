@@ -109,6 +109,13 @@ function openMainWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+
+  ipcMain.on("datos:videoactual", (e, videoActualTime) => {
+    mainWindow.webContents.send("datos:videoactual", videoActualTime);
+  });
+  ipcMain.on("datos:videoactual2", (e, videoActualTime) => {
+    mainWindow.webContents.send("datos:videoactual2", videoActualTime);
+  });
 }
 
 // Ventana GC
@@ -192,6 +199,9 @@ function openVideoWindow() {
   videoWindow.on("closed", () => {
     videoWindow = null;
   });
+
+  videoWindowIPC()
+
 }
 
 // Ventana de video en caso de que no haya pantalla externa
@@ -229,6 +239,26 @@ function openVideoWindow2() {
   });
   videoWindow.on("closed", () => {
     videoWindow = null;
+  });
+
+  videoWindowIPC()
+}
+
+function videoWindowIPC(){
+  ipcMain.on("datos:stream", (e, datosStream) => {
+    videoWindow.webContents.send("datos:stream", datosStream);
+  });
+  ipcMain.on("datos:stream2", (e, datosStream) => {
+    videoWindow.webContents.send("datos:stream2", datosStream);
+  });
+  ipcMain.on("datos:gc", (e, datosGC) => {
+    videoWindow.webContents.send("datos:gc", datosGC);
+  });
+  ipcMain.on("control:player", (e, control) => {
+    videoWindow.webContents.send("control:player", control);
+  });
+  ipcMain.on("control:player2", (e, control) => {
+    videoWindow.webContents.send("control:player2", control);
   });
 }
 
@@ -271,6 +301,23 @@ function openPreviewWindow() {
   previewWindow.on("closed", () => {
     previewWindow = null;
   });
+  //////////////////////////////////////// Ipc Renderer Events
+  ipcMain.on("datos:stream", (e, datosStream) => {
+    previewWindow.webContents.send("datos:stream", datosStream);
+  });
+  ipcMain.on("datos:stream2", (e, datosStream) => {
+    previewWindow.webContents.send("datos:stream2", datosStream);
+  });
+  ipcMain.on("datos:gc", (e, datosGC) => {
+    previewWindow.webContents.send("datos:gc", datosGC);
+  });
+  ipcMain.on("control:player", (e, control) => {
+    previewWindow.webContents.send("control:player", control);
+  });
+  ipcMain.on("control:player2", (e, control) => {
+    previewWindow.webContents.send("control:player2", control);
+  });
+  ////////////////////////////////////////
 }
 
 // Ventana acerca de
@@ -400,47 +447,6 @@ appUpdater.on("update-downloaded", (info) => {
 });
 //////////////////////////////////////// fin Updater
 
-ipcMain.on("datos:stream", (e, datosStream) => {
-  previewWindow.webContents.send("datos:stream", datosStream);
-});
-ipcMain.on("datos:stream2", (e, datosStream) => {
-  previewWindow.webContents.send("datos:stream2", datosStream);
-});
-ipcMain.on("datos:gc", (e, datosGC) => {
-  previewWindow.webContents.send("datos:gc", datosGC);
-});
-ipcMain.on("control:player", (e, control) => {
-  previewWindow.webContents.send("control:player", control);
-});
-ipcMain.on("control:player2", (e, control) => {
-  previewWindow.webContents.send("control:player2", control);
-});
-
-
-
-//////////////////////////////////////// Ipc Renderer Events
-ipcMain.on("datos:stream", (e, datosStream) => {
-  videoWindow.webContents.send("datos:stream", datosStream);
-});
-ipcMain.on("datos:stream2", (e, datosStream) => {
-  videoWindow.webContents.send("datos:stream2", datosStream);
-});
-ipcMain.on("datos:gc", (e, datosGC) => {
-  videoWindow.webContents.send("datos:gc", datosGC);
-});
-ipcMain.on("control:player", (e, control) => {
-  videoWindow.webContents.send("control:player", control);
-});
-ipcMain.on("control:player2", (e, control) => {
-  videoWindow.webContents.send("control:player2", control);
-});
-ipcMain.on("datos:videoactual", (e, videoActualTime) => {
-  mainWindow.webContents.send("datos:videoactual", videoActualTime);
-});
-ipcMain.on("datos:videoactual2", (e, videoActualTime) => {
-  mainWindow.webContents.send("datos:videoactual2", videoActualTime);
-});
-//////////////////////////////////////// Fin de Ipc Renderer Events
 
 // Menu de la ventana principal
 const MainWindowMenu = [
