@@ -621,24 +621,29 @@ var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
 /**Agrregar cortinillas */
 var n = 0
 function addCurtains(){
-  n += 1
-
-  if (n === 1) {
-    // agrega la cortinilla de entrada de primero
-    if(localStorage.getItem("CurtainIn")){
-      grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainIn"))), 0);
+    //si el video actual proviene de la misma lista de donde se cargaron las cortinillas
+    var dataItemCurrent = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))].pathListEvent
+    if(dataItemCurrent && dataItemCurrent === localStorage.getItem("pathListEvent")){
+      if (n === 0) {
+        // agrega la cortinilla de entrada de primero
+        if(localStorage.getItem("CurtainIn")){
+          grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainIn"))), 0);
+        }
+      }
+      if (n === 1) {
+        // agrega la cortinilla de salida de último
+        if(localStorage.getItem("CurtainOut")){
+          grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainOut"))), getIndexAddGrid(grid_ad_queue));
+        }
+      }
+      if (grid_ad_queue.data._order && grid_ad_queue.data._order.length === 0){
+        n = 0
+      }
+    
+      n += 1
     }
-  }
-  if (n === 5) {
-    // agrega la cortinilla de salida de último
-    if(localStorage.getItem("CurtainOut")){
-      grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainOut"))), getIndexAddGrid(grid_ad_queue));
-    }
-  }
-  if (grid_ad_queue.data._order && grid_ad_queue.data._order.length === 0){
-    n = 0
-  }
 }
+
 function convertList(item){
   const NextVideo = {
       namefile: `[${item.curtain}] ${item.namefile} | ${getTime.gT("hms24")}`,
@@ -657,6 +662,8 @@ function convertList(item){
 ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
 
   addCurtains()
+  
+  
 
   /** Bara de progreso */
   let barvalue = progressBar.setBar(videoActualTime.TiempoTranscurrido,videoActualTime.TiempoDuracion,false);
@@ -690,7 +697,8 @@ function controlPlayerAD(){
 
     ipcRenderer.send("control:player", "pause");
 
-    /**obtine el primer video de la segunda lista de reproduccion grid_ad_queue
+    /**
+     * obtine el primer video de la segunda lista de reproduccion grid_ad_queue
      * luego lo envia a reproduccir SendFileToPlay2()
     */
 
@@ -701,6 +709,8 @@ function controlPlayerAD(){
       in: item.in,
       id: item.id,
     });
+
+
   }else{
     // continua principal y detiene el secundario
     ipcRenderer.send("control:player", "play");

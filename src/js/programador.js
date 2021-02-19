@@ -680,7 +680,7 @@ function loadListProgram(item) {
              * en events (lista de videos uno a uno)
              */
             var n = 0
-            var a,b
+            var a,b,c
             list.forEach(dataVideo => {
                 if(dataVideo.curtain){
                     switch (dataVideo.curtain) {
@@ -692,14 +692,20 @@ function loadListProgram(item) {
                             localStorage.setItem("CurtainOut",JSON.stringify(dataVideo));
                             b = n
                           break;
+                        case "rating":
+                            localStorage.setItem("RatingProgram",JSON.stringify(dataVideo));
+                            c = n
+                          break;
                         default:
                     }
                 }
                 n += 1
             });
+            //Guardar en localStorage la ruta de la lista de la cual se agrega este video
+            localStorage.setItem("pathListEvent",item.path);
 
-            var cell = list[getValidIndexList(list, false, item, [a,b])];
-
+            // Agrega video programado
+            var cell = list[getValidIndexList(list, false, item, [a,b,c])];
             const NextVideo = {
                 namefile: "[P] " + cell.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                 ref: cell.ref,
@@ -710,11 +716,28 @@ function loadListProgram(item) {
                 custom: "LC-Violet",
                 random: 0,
                 temp: true,
+                pathListEvent: item.path,
             }
-
             //agrega el video +1 index despues del actual en reproduccion
             grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
-            // localStorage.setItem("NextVideoData", JSON.stringify(NextVideo));
+
+            // Agrega video clasificador
+
+            var cellRating = list[c];
+            const ratingVideo = {
+                namefile: "[rating] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
+                ref: cellRating.ref,
+                path: cellRating.path,
+                duration: cellRating.duration,
+                startTime: "00:00:00",
+                in: 0,
+                custom: "LC-Violet",
+                random: 0,
+                temp: true,
+            }
+            //agrega el video +1 index despues del actual en reproduccion
+            grid_queue.data.add(ratingVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
+
             return NextVideo.path
         });
 }
@@ -1062,7 +1085,7 @@ function ejecute_scheduler_ad() {
     }
 }
 
-/**cargar item de la lista en cola */
+/**cargar AD */
 function loadListAd(item) {
     /** obtener datos de la lista al cargar */
     fetch(item.path).then((results) => results.json()).then(function (list) {
@@ -1086,7 +1109,10 @@ function loadListAd(item) {
             // se agrega adelante del video actualmente en reproduccion
             grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1 );
         }else{
-            grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));             
+            grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));
+            
+            addCurtains()
+
             controlPlayerAD();
         }
     });
@@ -1363,7 +1389,6 @@ function RelojProgramador() {
         RelojProgramador();
     }, 800);
 }
-
 
 function validContent(content) {
     if (content.data._order) {
