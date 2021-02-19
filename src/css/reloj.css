@@ -1,8 +1,7 @@
 /*estilos para reloj 1280*720*/
 
 
-/*
-#clockdate {
+/* #clockdate {
     position: absolute;
     top: 25.6%;
     right: 7%;
@@ -16,8 +15,9 @@
 #clock {
     font-size: 2em;
     color: #fff;
-}
-*/
+} */
+
+
 
 
 /* estilos para reloj 720*480*/
@@ -39,44 +39,3 @@
     font-size: 1.25em;
     color: #fff;
 }
-
-
-/*
-#clockdate {
-    position: absolute;
-    top: 17.9%;
-    right: 7%;
-}
-.clockdate-wrapper {
-
-    background: linear-gradient(to right, red, orange, yellow, green, blue);
-    background-size: 600% 100%;
-    animation: bg-pan-right 3s ease infinite alternate both;
-
-    text-align: center;
-    border-radius: 0.1rem;
-    padding: 0px 6px 0px 6px;
-}
-#clock {
-    font-size: 1.6em;
-    color: #fff;
-}
-
-
-@-webkit-keyframes bg-pan-right {
-    0% {
-      background-position: 0% 50%;
-    }
-    100% {
-      background-position: 100% 50%;
-    }
-  }
-  @keyframes bg-pan-right {
-    0% {
-      background-position: 0% 50%;
-    }
-    100% {
-      background-position: 100% 50%;
-    }
-  }
-  */

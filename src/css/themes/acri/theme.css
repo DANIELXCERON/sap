@@ -1,0 +1,45 @@
+:root {
+  --main-color: #fff;
+  --element-radius: 0;
+  --background: #181819; 
+  --button-background: #162458;
+  --button-border: #233166;
+  --button-hover-background: #233166;
+  --button-hover-border: #364683;
+  --button-active-background: #1f1e1f;
+  --switch-active-background: #244ee7;
+  --button-color: #fff;
+  --field-background: #08080b;
+  --field-background-disable: #28282a;
+  --field-border: none;
+  --panel-border: solid 1px #2f2f2f;
+  --scrollbar-color: #2f2f2f;
+  --scrollbar-thickness: 7px;
+  --scrollbar-radius: 0px;
+  --tab-background: #212121;
+  --tab-border: #333336;
+  --tab-active-background: #131a30;
+  --tab-active-border: #252a45;
+  --tabs-separator: #333336;
+  --alt-preview-background: linear-gradient(135deg, #0b0b0c 0%,
+                                                    #0b0b0c 8%,
+                                                    #08080b 10%,
+                                                    #08080b 18%, 
+                                                    #0b0b0c 20%, 
+                                                    #0b0b0c 28%, 
+                                                    #08080b 30%, 
+                                                    #08080b 38%, 
+                                                    #0b0b0c 40%, 
+                                                    #0b0b0c 48%, 
+                                                    #08080b 50%, 
+                                                    #08080b 58%, 
+                                                    #0b0b0c 60%,
+                                                    #0b0b0c 68%, 
+                                                    #08080b 70%, 
+                                                    #08080b 78%, 
+                                                    #0b0b0c 80%, 
+                                                    #0b0b0c 88%, 
+                                                    #08080b 90%, 
+                                                    #08080b 98%, 
+                                                    #0b0b0c 100%);
+}
