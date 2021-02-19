@@ -1,4 +1,4 @@
-const {app,BrowserWindow,Menu,MenuItem,ipcMain,dialog,Notification,shell} = require("electron");
+const {app,BrowserWindow,Menu,MenuItem,ipcMain,dialog,Notification,shell,BrowserView} = require("electron");
 const electron = require("electron");
 
 const url = require("url");
@@ -20,10 +20,10 @@ const imgPath_n_screenFail = path.join(__dirname, "img/screen-fail.png");
 
 let mainWindow = null;
 let videoWindow = null;
+let previewWindow = null;
 let GCWindow = null;
 let windowAcercaDe = null;
 let windowUpdates = null;
-
 
 
 // solicitar bloqueo de instancia única
@@ -232,6 +232,47 @@ function openVideoWindow2() {
   });
 }
 
+// Ventana de preview
+function openPreviewWindow() {
+  app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required"); //desactiva las restrincciones de autoplay :)
+
+  previewWindow = new BrowserWindow({
+    show: false,
+    title: "Salida de video",
+    width: 16 + 720,
+    height: 38 + 480,
+    x: 0,
+    y: 0,
+    webviewTag: true,
+    backgroundColor: "#000",
+    // skipTaskbar: true,
+    webPreferences: {
+      webviewTag: true,
+      nodeIntegration: true,
+      enableRemoteModule: true,
+    },
+  });
+
+  previewWindow.setIcon(imgPath_icon);
+  previewWindow.setMenu(null);
+  previewWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "video.html"),
+      protocol: "file",
+      slashes: true,
+    })
+  );
+  previewWindow.webContents.setAudioMuted(true)
+
+  previewWindow.once("ready-to-show", () => {
+    previewWindow.show();
+  });
+
+  previewWindow.on("closed", () => {
+    previewWindow = null;
+  });
+}
+
 // Ventana acerca de
 function OpenAboutWindow() {
   windowAcercaDe = new BrowserWindow({
@@ -359,6 +400,24 @@ appUpdater.on("update-downloaded", (info) => {
 });
 //////////////////////////////////////// fin Updater
 
+ipcMain.on("datos:stream", (e, datosStream) => {
+  previewWindow.webContents.send("datos:stream", datosStream);
+});
+ipcMain.on("datos:stream2", (e, datosStream) => {
+  previewWindow.webContents.send("datos:stream2", datosStream);
+});
+ipcMain.on("datos:gc", (e, datosGC) => {
+  previewWindow.webContents.send("datos:gc", datosGC);
+});
+ipcMain.on("control:player", (e, control) => {
+  previewWindow.webContents.send("control:player", control);
+});
+ipcMain.on("control:player2", (e, control) => {
+  previewWindow.webContents.send("control:player2", control);
+});
+
+
+
 //////////////////////////////////////// Ipc Renderer Events
 ipcMain.on("datos:stream", (e, datosStream) => {
   videoWindow.webContents.send("datos:stream", datosStream);
@@ -441,6 +500,16 @@ const MainWindowMenu = [
             videoWindow.focus();
           } else {
             openVideoWindow2();
+          }
+        },
+      },
+      {
+        label: "preview",
+        click() {
+          if (previewWindow) {
+            previewWindow.focus();
+          } else {
+            openPreviewWindow();
           }
         },
       },
