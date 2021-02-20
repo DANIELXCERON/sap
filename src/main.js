@@ -211,8 +211,8 @@ function openVideoWindow2() {
   videoWindow = new BrowserWindow({
     show: false,
     title: "Salida de video",
-    width: 16 + 720,
-    height: 38 + 480,
+    width: 14 + 720,
+    height: 36 + 480,
     x: 0,
     y: 0,
     // frame: false,

@@ -96,4 +96,6 @@ webview {
     height: 100%;
     position: absolute;
     background-size: contain;
+    background-repeat: no-repeat;
+    margin-top: 6.2%;
 }

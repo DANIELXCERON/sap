@@ -24,8 +24,8 @@
 
 #clockdate {
     position: absolute;
-    top: 17%;
-    right: 6%;
+    top: 124px;
+    left: 594px;
 }
 
 .clockdate-wrapper {
@@ -38,4 +38,5 @@
 #clock {
     font-size: 1.25em;
     color: #fff;
+    font-family: sans-serif;
 }
