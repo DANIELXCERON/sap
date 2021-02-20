@@ -211,10 +211,11 @@ function openVideoWindow2() {
   videoWindow = new BrowserWindow({
     show: false,
     title: "Salida de video",
-    width: 16 + 720,
-    height: 38 + 480,
+    width: 720,
+    height: 405,
     x: 0,
     y: 0,
+    frame: false,
     webviewTag: true,
     backgroundColor: "#000",
     // skipTaskbar: true,

@@ -13,7 +13,23 @@ const videoPlayerBanner = document.querySelector("#videoplayerbanner");
 const GCText = document.querySelector("#GCText");
 const body = document.querySelector("body");
 const RelojDOM = document.querySelector("#clock");
+const sizeDom = document.querySelector(".marcoVideoLocal");
 
+function reportWindowSize() {
+  var ancho = sizeDom.getBoundingClientRect().width,
+  alto = sizeDom.getBoundingClientRect().height,
+  videoSizeStyle = "width: " + ancho + "px;" + "height: " + alto + "px;"
+
+  GCText.style.cssText = "left: " + ancho + "px;"
+  vPLuno.style.cssText = videoSizeStyle
+  vPLdos.style.cssText = videoSizeStyle
+  videoplayerloop.style.cssText = videoSizeStyle
+  videoPlayerBanner.style.cssText = videoSizeStyle
+
+  console.log(ancho,alto)
+}
+
+window.onresize = reportWindowSize;
 
 loadConfig();
 function loadConfig() {

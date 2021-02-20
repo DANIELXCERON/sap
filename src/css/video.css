@@ -2,8 +2,6 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    /* background-color: black; */
-    font-family: 'Roboto', sans-serif;
 }
 
 ::-webkit-scrollbar,
@@ -15,35 +13,35 @@ body {
 /* estilos para video 1280*720*/
 
 
-/*
+
 :root {
-  --main-video-width: 1280px;
-  --main-video-height: 720px;
+  --main-video-width: 720px;
+  --main-video-height: 480px;
 }
-*/
+
 
 
 /* estilos para video 720*480*/
 
-:root {
+/* :root {
     --main-video-width: 720px;
     --main-video-height: 405px;
-}
+} */
 
 #marcoVideoWebview webview,
 video,
 #clockdate,
 #GCText,
 .SafeArea {
-    transform: scaleY(1.1852);
-    margin-top: 6.2%;
+    transform: scaleY(1.18518519);
+    /* margin-top: 6.2%; */
 }
 
 #videoloop,
 .marcoVideoLocal,
 #videobanner,
 #marcoVideoWebview {
-    top: -7px;
+    /* top: -7px; */
 }
 
 video {
