@@ -15,10 +15,11 @@ const body = document.querySelector("body");
 const RelojDOM = document.querySelector("#clock");
 const sizeDom = document.querySelector(".marcoVideoLocal");
 
+var ancho = sizeDom.getBoundingClientRect().width,
+alto = sizeDom.getBoundingClientRect().height,
+videoSizeStyle = "width: " + ancho + "px;" + "height: " + alto + "px;"
+
 function reportWindowSize() {
-  var ancho = sizeDom.getBoundingClientRect().width,
-  alto = sizeDom.getBoundingClientRect().height,
-  videoSizeStyle = "width: " + ancho + "px;" + "height: " + alto + "px;"
 
   GCText.style.cssText = "left: " + ancho + "px;"
   vPLuno.style.cssText = videoSizeStyle
@@ -41,7 +42,7 @@ function loadConfig() {
       vPLuno.src = data.srcVideoCurrent;
       vPLuno.currentTime = data.TiempoTranscurrido + 0.390;
       vPLuno.load();
-      vPLuno.style.cssText = "display: block;"
+      vPLuno.style.cssText = "display: block;" + videoSizeStyle
     }
 
 
@@ -49,7 +50,7 @@ function loadConfig() {
     if (localStorage.getItem("CurrentLoopVideoPath")) {
       videoplayerloop.src = localStorage.getItem("CurrentLoopVideoPath");
       videoplayerloop.load();
-      videoplayerloop.style.cssText = "display: block;"
+      videoplayerloop.style.cssText = "display: block;" + videoSizeStyle
     }
 
     // Inicia reloj de la ventana de video
@@ -233,23 +234,23 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       vPLuno.src = datosStream.url;
       vPLuno.currentTime = datosStream.in;
       vPLuno.load();
-      vPLuno.style.cssText = "display: block;"
+      vPLuno.style.cssText = "display: block;" + videoSizeStyle
       break;
     case "videoloop": //reproduce video loop
       videoplayerloop.src = datosStream.url;
       videoplayerloop.load();
       localStorage.setItem("CurrentLoopVideoPath", datosStream.url);
-      videoplayerloop.style.cssText = "display: block;"
+      videoplayerloop.style.cssText = "display: block;" + videoSizeStyle
       break;
     case "videobanner": //reproduce video banner
       videoPlayerBanner.src = datosStream.url;
       videoPlayerBanner.load();
-      videoPlayerBanner.style.cssText = "display: block;"
+      videoPlayerBanner.style.cssText = "display: block;" + videoSizeStyle
       break;
     case "stopStream": //detiene stream web y reanuda video local
       marcoVideoWebview.innerHTML = "";
       vPLuno.play();
-      vPLuno.style.cssText = "display: block;"
+      vPLuno.style.cssText = "display: block;" + videoSizeStyle
       break;
     case "ocultar-mostrar-video-loop": //oculta o muestra video loop
       if (datosStream.valor == "ocultar") {
@@ -283,6 +284,7 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       //cuando webview este listo, pausar video local
       vPLuno.pause();
       webview.style.opacity = 1;
+      webview.style.height = sizeDom.getBoundingClientRect().height+"px";
       //ocultar para livestream
       webview.insertCSS(`
       .top-bar,
@@ -407,7 +409,7 @@ ipcRenderer.on("datos:stream2", (e, datosStream) => {
       vPLdos.currentTime = datosStream.in;
       vPLdos.load();
       vPLuno.style.cssText = "display: none;"
-      vPLdos.style.cssText = "display: block;"
+      vPLdos.style.cssText = "display: block;" + videoSizeStyle 
       break;
   }
 });
@@ -417,7 +419,7 @@ ipcRenderer.on("control:player", (e, control) => {
   switch (control) {
     case "play":
       vPLuno.play();
-      vPLuno.style.cssText = "display: block;"
+      vPLuno.style.cssText = "display: block;" + videoSizeStyle
       break;
     case "pause":
       vPLuno.pause();
@@ -438,7 +440,7 @@ ipcRenderer.on("control:player2", (e, control) => {
   switch (control) {
     case "play":
       vPLdos.play();
-      vPLdos.style.cssText = "display: block;"
+      vPLdos.style.cssText = "display: block;" + videoSizeStyle
       break;
     case "pause":
       vPLdos.pause();

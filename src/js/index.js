@@ -124,6 +124,21 @@ window.addEventListener("load", () => {
   //   });
   // }
 
+  // pintar ultimo video
+  if (localStorage.getItem("CurrentVideoID")) {
+    // var a = JSON.parse(localStorage.getItem("DataVideoCurrent"));
+    grid_queue.data._order.forEach((row) => {
+      grid_queue.removeRowCss(row.id, "bg_id_Next");
+      grid_queue.removeRowCss(row.id, "bg_id_Current");
+    });
+    grid_queue.addRowCss(localStorage.getItem("CurrentVideoID"), "bg_id_Current");
+
+    // ipcRenderer.send("datos:stream", {
+    //   referencia: "file-video",
+    //   url: a.srcVideoCurrent,
+    //   in: a.TiempoTranscurrido,
+    // });
+  }
   
 });
 

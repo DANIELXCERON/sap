@@ -10,23 +10,11 @@ body {
 }
 
 
-/* estilos para video 1280*720*/
-
-
-
 :root {
   --main-video-width: 720px;
   --main-video-height: 480px;
 }
 
-
-
-/* estilos para video 720*480*/
-
-/* :root {
-    --main-video-width: 720px;
-    --main-video-height: 405px;
-} */
 
 #marcoVideoWebview webview,
 video,
@@ -44,10 +32,10 @@ video,
     /* top: -7px; */
 }
 
-video {
+/* video {
     width: var(--main-video-width);
     height: var(--main-video-height);
-}
+} */
 
 #videoloop,
 .marcoVideoLocal,
@@ -65,7 +53,7 @@ video {
 }
 
 webview {
-    height: var(--main-video-height);
+    /* height: var(--main-video-height); */
     opacity: 0;
     transition: opacity 2s;
     transition-timing-function: linear;
