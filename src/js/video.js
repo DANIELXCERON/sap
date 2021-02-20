@@ -21,7 +21,6 @@ videoSizeStyle = "width: " + ancho + "px;" + "height: " + alto + "px;"
 
 function reportWindowSize() {
 
-  GCText.style.cssText = "left: " + ancho + "px;"
   vPLuno.style.cssText = videoSizeStyle
   vPLdos.style.cssText = videoSizeStyle
   videoplayerloop.style.cssText = videoSizeStyle
