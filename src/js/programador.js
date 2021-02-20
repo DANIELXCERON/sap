@@ -722,21 +722,22 @@ function loadListProgram(item) {
             grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
 
             // Agrega video clasificador
-
             var cellRating = list[c];
-            const ratingVideo = {
-                namefile: "[rating] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
-                ref: cellRating.ref,
-                path: cellRating.path,
-                duration: cellRating.duration,
-                startTime: "00:00:00",
-                in: 0,
-                custom: "LC-Violet",
-                random: 0,
-                temp: true,
+            if(cellRating){
+                const ratingVideo = {
+                    namefile: "[rating] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
+                    ref: cellRating.ref,
+                    path: cellRating.path,
+                    duration: cellRating.duration,
+                    startTime: "00:00:00",
+                    in: 0,
+                    custom: "LC-Violet",
+                    random: 0,
+                    temp: true,
+                }
+                //agrega el video +1 index despues del actual en reproduccion
+                grid_queue.data.add(ratingVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
             }
-            //agrega el video +1 index despues del actual en reproduccion
-            grid_queue.data.add(ratingVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
 
             return NextVideo.path
         });
