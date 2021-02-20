@@ -725,7 +725,7 @@ function loadListProgram(item) {
             var cellRating = list[c];
             if(cellRating){
                 const ratingVideo = {
-                    namefile: "[rating] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
+                    namefile: "[Rating] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                     ref: cellRating.ref,
                     path: cellRating.path,
                     duration: cellRating.duration,
