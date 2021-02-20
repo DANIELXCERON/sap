@@ -25,12 +25,12 @@ video,
     /* margin-top: 6.2%; */
 }
 
-#videoloop,
+/* #videoloop,
 .marcoVideoLocal,
 #videobanner,
 #marcoVideoWebview {
-    /* top: -7px; */
-}
+    top: -7px;
+} */
 
 video {
     width: var(--main-video-width);
