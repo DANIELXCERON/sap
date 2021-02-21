@@ -23,7 +23,7 @@ function setItem(key, value) {
 
 function getItem(key) {
 
-  bd.findOne({ key: key }, function (err, item) {
+  bd.findOne({ key: key },{ value: 1 }, function (err, item) {
     console.log(item)
   });  
 }

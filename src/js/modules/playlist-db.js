@@ -23,8 +23,8 @@ function obtenerVideos(operacion) {
   });
 }
 
-function ReproducirVideo(ruta) {
-  bd.findOne({ _id: ruta }, { ruta: 1 }, function (error, record) {
+function ReproducirVideo(id) {
+  bd.findOne({ _id: id }, { ruta: 1 }, function (error, record) {
     datosStream = {
       referencia: "videohtml",
       url: record.ruta,
@@ -33,8 +33,8 @@ function ReproducirVideo(ruta) {
   });
 }
 
-function ReproducirLoop(ruta) {
-  bd.findOne({ _id: ruta }, { ruta: 1 }, function (error, record) {
+function ReproducirLoop(id) {
+  bd.findOne({ _id: id }, { ruta: 1 }, function (error, record) {
     datosStream = {
       referencia: "videoloop",
       url: record.ruta,
@@ -43,8 +43,8 @@ function ReproducirLoop(ruta) {
   });
 }
 
-function ReproducirBanner(ruta) {
-  bd.findOne({ _id: ruta }, { ruta: 1 }, function (error, record) {
+function ReproducirBanner(id) {
+  bd.findOne({ _id: id }, { ruta: 1 }, function (error, record) {
     datosStream = {
       referencia: "videobanner",
       url: record.ruta,
@@ -53,8 +53,8 @@ function ReproducirBanner(ruta) {
   });
 }
 
-function TransitionVideo(ruta) {
-  bd.findOne({ _id: ruta }, { ruta: 1 }, function (error, record) {
+function TransitionVideo(id) {
+  bd.findOne({ _id: id }, { ruta: 1 }, function (error, record) {
     localStorage.setItem("transition",record.ruta)
   });
 }

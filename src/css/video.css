@@ -12,7 +12,7 @@ body {
 
 :root {
   --main-video-width: 720px;
-  --main-video-height: 480px;
+  --main-video-height: 405px;
 }
 
 
@@ -22,15 +22,15 @@ video,
 #GCText,
 .SafeArea {
     transform: scaleY(1.18518519);
-    /* margin-top: 6.2%; */
+    margin-top: 6.2%;
 }
 
-/* #videoloop,
+#videoloop,
 .marcoVideoLocal,
 #videobanner,
 #marcoVideoWebview {
     top: -7px;
-} */
+}
 
 video {
     width: var(--main-video-width);
@@ -97,5 +97,5 @@ webview {
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
-    margin-top: 6.2%;
+    /* margin-top: 6.2%; */
 }
