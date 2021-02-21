@@ -13,6 +13,7 @@ const nTF = require("../src/js/modules/nice-time-format");
 const getTime = require("../src/js/modules/reloj");
 const progressBar = require("../src/js/modules/progress-bar.js");
 const PlayListDB = require("../src/js/modules/playlist-db");
+const storage = require("../src/js/modules/storage");
 
 
 
@@ -741,8 +742,7 @@ function controlPlayerAD(){
 ////////////////////////////// GRAPHIC LIST /////////////////////////////////////////////
 cargarPlayListMain();
 abrirArchivo.addEventListener("click", () => {
-  dialog
-    .showOpenDialog({
+  dialog.showOpenDialog({
       title: "Selecciona tu video de gráficos",
       buttonLabel: "Agregar",
       properties: ["openFile"],
@@ -753,8 +753,7 @@ abrirArchivo.addEventListener("click", () => {
         },
         { name: "Todos", extensions: ["*"] },
       ],
-    })
-    .then((result) => {
+    }).then((result) => {
       var rutaArchivo = result.filePaths[0];
 
       ffprobe(rutaArchivo, { path: ffprobeStatic.path })
@@ -769,36 +768,33 @@ abrirArchivo.addEventListener("click", () => {
         .catch(function (err) {
           console.error(err);
         });
-    })
-    .catch((err) => {
+    }).catch((err) => {
       console.log(err);
     });
 });
 
 function getVd(rutaArchivo) {
-  ffprobe(rutaArchivo, { path: ffprobeStatic.path })
-    .then(function (info) {
+  ffprobe(rutaArchivo, { path: ffprobeStatic.path }).then(function (info) {
       return info.streams[0].coded_height;
-    })
-    .catch(function (err) {
+    }).catch(function (err) {
       console.error(err);
     });
 }
 
-function generarHtmlPlaylist(videos) {
+function generarHtmlPlaylist(item) {
   return `
   <div class="col mb-4">
   <div class="card">
-  <video id="videoPlayerPreView" src="${videos.ruta}" class="card-img-top" preload="none" controls muted></video>
+  <video id="videoPlayerPreView" src="${item.ruta}" class="card-img-top" preload="none" controls muted></video>
   <div class="card-body">
-     <h5 class="card-title">${videos.nombre}</h5>
-     <p class="card-text">Codec ${videos.codec}</p>
-     <button type="button" class="btn btn-danger mb-2" onclick="eliminarVideoDeLaLista('${videos._id}');" ><span class="material-icons">delete_forever</span></button>
-     <button type="button" class="btn btn-success mb-2" onclick="ReproducirVideoDeLaLista('${videos._id}');" ><span class="material-icons">play_arrow</span></button>
-     <button type="button" class="btn btn-primary mb-2" onclick="ReproducirComoLoop('${videos._id}');" ><span class="material-icons">loop</span></button>
-     <button type="button" class="btn btn-outline-primary mb-2" onclick="ReproducirComoBanner('${videos._id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
-     <button type="button" class="btn btn-outline-primary mb-2" onclick="Transition('${videos._id}');" >Transition</button>
-     <p class="card-text"><small class="text-muted">${videos.ruta}</small></p>
+     <h5 class="card-title">${item.nombre}</h5>
+     <p class="card-text">Codec ${item.codec}</p>
+     <button type="button" class="btn btn-danger mb-2" onclick="eliminarVideoDeLaLista('${item._id}');" ><span class="material-icons">delete_forever</span></button>
+     <button type="button" class="btn btn-success mb-2" onclick="ReproducirVideoDeLaLista('${item._id}');" ><span class="material-icons">play_arrow</span></button>
+     <button type="button" class="btn btn-primary mb-2" onclick="ReproducirComoLoop('${item._id}');" ><span class="material-icons">loop</span></button>
+     <button type="button" class="btn btn-outline-primary mb-2" onclick="ReproducirComoBanner('${item._id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
+     <button type="button" class="btn btn-outline-primary mb-2" onclick="Transition('${item._id}');" >Transition</button>
+     <p class="card-text"><small class="text-muted">${item.ruta}</small></p>
   </div>
   </div>
 </div>
