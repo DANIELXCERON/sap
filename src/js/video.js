@@ -181,8 +181,10 @@ ipcRenderer.on("datos:gc", (e, datosGC) => {
   GCText.classList.add("moviendoGC");
 });
 
+var select
 //datos stream ipc render
 ipcRenderer.on("datos:stream", (e, datosStream) => {
+  select = datosStream.referencia
   switch (datosStream.referencia) {
     case "livestream":
       marcoVideoWebview.innerHTML = `
@@ -285,6 +287,9 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       //cuando webview este listo, pausar video local y ocultarlo
       vPLuno.pause();
       vPLuno.style.cssText = "display: none;"
+      if(select==="facebook"){
+        webview.style.marginTop = "43px";
+      };
       //transition
       webview.style.opacity = 1;
       //ocultar para livestream
