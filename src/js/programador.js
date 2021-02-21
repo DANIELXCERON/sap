@@ -1285,9 +1285,9 @@ function getValidIndexList(list,random,item,skipIndex){
             index = nTF.randomNumber(list.length - 1)
         }else{
             // agregar de forma ordenada
-            if (sessionStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
+            if (localStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
                 // lee el index del ultimo item que se agrego de una lista especifica
-                index = parseInt(sessionStorage.getItem(item.item))
+                index = parseInt(localStorage.getItem(item.item))
                 if (index < list.length - 1){ // mientras que el index este dentro de la lista
                     index += 1
                 }else{
@@ -1297,12 +1297,12 @@ function getValidIndexList(list,random,item,skipIndex){
                 index = 0
             }
         }
-        sessionStorage.setItem(item.item, index);
+        localStorage.setItem(item.item, index);
         //si el index resultante contiene el skipIndex
         var even = (element) => element === index;
     } while (skipIndex.some(even));
 
-    sessionStorage.setItem(item.item, index);
+    localStorage.setItem(item.item, index);
     return index
 }
 

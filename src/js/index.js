@@ -13,7 +13,7 @@ const nTF = require("../src/js/modules/nice-time-format");
 const getTime = require("../src/js/modules/reloj");
 const progressBar = require("../src/js/modules/progress-bar.js");
 const PlayListDB = require("../src/js/modules/playlist-db");
-const storage = require("../src/js/modules/storage");
+const dataBase = require("../src/js/modules/dataBase");
 
 
 

@@ -22,10 +22,14 @@ function setItem(key, value) {
 }
 
 function getItem(key) {
-
-  bd.findOne({ key: key },{ value: 1 }, function (err, item) {
-    console.log(item)
-  });  
+  bd.find({ key: key }, function (err, docs) {
+    if (err) throw err;
+    do_something_when_you_get_your_result(docs);
+  });
+  
+  function do_something_when_you_get_your_result(docs) {
+    return docs[0].value
+  }
 }
 
 function removeItem(key) {
