@@ -26,7 +26,7 @@
     <div class="container-fluid px-2">
         <div class="block-header p-1 sticky-top">
             <div class="row">
-                <div class="col-2 my-1">
+                <div class="col-auto my-auto">
                     <div class="btn-group mx-auto" role="group">
                         <!--Control de reproduccion-->
                         <button id="controlPlay" type="button" class="btn btn-success">
@@ -39,13 +39,24 @@
                             <span class="material-icons">forward_10</span></button>
                     </div>
                 </div>
-                <div class="col-10 my-auto">
+                <div class="col-5 my-auto">
                     <div class="barraDeProgreso">
                         <div id="timeDisplay" class="my-1">
                             00:00:00 / 00:00:00 | 00:00:00/00:00:00
                         </div>
                         <div class="progress my-1">
                             <div id="progressBarDom" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5 my-auto">
+                    <div class="barraDeProgreso">
+                        <div id="timeDisplayAD" class="my-1">
+                            00:00:00 / 00:00:00 | 00:00:00/00:00:00
+                        </div>
+                        <div class="progress my-1">
+                            <div id="progressBarDomAD" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                             </div>
                         </div>
                     </div>
@@ -115,17 +126,6 @@
                                 <p>
                                     Publicidad
                                 </p>
-                                <div class="col-12 my-auto">
-                                    <div class="barraDeProgreso">
-                                        <div id="timeDisplayAD" class="my-1">
-                                            00:00:00 / 00:00:00 | 00:00:00/00:00:00
-                                        </div>
-                                        <div class="progress my-1">
-                                            <div id="progressBarDomAD" class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div id="grid_queue_ad_container" ></div>
                             </div>
                         </div>
