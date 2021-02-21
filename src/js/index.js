@@ -1,5 +1,6 @@
 /** modulos node y electron */
 const fs = require("fs");
+const util = require("util");
 const path = require("path");
 const { dialog, app} = require("electron").remote;
 const { ipcRenderer } = require("electron");
@@ -851,6 +852,9 @@ function getIndexAddGrid(grid) {
 }
 /**envia a reproductor 1 */
 function SendFileToPlay(datosStream) {
+  /**escribir en log */
+  writeLogVideo(grid_queue,datosStream)
+
   /**guardar id del item a reproducir */
   localStorage.setItem("CurrentVideoID", datosStream.id);
 
@@ -861,6 +865,10 @@ function SendFileToPlay(datosStream) {
 }
 /**envia a reproductor 2 */
 function SendFileToPlay2(datosStream) {
+
+  /**escribir en log */
+  writeLogVideo(grid_ad_queue,datosStream)
+
   var index = grid_ad_queue.data.getIndex(datosStream.id);
 
   localStorage.setItem("CurrentVideoIndex2", index);
@@ -873,7 +881,6 @@ function SendFileToPlay2(datosStream) {
   try {
     grid_ad_queue.addRowCss(datosStream.id, "bg_id_Current");
   } catch (error) {}
-
   ipcRenderer.send("datos:stream2", datosStream);
 }
 
@@ -907,3 +914,27 @@ $.each(themes, function(i) {
 });
 
 //////////////////
+
+//// Log a Archivo
+// var log_file = fs.createWriteStream(app.getPath("documents") + "/SAP Playout" + "/node.log", {flags : 'w'});
+// var log_stdout = process.stdout;
+
+// console.log = function(d) {
+//  log_file.write(util.format(d) + '\n');
+//  log_stdout.write(util.format(d) + '\n');
+// };
+var dir = app.getPath("documents") + "/SAP Playout/logs"
+if (!fs.existsSync(dir)){
+  fs.mkdirSync(dir);
+  
+}
+var log_file = fs.createWriteStream(dir + `/${getTime.gT("DateLog")}.csv`, {flags : 'w'});
+log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
+
+function writeLogVideo(grid_element,datosStream){
+  var item = grid_element.data._order[grid_element.data.getIndex(datosStream.id)],
+      name = item.namefile,
+      duration = nTF.secToHHMMSS(item.duration)
+  log_file.write(util.format(`${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${name},${duration}\n`));
+}
+////

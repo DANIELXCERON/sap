@@ -13,11 +13,11 @@ var grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
             },
         },
         { width: 100, id: "trueRandom", header: [{ text: "Random" }] },
-        { width: 100, id: "playTime", header: [{ text: "Hora programada" }] },
+        { width: 100, id: "playTime", header: [{ text: "Hora" }] },
         {
             width: 200,
             id: "playDay",
-            header: [{ text: "Dias programados" }],
+            header: [{ text: "Dias" }],
             template: function (text, row, col) {
                 var dia = ``;
                 text.forEach((day) => {
@@ -29,7 +29,7 @@ var grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
         {
             width: 200,
             id: "playMonths",
-            header: [{ text: "Meses programados" }],
+            header: [{ text: "Meses" }],
             template: function (text, row, col) {
                 var meses = ``;
                 text.forEach((months) => {
@@ -38,7 +38,7 @@ var grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
                 return `<span>${meses}</span>`;
             },
         },
-        { width: 150, id: "path", header: [{ text: "Ruta de la lista" }] },
+        { width: 150, id: "path", header: [{ text: "Ruta" }] },
     ],
     css: "my_grid_css",
     rowHeight: 25,
@@ -129,7 +129,7 @@ var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
         {
             type: "timepicker",
             labelInline: true,
-            label: "Play Time",
+            label: "Hora",
             labelPosition: "left",
             value: "00:00",
             name: "playTime",
@@ -137,7 +137,7 @@ var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
         {
             type: "checkbox",
             labelInline: true,
-            label: "activar random",
+            label: "Random",
             labelPosition: "left",
             value: true,
             checked: true,
@@ -478,7 +478,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
     {
         name: "playTime",
         type: "timepicker",
-        label: "Play Time",
+        label: "Hora",
         labelPosition: "left",
         labelInline: true,
         value: "00:00",
@@ -520,7 +520,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
     {
         name: "playDateRange",
         type: "datepicker",
-        label: "date",
+        label: "Fecha",
         labelPosition: "left",
         labelInline: true,
         range: true,
@@ -529,7 +529,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
     {
         name: "timeStart",
         type: "timepicker",
-        label: "Start Time",
+        label: "Hora de inicio",
         labelPosition: "left",
         labelInline: true,
         value: "00:00",
@@ -537,7 +537,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
     {
         name: "timeEnd",
         type: "timepicker",
-        label: "End Time",
+        label: "Hora de finalización",
         labelPosition: "left",
         labelInline: true,
         value: "23:59",
@@ -607,7 +607,7 @@ function ejecuteAdd(item) {
     switch (item.type) {
         case 'datos:stream':
             grid_queue.data.add({
-                namefile: "[EVENT] " + item.item,
+                namefile: "[EVENTO] " + item.item,
                 ref: item.ref,
                 path: item.path,
                 duration: "00:00:00",
@@ -628,7 +628,7 @@ function ejecuteInstant(item) {
     switch (item.type) {
         case "datos:stream":
             const NextVideo = {
-                namefile: "[EVENT] " + item.item + " | " +  item.interval + " | " + getTime.gT("hms24"),
+                namefile: "[EVENTO] " + item.item + " | " +  item.interval + " | " + getTime.gT("hms24"),
                 ref: item.ref,
                 path: item.path,
                 duration: 0,
@@ -725,7 +725,7 @@ function loadListProgram(item) {
             var cellRating = list[c];
             if(cellRating){
                 const ratingVideo = {
-                    namefile: "[Rating] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
+                    namefile: "[Clasificación] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                     ref: cellRating.ref,
                     path: cellRating.path,
                     duration: cellRating.duration,
@@ -750,7 +750,7 @@ function drop_scheduler_event(ev) {
     // validar datos del formulario
     if (!formData.playDateRange) {
         iziToast.show({
-          title: "Debe seleccionar un rango de fecha",
+          title: "Debe seleccionar una fecha",
           message: "",
           color: "red", // blue, red, green, yellow
         });
@@ -894,12 +894,12 @@ function drag_scheduler_event(ev) {ev.preventDefault();}
 /** crear nueva lista en grid_ad_container */
 var grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
     columns: [
-        { width: 100, id: "interval", header: [{ text: "interval" }] },
+        { width: 100, id: "interval", header: [{ text: "intervalo" }] },
         { width: 100, id: "item", header: [{ text: "Nombre" }] },
         {
             width: 300,
             id: "playDateRange",
-            header: [{ text: "Rango de fechas" }],
+            header: [{ text: "Fecha" }],
             template: function (text, row, col) {
                 if (text[0] === text[1]) {
                     return `${text[0]}`;
@@ -916,7 +916,7 @@ var grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
                 return `<span>${nTF.secToHHMMSS(text)}</span>`;
             },
         },
-        { width: 150, id: "path", header: [{ text: "Ruta de la lista" }] },
+        { width: 150, id: "path", header: [{ text: "Ruta" }] },
     ],
     css: "my_grid_css",
     rowHeight: 25,
@@ -1041,7 +1041,7 @@ var form_ad = new dhx.Form("form_ad_container", {
     {
         type: "datepicker",
         labelInline: true,
-        label: "range date",
+        label: "Fecha",
         labelPosition: "left",
         range: true,
         name: "playDateRange",
@@ -1093,7 +1093,7 @@ function loadListAd(item) {
         var cell = list[getValidIndexList(list,false,item,[-1,-1])]
 
         const NextVideo = {
-            namefile: "[AD] " + cell.namefile + " | " +  item.interval + " | " + getTime.gT("hms24"),
+            namefile: "[ANUNCIO] " + cell.namefile + " | " +  item.interval + " | " + getTime.gT("hms24"),
             ref: cell.ref,
             path: cell.path,
             duration: cell.duration,
@@ -1134,7 +1134,7 @@ function drop_scheduler_ad(ev) {
     const formData = form_ad.getValue();
     if (!formData.playDateRange) {
         iziToast.show({
-          title: "Debe seleccionar un rango de fechas",
+          title: "Debe seleccionar una fecha",
           message: "",
           color: "red", // blue, red, green, yellow
         });
@@ -1167,7 +1167,7 @@ function drop_scheduler_ad(ev) {
                         }
 
                         const data = {
-                            item: "[LIST] " + filename(file.name),
+                            item: "[LISTA] " + filename(file.name),
                             duration: durationList,
                             interval: formData.interval,
                             playDay: formData.playDay,
@@ -1412,93 +1412,66 @@ function seeMessage(text) {
 /** guardar programacion */
 ipcRenderer.on("saveScheduler", () => {
     if (localStorage.getItem("slst-path")) {
-        const dataScheduler = {
-            list_path: validContent(grid_scheduler_list),
-            event_path: validContent(grid_scheduler_event),
-            ad_path: validContent(grid_scheduler_ad),
-        };
-        var fileGcContent = JSON.stringify(dataScheduler);
-        /**se guarda la ruta del archivo slst guardado */
-        fs.writeFile(localStorage.getItem("slst-path"), fileGcContent, function (err) {
-            if (err) throw err;
-
-            if (!dataScheduler.list_path.length > 0) {
-                seeMessage("list no hay datos");
-            } else {
-                seeMessage("¡List Guardado con exito!");
-            }
-
-            if (!dataScheduler.event_path.length > 0) {
-                seeMessage("event no hay datos");
-            } else {
-                seeMessage("¡Event Guardado con exito!");
-            }
-
-            if (!dataScheduler.ad_path.length > 0) {
-                seeMessage("Ad no hay datos");
-            } else {
-                seeMessage("¡Ad Guardado con exito!");
-            }
-        });
+        saveFileSLST(localStorage.getItem("slst-path"))
     } else {
         saveAsScheduler();
     }
-
 });
 
 /** guardar programacion como */
+ipcRenderer.on("saveAsScheduler", () => {
+    saveAsScheduler();
+});
+
 function saveAsScheduler() {
     const options = {
         defaultPath: app.getPath("documents") + "/000-scheduler",
-        title: "Guarda Programación",
+        title: "Guardar Programación",
         buttonLabel: "Guardar",
         filters: [{ name: "scheduler", extensions: ["slst"] }],
     };
 
     dialog.showSaveDialog(null, options).then((result) => {
-        const dataScheduler = {
-            list_path: validContent(grid_scheduler_list),
-            event_path: validContent(grid_scheduler_event),
-            ad_path: validContent(grid_scheduler_ad),
-        };
-
-        var fileGcContent = JSON.stringify(dataScheduler);
-
         if (!result.canceled) {
             /**se guarda la ruta del archivo slst guardado */
             localStorage.setItem("slst-path", result.filePath.toString());
-
-            fs.writeFile(result.filePath.toString(), fileGcContent, function (err) {
-                if (err) throw err;
-
-                if (!dataScheduler.list_path.length > 0) {
-                    seeMessage("list no hay datos");
-                } else {
-                    seeMessage("¡List Guardado con exito!");
-                }
-
-                if (!dataScheduler.event_path.length > 0) {
-                    seeMessage("event no hay datos");
-                } else {
-                    seeMessage("¡Event Guardado con exito!");
-                }
-
-                if (!dataScheduler.ad_path.length > 0) {
-                    seeMessage("Ad no hay datos");
-                } else {
-                    seeMessage("¡Ad Guardado con exito!");
-                }
-            });
+            saveFileSLST(result.filePath.toString());
         }
-    })
-        .catch((err) => {
-            console.log(err);
-        });
+    }).catch((err) => {
+        console.log(err);
+    });
 }
 
-ipcRenderer.on("saveAsScheduler", () => {
-    saveAsScheduler();
-});
+function saveFileSLST(path){
+    const dataScheduler = {
+        list_path: validContent(grid_scheduler_list),
+        event_path: validContent(grid_scheduler_event),
+        ad_path: validContent(grid_scheduler_ad),
+    };
+
+    var fileGcContent = JSON.stringify(dataScheduler);
+
+    fs.writeFile(path, fileGcContent, function (err) {
+        if (err) throw err;
+        if (!dataScheduler.list_path.length > 0) {
+            seeMessage("list no hay datos");
+        } else {
+            seeMessage("¡List Guardado con exito!");
+        }
+        if (!dataScheduler.event_path.length > 0) {
+            seeMessage("event no hay datos");
+        } else {
+            seeMessage("¡Event Guardado con exito!");
+        }
+        if (!dataScheduler.ad_path.length > 0) {
+            seeMessage("Ad no hay datos");
+        } else {
+            seeMessage("¡Ad Guardado con exito!");
+        }
+    });
+}
+
+
 
 /** abrir programacion */
 ipcRenderer.on("openScheduler", () => {
@@ -1508,15 +1481,15 @@ ipcRenderer.on("openScheduler", () => {
         properties: ["openFile"],
         filters: [{ name: "scheduler", extensions: ["slst"] }],
     }).then((result) => {
-        /**si no ha sido cancelado */
         if (!result.canceled) {
-            /**luego carga los nuevos datos */
+            //Luego carga los nuevos datos
             loadFileSLST(result.filePaths[0]);
+            //guarda la ruta
+            localStorage.setItem("slst-path", result.filePaths[0]);
         }
-    })
-        .catch((err) => {
-            console.log(err);
-        });
+    }).catch((err) => {
+        console.log(err);
+    });
 });
 
 /** Cargar nuevos datos */
@@ -1559,3 +1532,5 @@ ipcRenderer.on("open:fileType", (e, pathFile) => {
             });
     }
 });
+
+

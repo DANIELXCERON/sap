@@ -101,6 +101,8 @@ function gT(Iwant) {
 
   var DateDMYYYY = nTF.checkFormat(dd) + "/" + nTF.checkFormat(mm + 1) + "/" + yyyy;
 
+  var DateLog = `[${nTF.checkFormat(dd)}-${nTF.checkFormat(mm + 1)}-${yyyy}][${nTF.checkFormat(hr)}-${nTF.checkFormat(min)}-${nTF.checkFormat(sec)}]`;
+
   switch (Iwant) {
     // "minutos y segundos en 00:00"
     case "min_sec":
@@ -137,6 +139,10 @@ function gT(Iwant) {
     // "01/01/2020"
     case "DateDMYYYY":
       return DateDMYYYY;
+
+    // "[01-01-2020][00-00-00]"
+    case "DateLog":
+      return DateLog;
 
     // Dia de la semana en numero del 0-6 iniciando por domingo
     case "DayWeek":
