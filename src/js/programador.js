@@ -42,6 +42,7 @@ var grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
     ],
     css: "my_grid_css",
     rowHeight: 25,
+    headerRowHeight: 25,
     height: 377,
     rowCss: function (row) { return row.custom; },
     htmlEnable: true,
@@ -377,6 +378,7 @@ var grid_scheduler_event = new dhx.Grid("grid_event_container", {
     ],
     css: "my_grid_css",
     rowHeight: 25,
+    headerRowHeight: 25,
     height: 454,
     rowCss: function (row) {
         return row.custom;
@@ -920,6 +922,7 @@ var grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
     ],
     css: "my_grid_css",
     rowHeight: 25,
+    headerRowHeight: 25,
     height: 377,
     rowCss: function (row) {
         return row.custom;

@@ -127,14 +127,19 @@ window.addEventListener("load", () => {
   // }
 
   // pintar ultimo video
-  if (localStorage.getItem("CurrentVideoID")) {
+  var id = localStorage.getItem("CurrentVideoID");
+  if (id) {
     // var a = JSON.parse(localStorage.getItem("DataVideoCurrent"));
     grid_queue.data._order.forEach((row) => {
       grid_queue.removeRowCss(row.id, "bg_id_Next");
       grid_queue.removeRowCss(row.id, "bg_id_Current");
     });
-    grid_queue.addRowCss(localStorage.getItem("CurrentVideoID"), "bg_id_Current");
-
+    grid_queue.addRowCss(id, "bg_id_Current");
+    //auto scroll a último item reproducido
+    setTimeout(function(){
+      grid_queue.scrollTo(id, "namefile");
+    }, 200);
+    
     // ipcRenderer.send("datos:stream", {
     //   referencia: "file-video",
     //   url: a.srcVideoCurrent,
@@ -327,7 +332,8 @@ var grid_queue = new dhx.Grid("grid_queue_container", {
     { width: 200, id: "path", header: [{ text: "Ruta" }] },
   ],
   rowHeight: 25,
-  // width: 500,
+  headerRowHeight: 25,
+  // width: 492,
   height: 400,
   rowCss: function (row) { return row.custom ? row.custom : "bg_id_Block" },
   htmlEnable: true,
@@ -335,9 +341,12 @@ var grid_queue = new dhx.Grid("grid_queue_container", {
   dragCopy: false,
   selection: "row",
   resizable: true,
+  
   // editable:true,
   // adjust: true,
 });
+
+
  
 /** Controles de la grilla */
 const grid_jsonFile_btn = document.querySelector("#grid_jsonFile_btn");
@@ -623,6 +632,7 @@ var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
     { width: 200, id: "path", header: [{ text: "Ruta" }] },
   ],
   rowHeight: 25,
+  headerRowHeight: 25,
   // width: 500,
   height: 400,
   rowCss: function (row) {
@@ -858,6 +868,9 @@ function SendFileToPlay(datosStream) {
     grid_queue.addRowCss(datosStream.id, "bg_id_Current");
   } catch (error) {}
   ipcRenderer.send("datos:stream", datosStream);
+
+  //auto scroll
+  grid_queue.scrollTo(datosStream.id, "namefile");
 }
 /**envia a reproductor 2 */
 function SendFileToPlay2(datosStream) {
