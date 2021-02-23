@@ -3,6 +3,10 @@ const getTime = require("./reloj");
 const fs = require("fs");
 const {app} = require("electron").remote;
 
+
+
+var log_file = fs.createWriteStream(dir + `/${getTime.gT("DateLog")}.slog`, {flags : 'w'});
+
 function writeLogVideo(grid_element,datosStream){
   var item = grid_element.data._order[grid_element.data.getIndex(datosStream.id)],
       name = item.namefile,
@@ -20,9 +24,10 @@ function writeLogVideo(grid_element,datosStream){
 const dir = app.getPath("documents") + "/SAP Playout/logs"
 if (!fs.existsSync(dir)){
   fs.mkdirSync(dir);
-  
 }
-var log_file = fs.createWriteStream(dir + `/${getTime.gT("DateLog")}.slog`, {flags : 'w'});
+
+
+
 // log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
 
 
