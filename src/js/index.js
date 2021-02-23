@@ -474,11 +474,7 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
   }
 
   /** Bara de progreso */
-  let barvalue = progressBar.setBar(
-    videoActualTime.TiempoTranscurrido,
-    videoActualTime.TiempoDuracion,
-    false
-  );
+  let barvalue = progressBar.setBar(videoActualTime.TiempoTranscurrido,videoActualTime.TiempoDuracion,false);
   progressBarDom.style.width = `${barvalue.progressBar}%`;
   progressBarDom.style.backgroundColor = `${barvalue.bgColor}`;
 
