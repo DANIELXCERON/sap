@@ -61,9 +61,7 @@ var ffprobe = require("ffprobe"),
   ffprobeStatic = ffprobeStaticPath;
 
 /** cargar configuracion de config.json en el localStorage */
-fetch("../config/config.json")
-  .then((results) => results.json())
-  .then(function (config) {
+fetch("../config/config.json").then((results) => results.json()).then(function (config) {
     localStorage.setItem("JSON_config", JSON.stringify(config));
   });
 // si no esta SpeedGC en localStorage
@@ -920,26 +918,33 @@ $.each(themes, function(i) {
 
 //////////////////
 
-//// Log a Archivo
-// var log_file = fs.createWriteStream(app.getPath("documents") + "/SAP Playout" + "/node.log", {flags : 'w'});
-// var log_stdout = process.stdout;
-
-// console.log = function(d) {
-//  log_file.write(util.format(d) + '\n');
-//  log_stdout.write(util.format(d) + '\n');
-// };
-var dir = app.getPath("documents") + "/SAP Playout/logs"
+//// Guardar y leer logs
+const dir = app.getPath("documents") + "/SAP Playout/logs"
 if (!fs.existsSync(dir)){
   fs.mkdirSync(dir);
   
 }
-var log_file = fs.createWriteStream(dir + `/${getTime.gT("DateLog")}.csv`, {flags : 'w'});
-log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
+var log_file = fs.createWriteStream(dir + `/${getTime.gT("DateLog")}.slog`, {flags : 'w'});
+// log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
 
 function writeLogVideo(grid_element,datosStream){
   var item = grid_element.data._order[grid_element.data.getIndex(datosStream.id)],
       name = item.namefile,
       duration = nTF.secToHHMMSS(item.duration)
-  log_file.write(util.format(`${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${name},${duration}\n`));
+  log_file.write(util.format(`
+{
+  "fecha": "${getTime.gT("DateDMYYYY")}",
+  "hora": "${getTime.gT("hms24")}",
+  "nombre": "${name}",
+  "duracion": "${duration}"
+},`));
 }
+
+fs.readdir(dir, (err, files) => {
+  files.forEach(file => {
+    fetch(dir+"/"+file).then((results) => results.text()).then(function (slog) {
+      console.log(JSON.parse("["+slog.slice(0, -1)+"]"));
+    });
+  });
+});
 ////
