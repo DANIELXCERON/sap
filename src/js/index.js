@@ -13,7 +13,8 @@ const nTF = require("../src/js/modules/nice-time-format");
 const getTime = require("../src/js/modules/reloj");
 const progressBar = require("../src/js/modules/progress-bar.js");
 const PlayListDB = require("../src/js/modules/playlist-db");
-const dataBase = require("../src/js/modules/dataBase");
+// const dataBase = require("../src/js/modules/dataBase");
+const logs = require("../src/js/modules/logs");
 
 
 
@@ -853,7 +854,7 @@ function getIndexAddGrid(grid) {
 /**envia a reproductor 1 */
 function SendFileToPlay(datosStream) {
   /**escribir en log */
-  writeLogVideo(grid_queue,datosStream)
+  logs.writeLogVideo(grid_queue,datosStream)
 
   /**guardar id del item a reproducir */
   localStorage.setItem("CurrentVideoID", datosStream.id);
@@ -870,7 +871,7 @@ function SendFileToPlay(datosStream) {
 function SendFileToPlay2(datosStream) {
 
   /**escribir en log */
-  writeLogVideo(grid_ad_queue,datosStream)
+  logs.writeLogVideo(grid_ad_queue,datosStream)
 
   var index = grid_ad_queue.data.getIndex(datosStream.id);
 
@@ -917,34 +918,3 @@ $.each(themes, function(i) {
 });
 
 //////////////////
-
-//// Guardar y leer logs
-const dir = app.getPath("documents") + "/SAP Playout/logs"
-if (!fs.existsSync(dir)){
-  fs.mkdirSync(dir);
-  
-}
-var log_file = fs.createWriteStream(dir + `/${getTime.gT("DateLog")}.slog`, {flags : 'w'});
-// log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
-
-function writeLogVideo(grid_element,datosStream){
-  var item = grid_element.data._order[grid_element.data.getIndex(datosStream.id)],
-      name = item.namefile,
-      duration = nTF.secToHHMMSS(item.duration)
-  log_file.write(util.format(`
-{
-  "fecha": "${getTime.gT("DateDMYYYY")}",
-  "hora": "${getTime.gT("hms24")}",
-  "nombre": "${name}",
-  "duracion": "${duration}"
-},`));
-}
-
-fs.readdir(dir, (err, files) => {
-  files.forEach(file => {
-    fetch(dir+"/"+file).then((results) => results.text()).then(function (slog) {
-      console.log(JSON.parse("["+slog.slice(0, -1)+"]"));
-    });
-  });
-});
-////
