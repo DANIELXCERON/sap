@@ -27,13 +27,21 @@ function write(data){
       r = data.ref
 
   if(!n){
-    n = data.path
+    n = filename(data.path)
   }
-  log_file.write(util.format(`{"fecha": "${getTime.gT("DateDMYYYY")}","hora": "${getTime.gT("hms24")}","duracion": "${d}","ref": "${r}","nombre": "${n}"},`));
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","duracion":"${d}","ref":"${r}","nombre":"${n}"},`));
+}
+
+/** funcion para extraer nombre del archivo de una ruta */
+function filename(rutaAbsoluta) {
+  var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
+  var nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
+  //.replace(/^.*[\\\/]/, "")
+  return nombreArchivo;
 }
 
 function writeEventsLog(data){
-  log_file.write(util.format(`{"fecha": "${getTime.gT("DateDMYYYY")}","hora": "${getTime.gT("hms24")}","nombre": "${data}"},`));
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","nombre":"${data}"},`));
 }
 
 function loadDir(elementgrid){
