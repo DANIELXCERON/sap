@@ -13,7 +13,7 @@ const getTime = require("../src/js/modules/reloj");
 const progressBar = require("../src/js/modules/progress-bar.js");
 const PlayListDB = require("../src/js/modules/playlist-db");
 // const dataBase = require("../src/js/modules/dataBase");
-const logs = require("../src/js/modules/logs");
+const logger = require("../src/js/modules/logger");
 
 
 
@@ -118,8 +118,8 @@ window.addEventListener("load", () => {
   //   var dataVideoCurrent = JSON.parse(localStorage.getItem("DataVideoCurrent"));
 
   //   ipcRenderer.send("datos:stream", {
-  //     referencia: "file-video",
-  //     url: dataVideoCurrent.srcVideoCurrent,
+  //     ref: "file-video",
+  //     path: dataVideoCurrent.srcVideoCurrent,
   //     in: dataVideoCurrent.TiempoTranscurrido,
   //   });
   // }
@@ -139,8 +139,8 @@ window.addEventListener("load", () => {
     }, 200);
     
     // ipcRenderer.send("datos:stream", {
-    //   referencia: "file-video",
-    //   url: a.srcVideoCurrent,
+    //   ref: "file-video",
+    //   path: a.srcVideoCurrent,
     //   in: a.TiempoTranscurrido,
     // });
   }
@@ -155,7 +155,7 @@ window.addEventListener("load", () => { ViewGraSwitch &&(initHiden(),ViewGraSwit
 
 function MostrarG() {
   const datosStream = {
-    referencia: "ocultar-mostrar-video-loop",
+    ref: "ocultar-mostrar-video-loop",
     valor: "mostrar",
   };
   ipcRenderer.send("datos:stream", datosStream);
@@ -163,7 +163,7 @@ function MostrarG() {
 
 function OcultarG() {
   const datosStream = {
-    referencia: "ocultar-mostrar-video-loop",
+    ref: "ocultar-mostrar-video-loop",
     valor: "ocultar",
   };
   ipcRenderer.send("datos:stream", datosStream);
@@ -186,13 +186,13 @@ function resetHiden() {
 SafeAreaSwitch.addEventListener("change", () => {
   if (SafeAreaSwitch.checked) {
     const datosStream = {
-      referencia: "ocultar-mostrar-safe-area",
+      ref: "ocultar-mostrar-safe-area",
       valor: "mostrar",
     };
     ipcRenderer.send("datos:stream", datosStream);
   } else {
     const datosStream = {
-      referencia: "ocultar-mostrar-safe-area",
+      ref: "ocultar-mostrar-safe-area",
       valor: "ocultar",
     };
     ipcRenderer.send("datos:stream", datosStream);
@@ -202,14 +202,14 @@ SafeAreaSwitch.addEventListener("change", () => {
 /** botones de la pestaña live stream */
 detenerWebVideo.addEventListener("click", () => {
   const datosStream = {
-    referencia: "stopStream",
+    ref: "stopStream",
   };
   ipcRenderer.send("datos:stream", datosStream);
 });
 iniciarWebVideo.addEventListener("click", () => {
   const datosStream = {
-    referencia: formLive.getValue().server,
-    url: formLive.getValue().url,
+    ref: formLive.getValue().server,
+    path: formLive.getValue().url,
   };
   ipcRenderer.send("datos:stream", datosStream);
 });
@@ -270,7 +270,7 @@ var formLive = new dhx.Form("formLive", {
  */
 formLive.getItem("scale").events.on("change", function () {
   const datosStream = {
-    referencia: "SetAspectRatioForFacebook",
+    ref: "SetAspectRatioForFacebook",
     numberAspectRatio: arguments[0][0],
   };
   ipcRenderer.send("datos:stream", datosStream);
@@ -449,12 +449,7 @@ grid_queue.events.on("CellDblClick", function (cell, e) {
   });
 
   /**enviar a reproducir */
-  SendFileToPlay({
-    referencia: cell.ref,
-    url: cell.path,
-    in: cell.in,
-    id: cell.id,
-  });
+  SendFileToPlay(cell);
 });
 
 ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
@@ -466,8 +461,8 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
   if (r + 0.3 >= sr && sr >= r) {
     // reproducir transición 
     ipcRenderer.send("datos:stream", {
-      referencia: "videobanner",
-      url: localStorage.getItem("transition"),
+      ref: "videobanner",
+      path: localStorage.getItem("transition"),
     });
   }
 
@@ -534,13 +529,7 @@ function NextVideo() {
   }
 
   StatusBar(item);
-
-  SendFileToPlay({
-    referencia: item.ref,
-    url: item.path,
-    in: item.in,
-    id: item.id,
-  });
+  SendFileToPlay(item);
   
 }
 
@@ -716,24 +705,8 @@ ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
 /**controla los dos players pausando, deteniendo y reproduciendo */
 function controlPlayerAD(){
   if (grid_ad_queue.data._order && grid_ad_queue.data._order.length > 0){
-
-
     ipcRenderer.send("control:player", "pause");
-
-    /**
-     * obtine el primer video de la segunda lista de reproduccion grid_ad_queue
-     * luego lo envia a reproduccir SendFileToPlay2()
-    */
-
-    var item = grid_ad_queue.data._order[0]
-    SendFileToPlay2({
-      referencia: item.ref,
-      url: item.path,
-      in: item.in,
-      id: item.id,
-    });
-
-
+    SendFileToPlay2(grid_ad_queue.data._order[0]);
   }else{
     // continua principal y detiene el secundario
     ipcRenderer.send("control:player", "play");
@@ -835,7 +808,7 @@ function cargarPlayListMain() {
 }
 ////////////////////////////// GRAPHIC LIST END ////////////////////////////////////////
 
-/** funcion para extraer nombre del archivo de una url */
+/** funcion para extraer nombre del archivo de una ruta */
 function filename(rutaAbsoluta) {
   var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
   var nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
@@ -850,29 +823,24 @@ function getIndexAddGrid(grid) {
     return 0;
   }
 }
-/**envia a reproductor 1 */
-function SendFileToPlay(datosStream) {
-  /**escribir en log */
-  logs.writeLog(grid_queue,datosStream)
 
+/**envia a reproductor 1 */
+function SendFileToPlay(item) {
   /**guardar id del item a reproducir */
-  localStorage.setItem("CurrentVideoID", datosStream.id);
+  localStorage.setItem("CurrentVideoID", item.id);
 
   try {
-    grid_queue.addRowCss(datosStream.id, "bg_id_Current");
+    grid_queue.addRowCss(item.id, "bg_id_Current");
   } catch (error) {}
-  ipcRenderer.send("datos:stream", datosStream);
+  ipcRenderer.send("datos:stream", item);
 
   //auto scroll
-  grid_queue.scrollTo(datosStream.id, "namefile");
+  grid_queue.scrollTo(item.id, "namefile");
 }
 /**envia a reproductor 2 */
-function SendFileToPlay2(datosStream) {
+function SendFileToPlay2(item) {
 
-  /**escribir en log */
-  logs.writeLog(grid_ad_queue,datosStream)
-
-  var index = grid_ad_queue.data.getIndex(datosStream.id);
+  var index = grid_ad_queue.data.getIndex(item.id);
 
   localStorage.setItem("CurrentVideoIndex2", index);
   if (index < grid_ad_queue.data._order.length - 1) {
@@ -882,9 +850,9 @@ function SendFileToPlay2(datosStream) {
   }
 
   try {
-    grid_ad_queue.addRowCss(datosStream.id, "bg_id_Current");
+    grid_ad_queue.addRowCss(item.id, "bg_id_Current");
   } catch (error) {}
-  ipcRenderer.send("datos:stream2", datosStream);
+  ipcRenderer.send("datos:stream2", item);
 }
 
 ////////////////////
@@ -919,27 +887,27 @@ $.each(themes, function(i) {
 //////////////////
 
 
-////////////////////////////// logs list viewer ///////////////////////////////////////////////
+////////////////////////////// logger list viewer ///////////////////////////////////////////////
 var grid_log_dir = new dhx.Grid("grid_log_dir_container", {
   css: "my_grid_css",
   columns: [
-    { width: 200, id: "filelog", header: [{ text: "Archivo Log" }] },
+    { width: 92, id: "filelog", header: [{ text: "Logs" }], type: "date", format: "%M %d %Y" },
     { width: 200, id: "path", header: [{ text: "Ruta" }] },
   ],
   rowHeight: 25,
   headerRowHeight: 25,
   height: 400,
-  htmlEnable: true,
-  dragMode: "both",
-  dragCopy: false,
+  // htmlEnable: true,
+  // dragMode: "both",
+  // dragCopy: false,
   selection: "row",
   resizable: true,
 });
 
-logs.loadDir(grid_log_dir)
+logger.loadDir(grid_log_dir)
 grid_log_dir.events.on("CellClick", function(row,column,e){
   console.log(row.path)
-  logs.readLog(row.path,grid_log_view)
+  logger.readLog(row.path,grid_log_view)
 });
 
 var grid_log_view = new dhx.Grid("grid_log_view_container", {
@@ -948,6 +916,7 @@ var grid_log_view = new dhx.Grid("grid_log_view_container", {
     { width: 92, id: "fecha", header: [{ text: "Fecha" }] },
     { width: 72, id: "hora", header: [{ text: "Hora" }] },
     { width: 72, id: "duracion", header: [{ text: "Duración" }] },
+    { width: 72, id: "ref", header: [{ text: "Referencia" }] },
     { width: 253, id: "nombre", header: [{ text: "Nombre" }] },
   ],
   rowHeight: 25,

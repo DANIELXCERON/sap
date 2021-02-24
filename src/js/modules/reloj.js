@@ -101,7 +101,7 @@ function gT(Iwant) {
 
   var DateDMYYYY = nTF.checkFormat(dd) + "/" + nTF.checkFormat(mm + 1) + "/" + yyyy;
 
-  var DateLog = `[${nTF.checkFormat(dd)}-${nTF.checkFormat(mm + 1)}-${yyyy}][${nTF.checkFormat(hr)}-${nTF.checkFormat(min)}-${nTF.checkFormat(sec)}]`;
+  var DateLog = `${nTF.checkFormat(dd)}-${nTF.checkFormat(mm + 1)}-${yyyy}`;
 
   switch (Iwant) {
     // "minutos y segundos en 00:00"
@@ -140,7 +140,7 @@ function gT(Iwant) {
     case "DateDMYYYY":
       return DateDMYYYY;
 
-    // "[01-01-2020][00-00-00]"
+    // "01-01-2020"
     case "DateLog":
       return DateLog;
 

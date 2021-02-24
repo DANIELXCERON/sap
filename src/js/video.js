@@ -4,7 +4,7 @@ const util = require("util");
 /** Mis modulos */
 const getTime = require("../src/js/modules/reloj");
 const nTF = require("../src/js/modules/nice-time-format");
-const logs = require("../src/js/modules/logs");
+const logger = require("../src/js/modules/logger");
 
 const SafeArea = document.querySelector(".SafeArea");
 const videobanner = document.querySelector("#videobanner");
@@ -135,25 +135,6 @@ vPLdos.ontimeupdate = function () {
   }
 };
 
-/** dispositivo de video externo TEST */
-const constraints = {
-  audio: {
-    sampleSize: 16,
-    channelCount: 2,
-    sampleRate: 44100,
-    noiseSuppression: false,
-    echoCancellation: false,
-  },
-  video: {
-    mandatory: {
-      // maxHeight: 480,
-      // maxWidth: 640,
-      // minHeight: 480,
-      // minWidth: 640,
-    },
-  },
-};
-
 // Recibir Datos para Generar Caracteres GC
 ipcRenderer.on("datos:gc", (e, datosGC) => {
   // remover animacion css
@@ -187,12 +168,13 @@ ipcRenderer.on("datos:gc", (e, datosGC) => {
 
 var select
 //datos stream ipc render
-ipcRenderer.on("datos:stream", (e, datosStream) => {
-  select = datosStream.referencia
-  switch (datosStream.referencia) {
+ipcRenderer.on("datos:stream", (e, data) => {
+  logger.write(data)
+  select = data.ref
+  switch (data.ref) {
     case "livestream":
       marcoVideoWebview.innerHTML = `
-        <webview id="wv1" src="${datosStream.url}/player?autoPlay=true&enableInfoAndActivity=false&defaultDrawer=&mute=false"
+        <webview id="wv1" src="${data.path}/player?autoPlay=true&enableInfoAndActivity=false&defaultDrawer=&mute=false"
           frameborder="0"
           scrolling="no"
           allowfullscreen>
@@ -201,7 +183,7 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       break;
     case "anyone":
       marcoVideoWebview.innerHTML = `
-          <webview id="wv1" src="${datosStream.url}"
+          <webview id="wv1" src="${data.path}"
             frameborder="0"
             scrolling="no"
             allowfullscreen>
@@ -211,7 +193,7 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
     case "facebook":
       marcoVideoWebview.innerHTML = `
         <webview id="wv1"
-          src="https://www.facebook.com/plugins/video.php?href=${datosStream.url}/
+          src="https://www.facebook.com/plugins/video.php?href=${data.path}/
           &data-autoplay=1&mute=0&show_text=0&appId"
           style="border:none;overflow:hidden;"
           scrolling="no"
@@ -222,35 +204,28 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
         </webview>
         `;
       break;
-    case "SetAspectRatioForFacebook":
-      document.querySelector("#wv1").style.cssText = `
-      width: ${datosStream.numberAspectRatio}px;
-      margin-left:${(body.clientWidth - datosStream.numberAspectRatio) / 2}px;
-      opacity: 1;
-      `;
-      break;
     case "youtube":
       marcoVideoWebview.innerHTML = `
       <webview id="wv1"
-        src="https://www.youtube.com/embed/${datosStream.url}?autoplay=1&cc_load_policy=1" allowfullscreen>
+        src="https://www.youtube.com/embed/${data.path}?autoplay=1&cc_load_policy=1" allowfullscreen>
       </webview>
       `;
       break;
     case "file-video": //video local 1
       marcoVideoWebview.innerHTML = ``;
-      vPLuno.src = datosStream.url;
-      vPLuno.currentTime = datosStream.in;
+      vPLuno.src = data.path;
+      vPLuno.currentTime = data.in;
       vPLuno.load();
       vPLuno.style.cssText = "display: block;"
       break;
     case "videoloop": //reproduce video loop
-      videoplayerloop.src = datosStream.url;
+      videoplayerloop.src = data.path;
       videoplayerloop.load();
-      localStorage.setItem("CurrentLoopVideoPath", datosStream.url);
+      localStorage.setItem("CurrentLoopVideoPath", data.path);
       videoplayerloop.style.cssText = "display: block;"
       break;
     case "videobanner": //reproduce video banner
-      videoPlayerBanner.src = datosStream.url;
+      videoPlayerBanner.src = data.path;
       videoPlayerBanner.load();
       videoPlayerBanner.style.cssText = "display: block;"
       break;
@@ -259,24 +234,31 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
       vPLuno.play();
       vPLuno.style.cssText = "display: block;"
       break;
+    case "SetAspectRatioForFacebook":
+      document.querySelector("#wv1").style.cssText = `
+      width: ${data.numberAspectRatio}px;
+      margin-left:${(body.clientWidth - data.numberAspectRatio) / 2}px;
+      opacity: 1;
+      `;
+      break;
     case "ocultar-mostrar-video-loop": //oculta o muestra video loop
-      if (datosStream.valor == "ocultar") {
+      if (data.valor == "ocultar") {
         videoloop.classList.add("invisible");
         videobanner.classList.add("invisible");
       }
-      if (datosStream.valor == "mostrar") {
+      if (data.valor == "mostrar") {
         videoloop.classList.remove("invisible");
         videobanner.classList.remove("invisible");
       }
       break;
     case "opacity-video-loop": //opacidad para video loop
-      videoloop.style.opacity = datosStream.valor;
+      videoloop.style.opacity = data.valor;
       break;
     case "ocultar-mostrar-safe-area": //oculta o muestra el margen safe area
-      if (datosStream.valor == "ocultar") {
+      if (data.valor == "ocultar") {
         SafeArea.classList.add("invisible");
       }
-      if (datosStream.valor == "mostrar") {
+      if (data.valor == "mostrar") {
         SafeArea.classList.remove("invisible");
       }
       break;
@@ -413,11 +395,12 @@ ipcRenderer.on("datos:stream", (e, datosStream) => {
 });
 
 // reproductor 2
-ipcRenderer.on("datos:stream2", (e, datosStream) => {
-  switch (datosStream.referencia) {
+ipcRenderer.on("datos:stream2", (e, data) => {
+  logger.write(data)
+  switch (data.ref) {
     case "file-video": //video local 2
-      vPLdos.src = datosStream.url;
-      vPLdos.currentTime = datosStream.in;
+      vPLdos.src = data.path;
+      vPLdos.currentTime = data.in;
       vPLdos.load();
       vPLuno.style.cssText = "display: none;"
       vPLdos.style.cssText = "display: block;"
@@ -469,7 +452,6 @@ ipcRenderer.on("control:player2", (e, control) => {
 
 //Al finalizar en el reproductor BANNER
 videoPlayerBanner.onended = function () {
-  /**simplemente termina el video */
   videoPlayerBanner.src = "";
   videoPlayerBanner.load();
   videoPlayerBanner.style.cssText = "display: none;"
