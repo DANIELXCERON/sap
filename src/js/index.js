@@ -1,4 +1,3 @@
-/** modulos node y electron */
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
@@ -854,7 +853,7 @@ function getIndexAddGrid(grid) {
 /**envia a reproductor 1 */
 function SendFileToPlay(datosStream) {
   /**escribir en log */
-  logs.writeLogVideo(grid_queue,datosStream)
+  logs.writeLog(grid_queue,datosStream)
 
   /**guardar id del item a reproducir */
   localStorage.setItem("CurrentVideoID", datosStream.id);
@@ -871,7 +870,7 @@ function SendFileToPlay(datosStream) {
 function SendFileToPlay2(datosStream) {
 
   /**escribir en log */
-  logs.writeLogVideo(grid_ad_queue,datosStream)
+  logs.writeLog(grid_ad_queue,datosStream)
 
   var index = grid_ad_queue.data.getIndex(datosStream.id);
 
@@ -918,3 +917,48 @@ $.each(themes, function(i) {
 });
 
 //////////////////
+
+
+////////////////////////////// logs list viewer ///////////////////////////////////////////////
+var grid_log_dir = new dhx.Grid("grid_log_dir_container", {
+  css: "my_grid_css",
+  columns: [
+    { width: 200, id: "filelog", header: [{ text: "Archivo Log" }] },
+    { width: 200, id: "path", header: [{ text: "Ruta" }] },
+  ],
+  rowHeight: 25,
+  headerRowHeight: 25,
+  height: 400,
+  htmlEnable: true,
+  dragMode: "both",
+  dragCopy: false,
+  selection: "row",
+  resizable: true,
+});
+
+logs.loadDir(grid_log_dir)
+grid_log_dir.events.on("CellClick", function(row,column,e){
+  console.log(row.path)
+  logs.readLog(row.path,grid_log_view)
+});
+
+var grid_log_view = new dhx.Grid("grid_log_view_container", {
+  css: "my_grid_css",
+  columns: [
+    { width: 92, id: "fecha", header: [{ text: "Fecha" }] },
+    { width: 72, id: "hora", header: [{ text: "Hora" }] },
+    { width: 72, id: "duracion", header: [{ text: "Duración" }] },
+    { width: 253, id: "nombre", header: [{ text: "Nombre" }] },
+  ],
+  rowHeight: 25,
+  headerRowHeight: 25,
+  height: 400,
+  htmlEnable: true,
+  dragMode: "both",
+  dragCopy: false,
+  selection: "row",
+  resizable: true,
+});
+
+
+

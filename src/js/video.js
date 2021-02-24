@@ -1,6 +1,10 @@
 const { ipcRenderer } = require("electron");
+const util = require("util");
+
+/** Mis modulos */
 const getTime = require("../src/js/modules/reloj");
 const nTF = require("../src/js/modules/nice-time-format");
+const logs = require("../src/js/modules/logs");
 
 const SafeArea = document.querySelector(".SafeArea");
 const videobanner = document.querySelector("#videobanner");

@@ -140,19 +140,35 @@
 
                     <!-- Configuraciones -->
                     <div class="tab-pane fade my-2" id="profile2" role="tabpanel" aria-labelledby="profile2-tab">
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="SafeAreaSwitch">
-                            <label class="custom-control-label" for="SafeAreaSwitch">Safe Area</label>
-                        </div>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="ViewGraSwitch">
-                            <label class="custom-control-label" for="ViewGraSwitch"><span
-									class="material-icons">picture_in_picture</span></label>
-                        </div>
-                        <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="darkSwitch">
-                            <label class="custom-control-label" for="darkSwitch"><span
-									class="material-icons">settings_brightness</span></label>
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="SafeAreaSwitch">
+                                    <label class="custom-control-label" for="SafeAreaSwitch">Safe Area</label>
+                                </div>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="ViewGraSwitch">
+                                    <label class="custom-control-label" for="ViewGraSwitch"><span
+                                            class="material-icons">picture_in_picture</span></label>
+                                </div>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="darkSwitch">
+                                    <label class="custom-control-label" for="darkSwitch"><span
+                                            class="material-icons">settings_brightness</span></label>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <p>
+                                    Archivos Logs
+                                </p>
+                                <div id="grid_log_dir_container" ></div>
+                            </div>
+                            <div class="col-6">
+                                <p>
+                                    Visor
+                                </p>
+                                <div id="grid_log_view_container" ></div>
+                            </div>
                         </div>
                     </div>
 
