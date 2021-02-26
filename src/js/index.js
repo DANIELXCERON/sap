@@ -630,7 +630,7 @@ var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
 var n = 0
 function addCurtains(){
     //si el video actual proviene de la misma lista de donde se cargaron las cortinillas
-    var dataItemCurrent = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))].pathListEvent
+    var dataItemCurrent = grid_queue.data.getItem(localStorage.getItem("CurrentVideoID")).pathListEvent
     if(dataItemCurrent && dataItemCurrent === localStorage.getItem("pathListEvent")){
       if (n === 0) {
         // agrega la cortinilla de entrada de primero
@@ -713,7 +713,47 @@ function controlPlayerAD(){
 
 
 ////////////////////////////// GRAPHIC LIST /////////////////////////////////////////////
-cargarPlayListMain();
+
+function template(item) {
+  let template = `<div>
+    <video id="videoPlayerPreView" src="${item.path}" style="width: 100%;" preload="none" controls muted></video>
+    <h5 class="card-title">${item.namefile}</h5>
+    <p class="card-text">Codec ${item.codec}</p>
+    <button type="button" class="btn btn-danger" onclick="actionBtns('delete','${item.id}');" ><span class="material-icons">delete_forever</span></button>
+    <button type="button" class="btn btn-success" onclick="actionBtns('file-video','${item.id}');" ><span class="material-icons">play_arrow</span></button>
+    <button type="button" class="btn btn-primary" onclick="actionBtns('videoloop','${item.id}');" ><span class="material-icons">loop</span></button>
+    <button type="button" class="btn btn-outline-primary" onclick="actionBtns('videobanner','${item.id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
+    <button type="button" class="btn btn-outline-primary" onclick="actionBtns('playTransition','${item.id}');" >Transition</button>
+    <p><small class="text-muted">${item.path}</small></p>
+</div>`
+  return template;
+}
+const dataview_graphics = new dhx.DataView("dataview_graphics", {
+  itemsInRow: 3,
+  gap: 5,
+  css: "dhx_widget--bordered",
+  template: template
+});
+// dataviewLoad.data.load("https://snippet.dhtmlx.com/codebase/data/dataview/01/dataset.json");
+// dataviewParse.data.parse(dataset);
+
+function actionBtns(action,id){
+  var data = dataview_graphics.data.getItem(id)
+  switch (action) {
+    case "delete":
+      dataview_graphics.data.remove(id);
+      break;
+    case "playTransition":
+      localStorage.setItem("transition", data.path)
+      break;
+    default:
+  }
+
+  data.ref = action
+  ipcRenderer.send("datos:stream", data);
+
+}
+
 abrirArchivo.addEventListener("click", () => {
   dialog.showOpenDialog({
       title: "Selecciona tu video de gráficos",
@@ -727,16 +767,16 @@ abrirArchivo.addEventListener("click", () => {
         { name: "Todos", extensions: ["*"] },
       ],
     }).then((result) => {
-      var rutaArchivo = result.filePaths[0];
-
-      ffprobe(rutaArchivo, { path: ffprobeStatic.path })
+      var filepath = result.filePaths[0];
+      ffprobe(filepath, { path: ffprobeStatic.path })
         .then(function (info) {
-          PlayListDB.agregarPlaylist(
-            filename(rutaArchivo),
-            info.streams[0].codec_long_name,
-            rutaArchivo
-          );
-          cargarPlayListMain();
+
+          dataview_graphics.data.add({
+            namefile: filename(filepath),
+            codec: info.streams[0].codec_long_name,
+            path: filepath,
+          });
+
         })
         .catch(function (err) {
           console.error(err);
@@ -746,62 +786,97 @@ abrirArchivo.addEventListener("click", () => {
     });
 });
 
-function getVd(rutaArchivo) {
-  ffprobe(rutaArchivo, { path: ffprobeStatic.path }).then(function (info) {
-      return info.streams[0].coded_height;
-    }).catch(function (err) {
-      console.error(err);
-    });
-}
 
-function generarHtmlPlaylist(item) {
-  return `
-  <div class="col mb-4">
-  <div class="card">
-  <video id="videoPlayerPreView" src="${item.ruta}" class="card-img-top" preload="none" controls muted></video>
-  <div class="card-body">
-     <h5 class="card-title">${item.nombre}</h5>
-     <p class="card-text">Codec ${item.codec}</p>
-     <button type="button" class="btn btn-danger mb-2" onclick="eliminarVideoDeLaLista('${item._id}');" ><span class="material-icons">delete_forever</span></button>
-     <button type="button" class="btn btn-success mb-2" onclick="ReproducirVideoDeLaLista('${item._id}');" ><span class="material-icons">play_arrow</span></button>
-     <button type="button" class="btn btn-primary mb-2" onclick="ReproducirComoLoop('${item._id}');" ><span class="material-icons">loop</span></button>
-     <button type="button" class="btn btn-outline-primary mb-2" onclick="ReproducirComoBanner('${item._id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
-     <button type="button" class="btn btn-outline-primary mb-2" onclick="Transition('${item._id}');" >Transition</button>
-     <p class="card-text"><small class="text-muted">${item.ruta}</small></p>
-  </div>
-  </div>
-</div>
-  `;
-}
 
-function eliminarVideoDeLaLista(id) {
-  PlayListDB.eliminarVideo(id);
-  cargarPlayListMain();
-}
+// cargarPlayListMain();
+// abrirArchivo.addEventListener("click", () => {
+//   dialog.showOpenDialog({
+//       title: "Selecciona tu video de gráficos",
+//       buttonLabel: "Agregar",
+//       properties: ["openFile"],
+//       filters: [
+//         {
+//           name: "video con soporte de canal alfa",
+//           extensions: ["webm", "mov"],
+//         },
+//         { name: "Todos", extensions: ["*"] },
+//       ],
+//     }).then((result) => {
+//       var rutaArchivo = result.filePaths[0];
 
-function ReproducirVideoDeLaLista(id) {
-  PlayListDB.ReproducirVideo(id);
-}
+//       ffprobe(rutaArchivo, { path: ffprobeStatic.path })
+//         .then(function (info) {
+//           PlayListDB.agregarPlaylist(
+//             filename(rutaArchivo),
+//             info.streams[0].codec_long_name,
+//             rutaArchivo
+//           );
+//           cargarPlayListMain();
+//         })
+//         .catch(function (err) {
+//           console.error(err);
+//         });
+//     }).catch((err) => {
+//       console.log(err);
+//     });
+// });
 
-function ReproducirComoLoop(id) {
-  PlayListDB.ReproducirLoop(id);
-}
+// function getVd(rutaArchivo) {
+//   ffprobe(rutaArchivo, { path: ffprobeStatic.path }).then(function (info) {
+//       return info.streams[0].coded_height;
+//     }).catch(function (err) {
+//       console.error(err);
+//     });
+// }
 
-function ReproducirComoBanner(id) {
-  PlayListDB.ReproducirBanner(id);
-}
+// function generarHtmlPlaylist(item) {
+//   return `
+//   <div class="col mb-4">
+//   <div class="card">
+//   <video id="videoPlayerPreView" src="${item.ruta}" class="card-img-top" preload="none" controls muted></video>
+//   <div class="card-body">
+//      <h5 class="card-title">${item.nombre}</h5>
+//      <p class="card-text">Codec ${item.codec}</p>
+//      <button type="button" class="btn btn-danger mb-2" onclick="eliminarVideoDeLaLista('${item._id}');" ><span class="material-icons">delete_forever</span></button>
+//      <button type="button" class="btn btn-success mb-2" onclick="ReproducirVideoDeLaLista('${item._id}');" ><span class="material-icons">play_arrow</span></button>
+//      <button type="button" class="btn btn-primary mb-2" onclick="ReproducirComoLoop('${item._id}');" ><span class="material-icons">loop</span></button>
+//      <button type="button" class="btn btn-outline-primary mb-2" onclick="ReproducirComoBanner('${item._id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
+//      <button type="button" class="btn btn-outline-primary mb-2" onclick="Transition('${item._id}');" >Transition</button>
+//      <p class="card-text"><small class="text-muted">${item.ruta}</small></p>
+//   </div>
+//   </div>
+// </div>
+//   `;
+// }
 
-function Transition(id) {
-  PlayListDB.TransitionVideo(id);
-}
+// function eliminarVideoDeLaLista(id) {
+//   PlayListDB.eliminarVideo(id);
+//   cargarPlayListMain();
+// }
 
-function cargarPlayListMain() {
-  PlayListDB.obtenerVideos((videos) => {
-    let html = videos.map(generarHtmlPlaylist).join("");
-    tbodyPlayList = document.querySelector("#tbodyPlayList");
-    tbodyPlayList.innerHTML = html;
-  });
-}
+// function ReproducirVideoDeLaLista(id) {
+//   PlayListDB.ReproducirVideo(id);
+// }
+
+// function ReproducirComoLoop(id) {
+//   PlayListDB.ReproducirLoop(id);
+// }
+
+// function ReproducirComoBanner(id) {
+//   PlayListDB.ReproducirBanner(id);
+// }
+
+// function Transition(id) {
+//   PlayListDB.TransitionVideo(id);
+// }
+
+// function cargarPlayListMain() {
+//   PlayListDB.obtenerVideos((videos) => {
+//     let html = videos.map(generarHtmlPlaylist).join("");
+//     tbodyPlayList = document.querySelector("#tbodyPlayList");
+//     tbodyPlayList.innerHTML = html;
+//   });
+// }
 ////////////////////////////// GRAPHIC LIST END ////////////////////////////////////////
 
 /** funcion para extraer nombre del archivo de una ruta */

@@ -68,7 +68,6 @@ function writeGCLog(datosGC){
 function loadDir(elementgrid){
   elementgrid.data.removeAll()
   fs.readdir(dir, (err, files) => {
-    console.log(files)
     files.forEach(file => {
       elementgrid.data.add({
         filelog: file.slice(0,-4).replace(/-/g, "/"),

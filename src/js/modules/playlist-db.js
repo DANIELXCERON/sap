@@ -26,8 +26,8 @@ function obtenerVideos(operacion) {
 function ReproducirVideo(id) {
   bd.findOne({ _id: id }, { ruta: 1 }, function (error, record) {
     datosStream = {
-      referencia: "videohtml",
-      url: record.ruta,
+      ref: "file-video",
+      path: record.ruta,
     };
     ipcRenderer.send("datos:stream", datosStream);
   });
@@ -36,8 +36,8 @@ function ReproducirVideo(id) {
 function ReproducirLoop(id) {
   bd.findOne({ _id: id }, { ruta: 1 }, function (error, record) {
     datosStream = {
-      referencia: "videoloop",
-      url: record.ruta,
+      ref: "videoloop",
+      path: record.ruta,
     };
     ipcRenderer.send("datos:stream", datosStream);
   });
@@ -46,8 +46,8 @@ function ReproducirLoop(id) {
 function ReproducirBanner(id) {
   bd.findOne({ _id: id }, { ruta: 1 }, function (error, record) {
     datosStream = {
-      referencia: "videobanner",
-      url: record.ruta,
+      ref: "videobanner",
+      path: record.ruta,
     };
     ipcRenderer.send("datos:stream", datosStream);
   });
