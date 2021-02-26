@@ -13,15 +13,19 @@ if (!fs.existsSync(dir)){// si no existe el directorio
   fs.mkdirSync(dir);// crea el directorio
 }
 
-if (!fs.existsSync(pathFile)){// si no existe el archivo
-  f = "w" // escribir
-}else{
-  f = "a" // agregar
+function checkFile(){
+  if (!fs.existsSync(pathFile)){// si no existe el archivo
+    f = "w" // escribir
+  }else{
+    f = "a" // agregar
+  }
+  log_file = fs.createWriteStream(pathFile, {flags : f});
 }
-log_file = fs.createWriteStream(pathFile, {flags : f});
+
 
 
 function write(data){
+  checkFile()
   var n = data.namefile,
       d = nTF.secToHHMMSS(data.duration),
       r = data.ref
@@ -31,16 +35,19 @@ function write(data){
 
 
 function writeEventsLog(data,n){
+  checkFile()
   var p = data.path,
       r = data.ref
   log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"${r}","nombre":"${n}","info":"${p}"},`));
 }
 
 function writeControlPlayerLog(n,i){
+  checkFile()
   log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"Control","nombre":"${n}","info":"${i}"},`));
 }
 
 function writeGCLog(datosGC){
+  checkFile()
   var s = ''
   var h = datosGC.textoGC
 
@@ -59,7 +66,9 @@ function writeGCLog(datosGC){
 
 
 function loadDir(elementgrid){
+  elementgrid.data.removeAll()
   fs.readdir(dir, (err, files) => {
+    console.log(files)
     files.forEach(file => {
       elementgrid.data.add({
         filelog: file.slice(0,-4).replace(/-/g, "/"),

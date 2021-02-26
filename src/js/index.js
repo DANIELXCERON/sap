@@ -277,21 +277,17 @@ formLive.getItem("scale").events.on("change", function () {
 });
 
 /** Botones del control del reproductor principal */
-controlPlay.addEventListener("click", (e) => {
+controlPlay.addEventListener("click", () => {
   ipcRenderer.send("control:player", "play");
-  e.preventDefault();
 });
-controlPause.addEventListener("click", (e) => {
+controlPause.addEventListener("click", () => {
   ipcRenderer.send("control:player", "pause");
-  e.preventDefault();
 });
-controlStop.addEventListener("click", (e) => {
+controlStop.addEventListener("click", () => {
   ipcRenderer.send("control:player", "stop");
-  e.preventDefault();
 });
-controlForward.addEventListener("click", (e) => {
+controlForward.addEventListener("click", () => {
   ipcRenderer.send("control:player", "forward");
-  e.preventDefault();
 });
 
 ////////////////////////////// LIST QUEUE ///////////////////////////////////////////////
@@ -888,6 +884,22 @@ $.each(themes, function(i) {
 
 
 ////////////////////////////// logger list viewer ///////////////////////////////////////////////
+
+const grid_log_update = document.querySelector("#grid_log_update_btn");
+const grid_log_csv = document.querySelector("#grid_log_csv_btn");
+
+grid_log_update.addEventListener("click", () => {
+  logger.loadDir(grid_log_dir)
+});
+grid_log_csv.addEventListener("click", () => {
+  if (grid_log_view && grid_log_view.data._order.length > 0){
+    var selectedCell = grid_log_dir.selection.getCell();
+    grid_log_view.export.csv({
+      name: filename(grid_log_dir.selection.getCell().row.path)
+    });
+  }
+});
+
 var grid_log_dir = new dhx.Grid("grid_log_dir_container", {
   css: "my_grid_css",
   columns: [
