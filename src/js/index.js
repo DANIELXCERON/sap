@@ -11,11 +11,7 @@ const https = require("https");
 const nTF = require("../src/js/modules/nice-time-format");
 const getTime = require("../src/js/modules/reloj");
 const progressBar = require("../src/js/modules/progress-bar.js");
-const PlayListDB = require("../src/js/modules/playlist-db");
-// const dataBase = require("../src/js/modules/dataBase");
 const logger = require("../src/js/modules/logger");
-
-
 
 /**definir idioma para suite dhmtlx */
 const lang = app.getLocale()
@@ -33,7 +29,6 @@ var titlebar = new customTitlebar.Titlebar({
   backgroundColor: customTitlebar.Color.fromHex("#333"),
   icon: iconPath,
   enableMnemonics: true,
-
 });
 
 /** Barra de estado*/
@@ -748,10 +743,8 @@ function actionBtns(action,id){
       break;
     default:
   }
-
   data.ref = action
   ipcRenderer.send("datos:stream", data);
-
 }
 
 abrirArchivo.addEventListener("click", () => {
@@ -786,97 +779,6 @@ abrirArchivo.addEventListener("click", () => {
     });
 });
 
-
-
-// cargarPlayListMain();
-// abrirArchivo.addEventListener("click", () => {
-//   dialog.showOpenDialog({
-//       title: "Selecciona tu video de gráficos",
-//       buttonLabel: "Agregar",
-//       properties: ["openFile"],
-//       filters: [
-//         {
-//           name: "video con soporte de canal alfa",
-//           extensions: ["webm", "mov"],
-//         },
-//         { name: "Todos", extensions: ["*"] },
-//       ],
-//     }).then((result) => {
-//       var rutaArchivo = result.filePaths[0];
-
-//       ffprobe(rutaArchivo, { path: ffprobeStatic.path })
-//         .then(function (info) {
-//           PlayListDB.agregarPlaylist(
-//             filename(rutaArchivo),
-//             info.streams[0].codec_long_name,
-//             rutaArchivo
-//           );
-//           cargarPlayListMain();
-//         })
-//         .catch(function (err) {
-//           console.error(err);
-//         });
-//     }).catch((err) => {
-//       console.log(err);
-//     });
-// });
-
-// function getVd(rutaArchivo) {
-//   ffprobe(rutaArchivo, { path: ffprobeStatic.path }).then(function (info) {
-//       return info.streams[0].coded_height;
-//     }).catch(function (err) {
-//       console.error(err);
-//     });
-// }
-
-// function generarHtmlPlaylist(item) {
-//   return `
-//   <div class="col mb-4">
-//   <div class="card">
-//   <video id="videoPlayerPreView" src="${item.ruta}" class="card-img-top" preload="none" controls muted></video>
-//   <div class="card-body">
-//      <h5 class="card-title">${item.nombre}</h5>
-//      <p class="card-text">Codec ${item.codec}</p>
-//      <button type="button" class="btn btn-danger mb-2" onclick="eliminarVideoDeLaLista('${item._id}');" ><span class="material-icons">delete_forever</span></button>
-//      <button type="button" class="btn btn-success mb-2" onclick="ReproducirVideoDeLaLista('${item._id}');" ><span class="material-icons">play_arrow</span></button>
-//      <button type="button" class="btn btn-primary mb-2" onclick="ReproducirComoLoop('${item._id}');" ><span class="material-icons">loop</span></button>
-//      <button type="button" class="btn btn-outline-primary mb-2" onclick="ReproducirComoBanner('${item._id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
-//      <button type="button" class="btn btn-outline-primary mb-2" onclick="Transition('${item._id}');" >Transition</button>
-//      <p class="card-text"><small class="text-muted">${item.ruta}</small></p>
-//   </div>
-//   </div>
-// </div>
-//   `;
-// }
-
-// function eliminarVideoDeLaLista(id) {
-//   PlayListDB.eliminarVideo(id);
-//   cargarPlayListMain();
-// }
-
-// function ReproducirVideoDeLaLista(id) {
-//   PlayListDB.ReproducirVideo(id);
-// }
-
-// function ReproducirComoLoop(id) {
-//   PlayListDB.ReproducirLoop(id);
-// }
-
-// function ReproducirComoBanner(id) {
-//   PlayListDB.ReproducirBanner(id);
-// }
-
-// function Transition(id) {
-//   PlayListDB.TransitionVideo(id);
-// }
-
-// function cargarPlayListMain() {
-//   PlayListDB.obtenerVideos((videos) => {
-//     let html = videos.map(generarHtmlPlaylist).join("");
-//     tbodyPlayList = document.querySelector("#tbodyPlayList");
-//     tbodyPlayList.innerHTML = html;
-//   });
-// }
 ////////////////////////////// GRAPHIC LIST END ////////////////////////////////////////
 
 /** funcion para extraer nombre del archivo de una ruta */
