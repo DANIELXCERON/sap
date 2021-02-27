@@ -1396,7 +1396,8 @@ function RelojProgramador() {
     }, 800);
 }
 
-function validContent(content) {
+//obtener contenido
+function getContent(content) {
     if (content.data._order) {
         return content.data._order
     } else {
@@ -1447,29 +1448,39 @@ function saveAsScheduler() {
 
 function saveFileSLST(path){
     const dataScheduler = {
-        list_path: validContent(grid_scheduler_list),
-        event_path: validContent(grid_scheduler_event),
-        ad_path: validContent(grid_scheduler_ad),
+        list_path: getContent(grid_scheduler_list),
+        event_path: getContent(grid_scheduler_event),
+        ad_path: getContent(grid_scheduler_ad),
+        graphics_path: getContent(dataview_graphics),
     };
 
     var fileGcContent = JSON.stringify(dataScheduler);
 
     fs.writeFile(path, fileGcContent, function (err) {
         if (err) throw err;
+
         if (!dataScheduler.list_path.length > 0) {
             seeMessage("list no hay datos");
         } else {
             seeMessage("¡List Guardado con exito!");
         }
+
         if (!dataScheduler.event_path.length > 0) {
             seeMessage("event no hay datos");
         } else {
             seeMessage("¡Event Guardado con exito!");
         }
+
         if (!dataScheduler.ad_path.length > 0) {
             seeMessage("Ad no hay datos");
         } else {
             seeMessage("¡Ad Guardado con exito!");
+        }
+
+        if (!dataScheduler.graphics_path.length > 0) {
+            seeMessage("No hay gráficos");
+        } else {
+            seeMessage("¡Gráficos guardados con exito!");
         }
     });
 }
@@ -1502,24 +1513,23 @@ function loadFileSLST(path) {
         .then(function (content) {
             /**si hay datos en la lista borrarlos primero */
             if (grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0) {
-                grid_scheduler_list.data._order.forEach((item) => {
-                    grid_scheduler_list.data.remove(item.id);
-                });
+                grid_scheduler_list.data.removeAll()
             }
             if (grid_scheduler_event.data._order && grid_scheduler_event.data._order.length > 0) {
-                grid_scheduler_event.data._order.forEach((item) => {
-                    grid_scheduler_event.data.remove(item.id);
-                });
+                grid_scheduler_event.data.removeAll()
             }
             if (grid_scheduler_ad.data._order && grid_scheduler_ad.data._order.length > 0) {
-                grid_scheduler_ad.data._order.forEach((item) => {
-                    grid_scheduler_ad.data.remove(item.id);
-                });
+                grid_scheduler_ad.data.removeAll()
+            }
+            if (dataview_graphics.data._order && dataview_graphics.data._order.length > 0) {
+                dataview_graphics.data.removeAll()
             }
             /**luego carga los nuevos datos */
-            grid_scheduler_list.data.add(content.list_path);
+            grid_scheduler_list.data.parse(content.list_path);
             grid_scheduler_event.data.add(content.event_path);
             grid_scheduler_ad.data.add(content.ad_path);
+            dataview_graphics.data.parse(content.graphics_path);
+            // dataview_graphics.data.add(content.graphics_path);
         });
 }
 

@@ -23,8 +23,6 @@ function checkFile(){
   log_file = fs.createWriteStream(pathFile, {flags : f});
 }
 
-
-
 function write(data){
   checkFile()
   var n = data.namefile,
@@ -32,8 +30,6 @@ function write(data){
       r = data.ref
   log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","duracion":"${d}","ref":"${r}","nombre":"${n}"},`));
 }
-
-
 
 function writeEventsLog(data,n){
   checkFile()

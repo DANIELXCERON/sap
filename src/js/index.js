@@ -729,8 +729,8 @@ const dataview_graphics = new dhx.DataView("dataview_graphics", {
   css: "dhx_widget--bordered",
   template: template
 });
-// dataviewLoad.data.load("https://snippet.dhtmlx.com/codebase/data/dataview/01/dataset.json");
-// dataviewParse.data.parse(dataset);
+// dataview_graphics.data.load("https://snippet.dhtmlx.com/codebase/data/dataview/01/dataset.json");
+// dataview_graphics.data.parse(dataset);
 
 function actionBtns(action,id){
   var data = dataview_graphics.data.getItem(id)
@@ -905,8 +905,8 @@ var grid_log_view = new dhx.Grid("grid_log_view_container", {
     { width: 92, id: "fecha", header: [{ text: "Fecha" }] },
     { width: 72, id: "hora", header: [{ text: "Hora" }] },
     { width: 72, id: "duracion", header: [{ text: "Duración" }] },
-    { width: 72, id: "ref", header: [{ text: "Referencia" }] },
-    { width: 253, id: "nombre", header: [{ text: "Nombre" }] },
+    { width: 72, id: "ref", header: [{ text: "Referencia" },{ content: "selectFilter" }] },
+    { width: 253, id: "nombre", header: [{ text: "Nombre" },{ content: "selectFilter" }] },
     { width: 253, id: "info", header: [{ text: "Info" }] },
   ],
   rowHeight: 25,
