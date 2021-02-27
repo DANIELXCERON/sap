@@ -899,6 +899,29 @@ grid_log_dir.events.on("CellClick", function(row,column,e){
   logger.readLog(row.path,grid_log_view)
 });
 
+var formFilterDate = new dhx.Form("formFilterDate", {
+  ccss: "my_form_css",
+  padding: 0,
+  rows: [
+      {
+        labelInline: true,
+        // range: true,
+        labelPosition: "left",
+        label: "Filtar:",
+        placeholder: "Seleccione un fecha",
+        type: "datepicker",
+        name: "filterDateRange",
+        dateFormat: "%d/%m/%Y"
+      }
+  ]
+});
+
+formFilterDate.events.on("change", function (name, value) {
+  grid_log_dir.data.filter({ by: "filelog", match: value });
+});
+
+
+
 var grid_log_view = new dhx.Grid("grid_log_view_container", {
   css: "my_grid_css",
   columns: [
