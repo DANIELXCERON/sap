@@ -718,7 +718,7 @@ function template(item) {
     <button type="button" class="btn btn-success" onclick="actionBtns('file-video','${item.id}');" ><span class="material-icons">play_arrow</span></button>
     <button type="button" class="btn btn-primary" onclick="actionBtns('videoloop','${item.id}');" ><span class="material-icons">loop</span></button>
     <button type="button" class="btn btn-outline-primary" onclick="actionBtns('videobanner','${item.id}');" ><span class="material-icons">picture_in_picture_alt</span></button>
-    <button type="button" class="btn btn-outline-primary" onclick="actionBtns('playTransition','${item.id}');" >Transition</button>
+    <button type="button" class="btn btn-outline-primary" onclick="actionBtns('transition','${item.id}');" >Transition</button>
     <p><small class="text-muted">${item.path}</small></p>
 </div>`
   return template;
@@ -726,7 +726,6 @@ function template(item) {
 const dataview_graphics = new dhx.DataView("dataview_graphics", {
   itemsInRow: 3,
   gap: 5,
-  css: "dhx_widget--bordered",
   template: template
 });
 // dataview_graphics.data.load("https://snippet.dhtmlx.com/codebase/data/dataview/01/dataset.json");
@@ -738,8 +737,8 @@ function actionBtns(action,id){
     case "delete":
       dataview_graphics.data.remove(id);
       break;
-    case "playTransition":
-      localStorage.setItem("transition", data.path)
+    case "transition":
+      localStorage.setItem(action, data.path)
       break;
     default:
   }
