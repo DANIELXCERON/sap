@@ -7,13 +7,14 @@ var dir,pathFile,log_file,f
 
 
 dir = app.getPath("documents") + "\\SAP Playout\\logs"
-pathFile = dir + `\\${getTime.gT("DateLog")}.log`
+
 
 if (!fs.existsSync(dir)){// si no existe el directorio
   fs.mkdirSync(dir);// crea el directorio
 }
 
 function checkFile(){
+  pathFile = dir + `\\${getTime.gT("DateLog")}.log`
   if (!fs.existsSync(pathFile)){// si no existe el archivo
     f = "w" // escribir
   }else{
