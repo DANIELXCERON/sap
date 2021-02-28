@@ -606,6 +606,7 @@ function ejecute_scheduler_event() {
 }
 
 function ejecuteAdd(item) {
+    console.log(item)
     switch (item.type) {
         case 'datos:stream':
             grid_queue.data.add({
@@ -708,7 +709,7 @@ function loadListProgram(item) {
 
             // Agrega video programado
             var cell = list[getValidIndexList(list, false, item, [a,b,c])];
-            const NextVideo = {
+            const programVideo = {
                 namefile: "[P] " + cell.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                 ref: cell.ref,
                 path: cell.path,
@@ -721,13 +722,14 @@ function loadListProgram(item) {
                 pathListEvent: item.path,
             }
             //agrega el video +1 index despues del actual en reproduccion
-            grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
+            var pAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
+            grid_queue.data.add(programVideo, pAddIndex ? pAddIndex+1 : 0);
 
             // Agrega video clasificador
             var cellRating = list[c];
             if(cellRating){
                 const ratingVideo = {
-                    namefile: "[Clasificación] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
+                    namefile: "[C] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                     ref: cellRating.ref,
                     path: cellRating.path,
                     duration: cellRating.duration,
@@ -738,10 +740,11 @@ function loadListProgram(item) {
                     temp: true,
                 }
                 //agrega el video +1 index despues del actual en reproduccion
-                grid_queue.data.add(ratingVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
+                var rAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
+                grid_queue.data.add(ratingVideo, rAddIndex ? rAddIndex+1 : 0);
             }
 
-            return NextVideo.path
+            return programVideo.path
         });
 }
 
