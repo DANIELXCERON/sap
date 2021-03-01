@@ -882,7 +882,7 @@ grid_log_csv.addEventListener("click", () => {
 var grid_log_dir = new dhx.Grid("grid_log_dir_container", {
   css: "my_grid_css",
   columns: [
-    { width: 92, id: "filelog", header: [{ text: "Logs" }], type: "date", format: "%M %d %Y" },
+    { width: 92, id: "filelog", header: [{ text: "Logs" }], type: "date", format: "%Y/%m-%d" },
     { width: 200, id: "path", header: [{ text: "Ruta" }] },
   ],
   rowHeight: 25,
@@ -913,7 +913,7 @@ var formFilterDate = new dhx.Form("formFilterDate", {
         placeholder: "Seleccione un fecha",
         type: "datepicker",
         name: "filterDateRange",
-        dateFormat: "%d/%m/%Y"
+        dateFormat: "%Y/%m/%d"
       }
   ]
 });
