@@ -897,7 +897,6 @@ var grid_log_dir = new dhx.Grid("grid_log_dir_container", {
 
 logger.loadDir(grid_log_dir)
 grid_log_dir.events.on("CellClick", function(row,column,e){
-  console.log(row.path)
   logger.readLog(row.path,grid_log_view)
 });
 
