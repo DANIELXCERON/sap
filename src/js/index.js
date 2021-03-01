@@ -55,6 +55,9 @@ if (!__dirname.includes(".asar")) {
 var ffprobe = require("ffprobe"),
   ffprobeStatic = ffprobeStaticPath;
 
+
+
+
 /** cargar configuracion de config.json en el localStorage */
 fetch("../config/config.json").then((results) => results.json()).then(function (config) {
     localStorage.setItem("JSON_config", JSON.stringify(config));

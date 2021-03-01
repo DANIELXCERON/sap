@@ -3,13 +3,15 @@ const getTime = require("./reloj");
 const fs = require("fs");
 const {app} = require("electron").remote;
 
-var dir,pathFile,log_file,f
+var dir,dirSap,pathFile,log_file,f
 
-
+dirSap = app.getPath("documents") + "\\SAP Playout"
 dir = app.getPath("documents") + "\\SAP Playout\\logs"
 
 
+
 if (!fs.existsSync(dir)){// si no existe el directorio
+  fs.mkdirSync(dirSap);// crea el directorio
   fs.mkdirSync(dir);// crea el directorio
 }
 
