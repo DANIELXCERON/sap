@@ -101,7 +101,7 @@ function gT(Iwant) {
 
   var DateDMYYYY = nTF.checkFormat(dd) + "/" + nTF.checkFormat(mm + 1) + "/" + yyyy;
 
-  var DateLog = `${yyyy}-${nTF.checkFormat(mm + 1)}-${nTF.checkFormat(dd)}`;
+  var DateLog = `${yyyy}-${mes[mm]}`;
 
   switch (Iwant) {
     // "minutos y segundos en 00:00"
