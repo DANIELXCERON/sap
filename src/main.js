@@ -18,12 +18,12 @@ const imgPath_icon = path.join(__dirname, "img/logo-icon.png");
 // imagen de notificaciones
 const imgPath_n_screenFail = path.join(__dirname, "img/screen-fail.png");
 
-let mainWindow = null;
-let videoWindow = null, count=0;
-let previewWindow = null;
-let GCWindow = null;
-let windowAcercaDe = null;
-let windowUpdates = null;
+let mainWindow = null,
+videoWindow = null,
+previewWindow = null,
+GCWindow = null,
+windowAcercaDe = null,
+windowUpdates = null
 
 
 // solicitar bloqueo de instancia única
@@ -245,21 +245,14 @@ function openVideoWindow2() {
   videoWindowIPC()
 }
 
-ipcMain.on("datos:stream", (e, datosStream) => {
-  //setting the time interval for 3 second (3000 in millis)
-  setInterval(()=>{
-    console.log(`Capturing Count: ${count}`)
-    //start capturing the window
-    videoWindow.webContents.capturePage().then(image => 
-    {
-      //writing  image to the disk
-          fs.writeFile(app.getPath("documents")+`/screenshot ${count}.png`, image.toPNG(), (err) => {
-          if (err) throw err
-          console.log('Image Saved')
-          count++
-          })
+ipcMain.on("screenshot", (e, data) => {
+    //empezar a capturar la ventana
+    videoWindow.webContents.capturePage().then(image => {
+    //escribiendo la imagen en el disco
+      fs.writeFile(app.getPath("documents")+`/screenshot ${Date.now()}.png`, image.toPNG(), (err) => {
+      if (err) throw err
+      })
     })
-    }, 5000); //tome in millis
 });
 
 function videoWindowIPC(){
