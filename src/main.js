@@ -1,6 +1,6 @@
 const {app,BrowserWindow,Menu,MenuItem,ipcMain,dialog,Notification,shell,BrowserView} = require("electron");
 const electron = require("electron");
-
+const fs = require("fs");
 const url = require("url");
 const path = require("path");
 const log = require('electron-log');
@@ -19,7 +19,7 @@ const imgPath_icon = path.join(__dirname, "img/logo-icon.png");
 const imgPath_n_screenFail = path.join(__dirname, "img/screen-fail.png");
 
 let mainWindow = null;
-let videoWindow = null;
+let videoWindow = null, count=0;
 let previewWindow = null;
 let GCWindow = null;
 let windowAcercaDe = null;
@@ -244,6 +244,23 @@ function openVideoWindow2() {
 
   videoWindowIPC()
 }
+
+ipcMain.on("datos:stream", (e, datosStream) => {
+  //setting the time interval for 3 second (3000 in millis)
+  setInterval(()=>{
+    console.log(`Capturing Count: ${count}`)
+    //start capturing the window
+    videoWindow.webContents.capturePage().then(image => 
+    {
+      //writing  image to the disk
+          fs.writeFile(app.getPath("documents")+`/screenshot ${count}.png`, image.toPNG(), (err) => {
+          if (err) throw err
+          console.log('Image Saved')
+          count++
+          })
+    })
+    }, 5000); //tome in millis
+});
 
 function videoWindowIPC(){
   ipcMain.on("datos:stream", (e, datosStream) => {
