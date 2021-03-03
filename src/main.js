@@ -249,7 +249,7 @@ ipcMain.on("screenshot", (e, path) => {
     //empezar a capturar la ventana
     videoWindow.webContents.capturePage().then(image => {
     //escribiendo la imagen en el disco
-      fs.writeFile(path, image.toPNG(), (err) => {
+      fs.writeFile(path, image.toJPEG(90), (err) => {
       if (err) throw err
       })
     })

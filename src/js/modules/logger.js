@@ -30,7 +30,8 @@ function write(data){
   var n = data.namefile,
       d = nTF.secToHHMMSS(data.duration),
       r = data.ref,
-      id = `u${Date.now()}`
+      id = `u${Date.now()}`,
+      p = filename(data.path)
   log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","duracion":"${d}","ref":"${r}","nombre":"${n}","id":"${id}"},`));
 
   if(data.screenshot){
@@ -40,15 +41,22 @@ function write(data){
       fs.mkdirSync(dirScreenshot);// crea el directorio
     }
     /**Crear carpeta individual*/
-    var dirIndividualScreenshot = dirScreenshot + `\\${n}`
+    var dirIndividualScreenshot = dirScreenshot + `\\${p}`
     if (!fs.existsSync(dirIndividualScreenshot)){// si no existe el directorio
       fs.mkdirSync(dirIndividualScreenshot);// crear el directorio
     }
     setTimeout(function () {
-      ipcRenderer.send("screenshot",dirIndividualScreenshot + `\\${id}.png`);
+      ipcRenderer.send("screenshot",dirIndividualScreenshot + `\\${id}.jpeg`);
     }, 3000);
   }
-  
+}
+
+/** funcion para extraer nombre del archivo de una ruta */
+function filename(rutaAbsoluta) {
+  var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
+  var nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
+  //.replace(/^.*[\\\/]/, "")
+  return nombreArchivo;
 }
 
 function writeEventsLog(data,n){
