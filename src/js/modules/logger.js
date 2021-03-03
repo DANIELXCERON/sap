@@ -29,8 +29,26 @@ function write(data){
   checkFile()
   var n = data.namefile,
       d = nTF.secToHHMMSS(data.duration),
-      r = data.ref
-  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","duracion":"${d}","ref":"${r}","nombre":"${n}"},`));
+      r = data.ref,
+      id = `u${Date.now()}`
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","duracion":"${d}","ref":"${r}","nombre":"${n}","id":"${id}"},`));
+
+  if(data.screenshot){
+    /**Crear carpeta screenshot*/
+    var dirScreenshot = dir + `\\${getTime.gT("DateLog")}-screenshots`
+    if (!fs.existsSync(dirScreenshot)){// si no existe el directorio
+      fs.mkdirSync(dirScreenshot);// crea el directorio
+    }
+    /**Crear carpeta individual*/
+    var dirIndividualScreenshot = dirScreenshot + `\\${n}`
+    if (!fs.existsSync(dirIndividualScreenshot)){// si no existe el directorio
+      fs.mkdirSync(dirIndividualScreenshot);// crear el directorio
+    }
+    setTimeout(function () {
+      ipcRenderer.send("screenshot",dirIndividualScreenshot + `\\${id}.png`);
+    }, 3000);
+  }
+  
 }
 
 function writeEventsLog(data,n){

@@ -932,6 +932,7 @@ var grid_log_view = new dhx.Grid("grid_log_view_container", {
     { width: 72, id: "ref", header: [{ text: "Referencia" },{ content: "selectFilter" }] },
     { width: 253, id: "nombre", header: [{ text: "Nombre" },{ content: "inputFilter" }] },
     { width: 253, id: "info", header: [{ text: "Info" }] },
+    { width: 253, id: "id", header: [{ text: "Id" }] },
   ],
   rowHeight: 25,
   headerRowHeight: 25,

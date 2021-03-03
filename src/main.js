@@ -245,11 +245,11 @@ function openVideoWindow2() {
   videoWindowIPC()
 }
 
-ipcMain.on("screenshot", (e, data) => {
+ipcMain.on("screenshot", (e, path) => {
     //empezar a capturar la ventana
     videoWindow.webContents.capturePage().then(image => {
     //escribiendo la imagen en el disco
-      fs.writeFile(app.getPath("documents")+`/screenshot ${Date.now()}.png`, image.toPNG(), (err) => {
+      fs.writeFile(path, image.toPNG(), (err) => {
       if (err) throw err
       })
     })

@@ -502,6 +502,14 @@ var form_scheduler_events = new dhx.Form("form_container", {
         value: false,
     },
     {
+        name: "screenshot",
+        type: "checkbox",
+        label: "screenshot",
+        labelPosition: "left",
+        labelInline: true,
+        value: false,
+    },
+    {
         name: "playDay",
         type: "combo",
         label: "Días",
@@ -606,7 +614,6 @@ function ejecute_scheduler_event() {
 }
 
 function ejecuteAdd(item) {
-    console.log(item)
     switch (item.type) {
         case 'datos:stream':
             grid_queue.data.add({
@@ -618,6 +625,7 @@ function ejecuteAdd(item) {
                 in: 0,
                 custom: "bg_id_Scheduler",
                 temp: item.temp,
+                screenshot: item.screenshot,
             }, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
           break;
         case 'datos:plst':
@@ -720,6 +728,7 @@ function loadListProgram(item) {
                 random: 0,
                 temp: true,
                 pathListEvent: item.path,
+                screenshot: item.screenshot,
             }
             //agrega el video +1 index despues del actual en reproduccion
             var pAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
@@ -738,6 +747,7 @@ function loadListProgram(item) {
                     custom: "LC-Violet",
                     random: 0,
                     temp: true,
+                    screenshot: item.screenshot,
                 }
                 //agrega el video +1 index despues del actual en reproduccion
                 var rAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
@@ -752,6 +762,7 @@ function loadListProgram(item) {
 function drop_scheduler_event(ev) {
     ev.preventDefault();
     const formData = form_scheduler_events.getValue();
+    console.log(formData)
     // validar datos del formulario
     if (!formData.playDateRange) {
         iziToast.show({
@@ -790,6 +801,7 @@ function drop_scheduler_event(ev) {
                         playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
                         playDay: formData.playDay,
                         temp: true,
+                        screenshot: formData.screenshot,
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
@@ -816,6 +828,7 @@ function drop_scheduler_event(ev) {
                         playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
                         playDay: formData.playDay,
                         temp: true,
+                        screenshot: formData.screenshot,
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
@@ -842,6 +855,7 @@ function drop_scheduler_event(ev) {
                         playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
                         playDay: formData.playDay,
                         temp: false,
+                        screenshot: formData.screenshot,
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
@@ -868,6 +882,7 @@ function drop_scheduler_event(ev) {
                         playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
                         playDay: formData.playDay,
                         temp: false,
+                        screenshot: formData.screenshot,
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
