@@ -45,9 +45,11 @@ function write(data){
     if (!fs.existsSync(dirIndividualScreenshot)){// si no existe el directorio
       fs.mkdirSync(dirIndividualScreenshot);// crear el directorio
     }
+    console.log(nTF.RelojToSec(data.duration))
     setTimeout(function () {
       ipcRenderer.send("screenshot",dirIndividualScreenshot + `\\${id}.jpeg`);
     }, 3000);
+  // nTF.randomNumber(nTF.RelojToSec(data.duration))
   }
 }
 
