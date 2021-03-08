@@ -614,13 +614,14 @@ function ejecute_scheduler_event() {
 }
 
 function ejecuteAdd(item) {
+    console.log(item)
     switch (item.type) {
         case 'datos:stream':
             grid_queue.data.add({
                 namefile: "[EVENTO] " + item.item,
                 ref: item.ref,
                 path: item.path,
-                duration: "00:00:00",
+                duration: item.duration,
                 startTime: "00:00:00",
                 in: 0,
                 custom: "bg_id_Scheduler",
@@ -762,7 +763,6 @@ function loadListProgram(item) {
 function drop_scheduler_event(ev) {
     ev.preventDefault();
     const formData = form_scheduler_events.getValue();
-    console.log(formData)
     // validar datos del formulario
     if (!formData.playDateRange) {
         iziToast.show({
@@ -807,57 +807,73 @@ function drop_scheduler_event(ev) {
                 }
             } else if (validExts(file.name, ["mp4", "mov"])) { // Archivo de video normal
                 if (formData.playDateRange !== "") {
-                    var validDateRange;
 
-                    if (formData.playDateRange[0] && formData.playDateRange[1]) {
-                        validDateRange = formData.playDateRange;
-                    } else {
-                        validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
+                    let v = document.createElement('video')
+                    v.setAttribute('src', file.path)
+                    v.onloadeddata = function(e) {
+                      const {videoHeight,videoWidth,duration} = e.srcElement
+
+                      var validDateRange;
+
+                      if (formData.playDateRange[0] && formData.playDateRange[1]) {
+                          validDateRange = formData.playDateRange;
+                      } else {
+                          validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
+                      }
+  
+                      const data = {
+                          item: filename(file.name),
+                          interval: formData.interval,
+                          playTime: formData.playTime + ":00",
+                          stopTime: formData.stopTime + ":00",
+                          instant: formData.instant,
+                          type: "datos:stream",
+                          ref: "file-video",
+                          duration,
+                          path: file.path,
+                          playDateRange: validDateRange,
+                          playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
+                          playDay: formData.playDay,
+                          temp: true,
+                          screenshot: formData.screenshot,
+                      };
+                      grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                     }
-
-                    const data = {
-                        item: filename(file.name),
-                        interval: formData.interval,
-                        playTime: formData.playTime + ":00",
-                        stopTime: formData.stopTime + ":00",
-                        instant: formData.instant,
-                        type: "datos:stream",
-                        ref: "file-video",
-                        path: file.path,
-                        playDateRange: validDateRange,
-                        playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
-                        playDay: formData.playDay,
-                        temp: true,
-                        screenshot: formData.screenshot,
-                    };
-                    grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
             } else if (validExts(file.name, ["webm"])) { // Archivo de video con canal alfa webm
                 if (formData.playDateRange !== "") {
-                    var validDateRange;
 
-                    if (formData.playDateRange[0] && formData.playDateRange[1]) {
-                        validDateRange = formData.playDateRange;
-                    } else {
-                        validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
+                    let v = document.createElement('video')
+                    v.setAttribute('src', file.path)
+                    v.onloadeddata = function(e) {
+                        const {videoHeight,videoWidth,duration} = e.srcElement
+
+                        var validDateRange;
+
+                        if (formData.playDateRange[0] && formData.playDateRange[1]) {
+                            validDateRange = formData.playDateRange;
+                        } else {
+                            validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
+                        }
+        
+                        const data = {
+                            item: filename(file.name),
+                            interval: formData.interval,
+                            playTime: formData.playTime + ":00",
+                            stopTime: formData.stopTime + ":00",
+                            instant: true, // siempre se ejecuta de inmediado
+                            type: "videoloop",
+                            ref: "file-webm",
+                            duration,
+                            path: file.path,
+                            playDateRange: validDateRange,
+                            playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
+                            playDay: formData.playDay,
+                            temp: false,
+                            screenshot: formData.screenshot,
+                        };
+                        grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                     }
-    
-                    const data = {
-                        item: filename(file.name),
-                        interval: formData.interval,
-                        playTime: formData.playTime + ":00",
-                        stopTime: formData.stopTime + ":00",
-                        instant: true, // siempre se ejecuta de inmediado
-                        type: "videoloop",
-                        ref: "file-webm",
-                        path: file.path,
-                        playDateRange: validDateRange,
-                        playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
-                        playDay: formData.playDay,
-                        temp: false,
-                        screenshot: formData.screenshot,
-                    };
-                    grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
             } else if (validExts(file.name, ["plst"])) { // Lista de reproduccion
                 if (formData.playDateRange !== "") {

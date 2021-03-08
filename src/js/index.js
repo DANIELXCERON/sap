@@ -549,8 +549,7 @@ function dropHandler(ev) {
             },
             getIndexAddGrid(grid_queue)
           );
-        })
-        .catch(function (err) {
+        }).catch(function (err) {
           console.error(err);
         });
     }
@@ -716,7 +715,7 @@ function template(item) {
   let template = `<div>
     <video id="videoPlayerPreView" src="${item.path}" style="width: 100%;" preload="none" controls muted></video>
     <h5 class="card-title">${item.namefile}</h5>
-    <p class="card-text">Codec ${item.codec}</p>
+    <p class="card-text">Codec ${item.codec}, ${nTF.secToHHMMSS(item.duration)}</p>
     <button type="button" class="btn btn-danger" onclick="actionBtns('delete','${item.id}');" ><span class="material-icons">delete_forever</span></button>
     <button type="button" class="btn btn-success" onclick="actionBtns('file-video','${item.id}');" ><span class="material-icons">play_arrow</span></button>
     <button type="button" class="btn btn-primary" onclick="actionBtns('videoloop','${item.id}');" ><span class="material-icons">loop</span></button>
@@ -762,20 +761,30 @@ abrirArchivo.addEventListener("click", () => {
         { name: "Todos", extensions: ["*"] },
       ],
     }).then((result) => {
+
       var filepath = result.filePaths[0];
-      ffprobe(filepath, { path: ffprobeStatic.path })
-        .then(function (info) {
+
+      ffprobe(filepath, { path: ffprobeStatic.path }).then(function (info) {
+
+        let v = document.createElement('video')
+        v.setAttribute('src', filepath)
+        v.onloadeddata = function(e) {
+          const {videoHeight,videoWidth,duration} = e.srcElement
 
           dataview_graphics.data.add({
             namefile: filename(filepath),
             codec: info.streams[0].codec_long_name,
             path: filepath,
+            duration,
           });
 
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
+        }
+
+
+      }).catch(function (err) {
+        console.error(err);
+      });
+
     }).catch((err) => {
       console.log(err);
     });
