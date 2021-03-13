@@ -76,19 +76,19 @@ function writeControlPlayerLog(n,i){
 function writeGCLog(datosGC){
   checkFile()
   var s = ''
-  var h = datosGC.textoGC
+  var html = datosGC.textoGC
 
-  h = h.replace(/<style([\s\S]*?)<\/style>/gi, '');
-  h = h.replace(/<script([\s\S]*?)<\/script>/gi, '');
-  h = h.replace(/<\/div>/ig, s);
-  h = h.replace(/<\/li>/ig, s);
-  h = h.replace(/<li>/ig, '  *  ');
-  h = h.replace(/<\/ul>/ig, s);
-  h = h.replace(/<\/p>/ig, s);
-  h = h.replace(/<br\s*[\/]?>/gi, s);
-  h = h.replace(/<[^>]+>/ig, '');
+  html = html.replace(/<style([\s\S]*?)<\/style>/gi, '');
+  html = html.replace(/<script([\s\S]*?)<\/script>/gi, '');
+  html = html.replace(/<\/div>/ig, s);
+  html = html.replace(/<\/li>/ig, s);
+  html = html.replace(/<li>/ig, '  *  ');
+  html = html.replace(/<\/ul>/ig, s);
+  html = html.replace(/<\/p>/ig, s);
+  html = html.replace(/<br\s*[\/]?>/gi, s);
+  html = html.replace(/<[^>]+>/ig, '');
 
-  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"GC","nombre":"Generador de caracteres","info":"${h}"},`));
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"GC","nombre":"Generador de caracteres","info":"${html}"},`));
 }
 
 
