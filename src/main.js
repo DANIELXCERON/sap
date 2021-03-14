@@ -430,13 +430,13 @@ appUpdater.on("update-available", (info) => {
 });
 
 
-// var cancellationToken = new CancellationToken()
+var cancellationToken = new CancellationToken()
 ipcMain.on("btnUpdates", (e, btn) => {
   switch (btn) {
     case "downloadUpdate":
       //Anular token de cancelación y crear uno nuevo
       cancellationToken = null
-      // cancellationToken = new CancellationToken()
+      cancellationToken = new CancellationToken()
 
       //iniciar descarga de la actualización
       appUpdater.downloadUpdate(cancellationToken);
