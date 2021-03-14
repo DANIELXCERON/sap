@@ -4,7 +4,7 @@ const nTF = require("./nice-time-format");
 // barra de dhtmlx
 // var slider = new sapLVC.Slider("slider", { min: 0,max: 100,step: 1,tooltip: false});
 
-function setBar(currentTime, duration, convertToSec) {
+const setBar = (currentTime, duration, convertToSec) => {
   /** color inicial de la barra */
   var bgColor = "#2ecc71";
 

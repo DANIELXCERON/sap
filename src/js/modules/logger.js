@@ -3,7 +3,7 @@ const getTime = require("./reloj");
 const fs = require("fs");
 const {app} = require("electron").remote;
 
-var dir,dirSap,pathFile,log_file,f
+let dir,dirSap,pathFile,log_file,f
 
 dirSap = app.getPath("documents") + "\\SAP Playout"
 dir = app.getPath("documents") + "\\SAP Playout\\logs"
@@ -15,7 +15,7 @@ if (!fs.existsSync(dir)){// si no existe el directorio
   fs.mkdirSync(dir);// crea el directorio
 }
 
-function checkFile(){
+const checkFile = () => {
   pathFile = dir + `\\${getTime.gT("DateLog")}.log`
   if (!fs.existsSync(pathFile)){// si no existe el archivo
     f = "w" // escribir
@@ -25,7 +25,7 @@ function checkFile(){
   log_file = fs.createWriteStream(pathFile, {flags : f});
 }
 
-function write(data){
+const write = (data) => {
   checkFile()
   var n = data.namefile,
       d = nTF.secToHHMMSS(data.duration),
@@ -54,26 +54,26 @@ function write(data){
 }
 
 /** funcion para extraer nombre del archivo de una ruta */
-function filename(rutaAbsoluta) {
+const filename = (rutaAbsoluta) => {
   var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
-  var nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
+  nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
   //.replace(/^.*[\\\/]/, "")
   return nombreArchivo;
 }
 
-function writeEventsLog(data,n){
+const writeEventsLog = (data,n) => {
   checkFile()
   var p = data.path,
       r = data.ref
   log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"${r}","nombre":"${n}","info":"${p}"},`));
 }
 
-function writeControlPlayerLog(n,i){
+const writeControlPlayerLog = (n,i) => {
   checkFile()
   log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"Control","nombre":"${n}","info":"${i}"},`));
 }
 
-function writeGCLog(datosGC){
+const writeGCLog = (datosGC) => {
   checkFile()
   var s = ''
   var html = datosGC.textoGC
@@ -92,7 +92,7 @@ function writeGCLog(datosGC){
 }
 
 
-function loadDir(elementgrid){
+const loadDir = (elementgrid) => {
   elementgrid.data.removeAll()
   fs.readdir(dir, (err, files) => {
     files.forEach(file => {
@@ -104,7 +104,7 @@ function loadDir(elementgrid){
   });
 }
 
-function readLog(path,elementgrid){
+const readLog = (path,elementgrid) => {
   elementgrid.data.removeAll()
   fetch(path).then((results) => results.text()).then(function (contentLog) {
     var dataset = new dhx.DataCollection().parse(JSON.parse("["+contentLog.slice(0, -1)+"]"))

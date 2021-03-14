@@ -61,12 +61,11 @@ app.on("ready", () => {
   }
 });
 
-function osNotif(notif) {
-  new Notification(notif).show();
-}
+const osNotif = (notif) => new Notification(notif).show();
+
 
 // La ventana principal
-function openMainWindow() {
+const openMainWindow = () => {
   mainWindow = new BrowserWindow({
     //kiosk: true, modo quiosco o pantalla completa
     show: false,
@@ -119,7 +118,7 @@ function openMainWindow() {
 }
 
 // Ventana GC
-function openGCWindow() {
+const openGCWindow = () => {
   GCWindow = new BrowserWindow({
     show: false,
     width: 16+1020,
@@ -156,7 +155,7 @@ function openGCWindow() {
 }
 
 // Ventana de video
-function openVideoWindow() {
+const openVideoWindow = () => {
   app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required"); //desactiva las restrincciones de autoplay :)
 
   let displays = electron.screen.getAllDisplays();
@@ -205,7 +204,7 @@ function openVideoWindow() {
 }
 
 // Ventana de video en caso de que no haya pantalla externa
-function openVideoWindow2() {
+const openVideoWindow2 = () => {
   app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required"); //desactiva las restrincciones de autoplay :)
 
   videoWindow = new BrowserWindow({
@@ -255,7 +254,7 @@ ipcMain.on("screenshot", (e, path) => {
     })
 });
 
-function videoWindowIPC(){
+const videoWindowIPC = () => {
   ipcMain.on("datos:stream", (e, datosStream) => {
     if (videoWindow){
       videoWindow.webContents.send("datos:stream", datosStream);
@@ -284,7 +283,7 @@ function videoWindowIPC(){
 }
 
 // Ventana de preview
-function openPreviewWindow() {
+const openPreviewWindow = () => {
   app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required"); //desactiva las restrincciones de autoplay :)
 
   previewWindow = new BrowserWindow({
@@ -352,7 +351,7 @@ function openPreviewWindow() {
 }
 
 // Ventana acerca de
-function OpenAboutWindow() {
+const OpenAboutWindow = () => {
   windowAcercaDe = new BrowserWindow({
     show: false,
     parent: mainWindow,
@@ -385,7 +384,7 @@ function OpenAboutWindow() {
 }
 
 // Ventana de Actualizacion
-function OpenUpdatesWindow() {
+const OpenUpdatesWindow = () => {
   windowUpdates = new BrowserWindow({
     show: false,
     parent: mainWindow,

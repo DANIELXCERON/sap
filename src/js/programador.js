@@ -1,7 +1,7 @@
 ///////////////////////////////////////// * LIST * //////////////////////////////////////////////////
 
 /** crear nueva lista en grid_scheduler_list_container */
-var grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
+const grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
     columns: [
         { width: 100, id: "item", header: [{ text: "Nombre" }] },
         {
@@ -124,7 +124,7 @@ remove_btn_scheluder_list.addEventListener("click", function () {
     }
 });
 /** formulario para agregar */
-var form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
+const form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
     css: "my_form_css",
     rows: [
         {
@@ -192,7 +192,7 @@ grid_scheduler_list.events.on("CellDblClick", function (cell, e) {
     loadListQueue(cell)
 });
 
-function ejecute_scheduler_list() {
+const ejecute_scheduler_list = () => {
     /**programacion local */
     // si hay lista y datos en ella
     if (grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0) {
@@ -212,7 +212,7 @@ function ejecute_scheduler_list() {
 }
 
 /**cargar lista en cola */
-function loadListQueue(item) {
+const loadListQueue = (item) => {
     if (grid_queue.data._order && grid_queue.data._order.length > 0) {
         /**si hay datos en la lista de cola, borrarlos primero */
         grid_queue.data._order.forEach(item => {
@@ -254,7 +254,7 @@ function loadListQueue(item) {
 }
 
 /**Drop & Drag Files */
-function drop_scheduler_list(ev) {
+const drop_scheduler_list = (ev) => {
     ev.preventDefault();
     // Utilice la interfaz DataTransferItemList para acceder a los archivos
     for (var i = 0; i < ev.dataTransfer.items.length; i++) {
@@ -315,7 +315,7 @@ function drop_scheduler_list(ev) {
     }
 }
 
-function drag_scheduler_list(ev) {ev.preventDefault();}
+const drag_scheduler_list = (ev) => ev.preventDefault()
 /** Drop & Drag Files, Ends*/
 
 ///////////////////////////////////////// * END LIST * //////////////////////////////////////////////////
@@ -323,7 +323,7 @@ function drag_scheduler_list(ev) {ev.preventDefault();}
 
 ///////////////////////////////////////// * EVENTS * //////////////////////////////////////////////////
 /** crear nueva lista en grid_event_container  */
-var grid_scheduler_event = new dhx.Grid("grid_event_container", {
+const grid_scheduler_event = new dhx.Grid("grid_event_container", {
     columns: [
         {
             width: 45,
@@ -563,7 +563,7 @@ grid_scheduler_event.events.on("CellDblClick", function (cell, e) {
     }
 });
 
-function ejecute_scheduler_event() {
+const ejecute_scheduler_event = () => {
     /**programacion local */
     // si hay lista y datos en ella
     if (grid_scheduler_event.data._order && grid_scheduler_event.data._order.length > 0) {
@@ -613,7 +613,7 @@ function ejecute_scheduler_event() {
     }
 }
 
-function ejecuteAdd(item) {
+const ejecuteAdd = (item) => {
     console.log(item)
     switch (item.type) {
         case 'datos:stream':
@@ -636,7 +636,7 @@ function ejecuteAdd(item) {
     }
 }
 
-function ejecuteInstant(item) {
+const ejecuteInstant = (item) => {
     switch (item.type) {
         case "datos:stream":
             const NextVideo = {
@@ -681,7 +681,7 @@ function ejecuteInstant(item) {
 }
 
 /**cargar item de la lista en cola (Programas) */
-function loadListProgram(item) {
+const loadListProgram = (item) => {
     /** obtener datos de la lista al cargar */
     fetch(item.path)
         .then((results) => results.json())
@@ -760,7 +760,7 @@ function loadListProgram(item) {
 }
 
 /**Drop & Drag Files */
-function drop_scheduler_event(ev) {
+const drop_scheduler_event = (ev) => {
     ev.preventDefault();
     const formData = form_scheduler_events.getValue();
     // validar datos del formulario
@@ -920,7 +920,7 @@ function drop_scheduler_event(ev) {
         ev.dataTransfer.clearData();
     }
 }
-function drag_scheduler_event(ev) {ev.preventDefault();}
+const drag_scheduler_event = (ev) => ev.preventDefault()
 /** Drop & Drag Files, Ends*/
 ///////////////////////////////////////// * END EVENTS * //////////////////////////////////////////////////
 
@@ -928,7 +928,7 @@ function drag_scheduler_event(ev) {ev.preventDefault();}
 
 ///////////////////////////////////////// * AD * //////////////////////////////////////////////////
 /** crear nueva lista en grid_ad_container */
-var grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
+const grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
     columns: [
         { width: 100, id: "interval", header: [{ text: "intervalo" }] },
         { width: 100, id: "item", header: [{ text: "Nombre" }] },
@@ -1031,7 +1031,7 @@ remove_btn_scheluder_ad.addEventListener("click", function () {
     }
 });
 /** formulario para agregar */
-var form_ad = new dhx.Form("form_ad_container", {
+const form_ad = new dhx.Form("form_ad_container", {
     css: "my_form_css",
     rows: [{
         type: "select",
@@ -1090,7 +1090,7 @@ grid_scheduler_ad.events.on("CellDblClick", function (cell, e) {
     loadListAd(cell)
 });
 
-function ejecute_scheduler_ad() {
+const ejecute_scheduler_ad = () => {
     /**programacion local */
     // si hay lista y datos en ella
     if (grid_scheduler_ad.data._order && grid_scheduler_ad.data._order.length > 0) {
@@ -1124,7 +1124,7 @@ function ejecute_scheduler_ad() {
 }
 
 /**cargar AD */
-function loadListAd(item) {
+const loadListAd = (item) => {
     /** obtener datos de la lista al cargar */
     fetch(item.path).then((results) => results.json()).then(function (list) {
         var cell = list[getValidIndexList(list,false,item,[-1,-1])]
@@ -1157,7 +1157,7 @@ function loadListAd(item) {
 }
 
 /**cargar graficos banner*/
-function loadGraphics(ref, url) {
+const loadGraphics = (ref, url) => {
     datosStream = {
         referencia: ref,
         url: url,
@@ -1166,8 +1166,8 @@ function loadGraphics(ref, url) {
 }
 
 /**Drop & Drag Files */
-function drop_scheduler_ad(ev) {
-    ev.preventDefault();
+const drop_scheduler_ad = (e) => {
+    e.preventDefault();
     const formData = form_ad.getValue();
     if (!formData.playDateRange) {
         iziToast.show({
@@ -1179,10 +1179,10 @@ function drop_scheduler_ad(ev) {
     }
 
     // Utilice la interfaz DataTransferItemList para acceder a los archivos
-    for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+    for (var i = 0; i < e.dataTransfer.items.length; i++) {
         // Si los elementos caídos no son archivos, rechácelos
-        if (ev.dataTransfer.items[i].kind === "file") {
-            let file = ev.dataTransfer.items[i].getAsFile();
+        if (e.dataTransfer.items[i].kind === "file") {
+            let file = e.dataTransfer.items[i].getAsFile();
             // si la extencion es valida
             if (validExts(file.name, ["json", "plst"])) {
 
@@ -1244,21 +1244,21 @@ function drop_scheduler_ad(ev) {
         }
     }
     // para la limpieza
-    if (ev.dataTransfer.items) {
+    if (e.dataTransfer.items) {
         // Utilice la interfaz DataTransferItemList para eliminar los datos de arrastre
-        ev.dataTransfer.items.clear();
+        e.dataTransfer.items.clear();
     } else {
         // Utilice la interfaz DataTransfer para eliminar los datos de arrastre
-        ev.dataTransfer.clearData();
+        e.dataTransfer.clearData();
     }
 }
 
-function drag_scheduler_ad(ev) {ev.preventDefault();}
+const drag_scheduler_ad = (e) => e.preventDefault()
 /** Drop & Drag Files, Ends*/
 ///////////////////////////////////////// * END AD * //////////////////////////////////////////////////
 
 //////////////////////////////////////// * INTERNET TEST* /////////////////////////////////////////////////
-function fromHttpJson_event() {
+const fromHttpJson_event = () => {
     /** programacion desde internet */
     var JsonFromURL = "https://ategaitana.com/tv/status.json";
     // var JsonFromURL = "https://ategaitana.com/tv/status-test.json";
@@ -1314,7 +1314,7 @@ function fromHttpJson_event() {
  * random: Boolean
  * skipIndex: Array [1,2] (dos de los index que se quieren omitir)
  */
-function getValidIndexList(list,random,item,skipIndex){
+const getValidIndexList = (list,random,item,skipIndex) => {
     do {
         var index
         if (random){
@@ -1348,7 +1348,7 @@ function getValidIndexList(list,random,item,skipIndex){
  * una fecha (date) especificada
  * rangeDate(["startDate","endDate"])
  */
-function rangeDate(date) {
+const rangeDate = (date) => {
     var s = date[0].split("/");
     var e = date[1].split("/");
     var c = getTime.gT("DateDMYYYY").split("/");
@@ -1368,18 +1368,18 @@ function rangeDate(date) {
  * una hora (time) especificada
  * rangeTime(["startTime","endTime"])
  */
-function rangeTime(time) {
+const rangeTime = (time) => {
     var cT = getTime.gT("hms24");
     return (time[0] <= cT) & (cT <= time[1]);
 }
 /**devuelve true si la extencion del nombre del archivo coinciden */
-function validExts(nameFile, exts) {
+const validExts = (nameFile, exts) => {
     const even = (ext) => ext === nameFile.split(".").pop();
     return exts.some(even);
 }
 /**Iniciar Reloj Programador */
-RelojProgramador();
-function RelojProgramador() {
+
+const RelojProgramador = () => {
 
     /**Iniciar ejecucion de programadores */
     ejecute_scheduler_list();
@@ -1429,9 +1429,10 @@ function RelojProgramador() {
         RelojProgramador();
     }, 800);
 }
+RelojProgramador();
 
 //obtener contenido
-function getContent(content) {
+const getContent = (content) => {
     if (content.data._order) {
         return content.data._order
     } else {
@@ -1439,7 +1440,7 @@ function getContent(content) {
     }
 }
 
-function seeMessage(text) {
+const seeMessage = (text) => {
     iziToast.show({
         title: text,
         message: "",
@@ -1461,7 +1462,7 @@ ipcRenderer.on("saveAsScheduler", () => {
     saveAsScheduler();
 });
 
-function saveAsScheduler() {
+const saveAsScheduler = () => {
     const options = {
         defaultPath: app.getPath("documents") + "/000-scheduler",
         title: "Guardar Programación",
@@ -1480,7 +1481,7 @@ function saveAsScheduler() {
     });
 }
 
-function saveFileSLST(path){
+const saveFileSLST = (path) =>{
     const dataScheduler = {
         list_path: getContent(grid_scheduler_list),
         event_path: getContent(grid_scheduler_event),
@@ -1541,7 +1542,7 @@ ipcRenderer.on("openScheduler", () => {
 });
 
 /** Cargar nuevos datos */
-function loadFileSLST(path) {
+const loadFileSLST = (path) => {
     fetch(path)
         .then((results) => results.json())
         .then(function (content) {

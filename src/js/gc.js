@@ -73,7 +73,7 @@ ipcRenderer.on("saveGC", () => {
 ipcRenderer.on("saveAsGC", () => {
   saveAsGC()
 })
-function saveAsGC() {
+const saveAsGC = () => {
   const options = {
     defaultPath: `${app.getPath("documents")}/${richtext.getValue('text').slice(0, 25).replace(/(\r\n|\n|\r)/gm, "")}`,
     title: `Guarda GC ${richtext.getValue('text').slice(0, 20)}...`,
@@ -108,7 +108,7 @@ function saveAsGC() {
     });
 }
 
-var formGC = new dhx.Form("formGC", {
+const formGC = new dhx.Form("formGC", {
   css: "my_form_css",
   padding: 20,
   rows: [

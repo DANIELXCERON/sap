@@ -1,7 +1,7 @@
 const fs = require("fs");
 const util = require("util");
 const path = require("path");
-const { dialog, app} = require("electron").remote;
+const { dialog, app } = require("electron").remote;
 const { ipcRenderer } = require("electron");
 const { shell } = require("electron");
 const https = require("https");
@@ -32,7 +32,7 @@ var titlebar = new customTitlebar.Titlebar({
 });
 
 /** Barra de estado*/
-function StatusBar(item) {
+const StatusBar = (item) => {
   const statusBar = document.querySelector("#statusBar");
   var conntentStatusBar = `${item.namefile}`;
   statusBar.innerHTML = conntentStatusBar;
@@ -60,8 +60,8 @@ var ffprobe = require("ffprobe"),
 
 /** cargar configuracion de config.json en el localStorage */
 fetch("../config/config.json").then((results) => results.json()).then(function (config) {
-    localStorage.setItem("JSON_config", JSON.stringify(config));
-  });
+  localStorage.setItem("JSON_config", JSON.stringify(config));
+});
 // si no esta SpeedGC en localStorage
 if (!localStorage.getItem("SpeedGC")) {
   // crear Speed GC en localStorage con valor de 5
@@ -132,26 +132,27 @@ window.addEventListener("load", () => {
     });
     grid_queue.addRowCss(id, "bg_id_Current");
     //auto scroll a último item reproducido
-    setTimeout(function(){
+    setTimeout(function () {
       grid_queue.scrollTo(id, "namefile");
     }, 200);
-    
+
     // ipcRenderer.send("datos:stream", {
     //   ref: "file-video",
     //   path: a.srcVideoCurrent,
     //   in: a.TiempoTranscurrido,
     // });
   }
-  
+
 });
 
 // ocultar mostrar Video Loop & Banner
-window.addEventListener("load", () => { ViewGraSwitch &&(initHiden(),ViewGraSwitch.addEventListener("change", () => {
-      resetHiden();
-    }));
+window.addEventListener("load", () => {
+  ViewGraSwitch && (initHiden(), ViewGraSwitch.addEventListener("change", () => {
+    resetHiden();
+  }));
 });
 
-function MostrarG() {
+const MostrarG = () => {
   const datosStream = {
     ref: "ocultar-mostrar-video-loop",
     valor: "mostrar",
@@ -159,7 +160,7 @@ function MostrarG() {
   ipcRenderer.send("datos:stream", datosStream);
 }
 
-function OcultarG() {
+const OcultarG = () => {
   const datosStream = {
     ref: "ocultar-mostrar-video-loop",
     valor: "ocultar",
@@ -167,14 +168,14 @@ function OcultarG() {
   ipcRenderer.send("datos:stream", datosStream);
 }
 
-function initHiden() {
+const initHiden = () => {
   const e =
     null !== localStorage.getItem("ViewGraSwitch") &&
     "HiddenGraphics" === localStorage.getItem("ViewGraSwitch");
   (ViewGraSwitch.checked = e), e ? MostrarG() : OcultarG();
 }
 
-function resetHiden() {
+const resetHiden = () => {
   ViewGraSwitch.checked
     ? (MostrarG(), localStorage.setItem("ViewGraSwitch", "HiddenGraphics"))
     : (OcultarG(), localStorage.removeItem("ViewGraSwitch"));
@@ -216,50 +217,50 @@ var formLive = new dhx.Form("formLive", {
   css: "my_form_css",
   padding: 20,
   rows: [
-      {
-          type: "select",
-          name: "server",
+    {
+      type: "select",
+      name: "server",
+      value: "anyone",
+      label: "Server",
+      labelPosition: "left",
+      helpMessage: "Selccione un servidor",
+      options: [
+        {
           value: "anyone",
-          label: "Server",
-          labelPosition: "left",
-          helpMessage: "Selccione un servidor",
-          options: [
-              {
-                  value: "anyone",
-                  content: "anyone"
-              },
-              {
-                  value: "livestream",
-                  content: "livestream"
-              },
-              {
-                  value: "facebook",
-                  content: "facebook"
-              },
-              {
-                  value: "youtube",
-                  content: "youtube"
-              }
-          ],
-      },
-      {
-          type: "input",
-          label: "Url",
-          labelPosition: "left",
-          icon: "dxi dxi-link-variant",
-          name: "url",
-          value: "https://player-cdn.logicideas.media/embed/LI29a62fa1",
-      },
-      {
-        name: "scale",
-        type: "slider",
-        label: "Escala",
-        labelPosition: "left",
-        helpMessage: "Ajusta la escala si la orientación del video es vertical",
-        min: 0,
-        max: 1080,
-        value: 720,
-      },
+          content: "anyone"
+        },
+        {
+          value: "livestream",
+          content: "livestream"
+        },
+        {
+          value: "facebook",
+          content: "facebook"
+        },
+        {
+          value: "youtube",
+          content: "youtube"
+        }
+      ],
+    },
+    {
+      type: "input",
+      label: "Url",
+      labelPosition: "left",
+      icon: "dxi dxi-link-variant",
+      name: "url",
+      value: "https://player-cdn.logicideas.media/embed/LI29a62fa1",
+    },
+    {
+      name: "scale",
+      type: "slider",
+      label: "Escala",
+      labelPosition: "left",
+      helpMessage: "Ajusta la escala si la orientación del video es vertical",
+      min: 0,
+      max: 1080,
+      value: 720,
+    },
   ]
 });
 
@@ -290,7 +291,7 @@ controlForward.addEventListener("click", () => {
 
 ////////////////////////////// LIST QUEUE ///////////////////////////////////////////////
 /** crear nueva lista en grid_queue_container */
-var grid_queue = new dhx.Grid("grid_queue_container", {
+const grid_queue = new dhx.Grid("grid_queue_container", {
   css: "my_grid_css",
   columns: [
     { width: 200, id: "namefile", header: [{ text: "Nombre" }] },
@@ -333,13 +334,13 @@ var grid_queue = new dhx.Grid("grid_queue_container", {
   dragCopy: false,
   selection: "row",
   resizable: true,
-  
+
   // editable:true,
   // adjust: true,
 });
 
 
- 
+
 /** Controles de la grilla */
 const grid_jsonFile_btn = document.querySelector("#grid_jsonFile_btn");
 const grid_remove_btn = document.querySelector("#grid_remove_btn");
@@ -428,9 +429,8 @@ grid_queue.events.on("CellMouseOver", function (row, column, e) {
   });
 
   DurationListViewDOM.innerHTML = `
-  ${
-    grid_queue._getRowIndex(row.id) + 1
-  } de ${numElements}, duracion total: ${nTF.secToHHMMSS(duration)}
+  ${grid_queue._getRowIndex(row.id) + 1
+    } de ${numElements}, duracion total: ${nTF.secToHHMMSS(duration)}
   `;
 });
 
@@ -461,7 +461,7 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
   }
 
   /** Bara de progreso */
-  let barvalue = progressBar.setBar(videoActualTime.TiempoTranscurrido,videoActualTime.TiempoDuracion,false);
+  let barvalue = progressBar.setBar(videoActualTime.TiempoTranscurrido, videoActualTime.TiempoDuracion, false);
   progressBarDom.style.width = `${barvalue.progressBar}%`;
   progressBarDom.style.backgroundColor = `${barvalue.bgColor}`;
 
@@ -499,7 +499,7 @@ ipcRenderer.on("datos:videoactual", (e, videoActualTime) => {
   }
 });
 
-function NextVideo() {
+const NextVideo = () => {
   //obtiene index del actual
   var index = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
 
@@ -508,13 +508,13 @@ function NextVideo() {
   var item = grid_queue.data._order[0]
   if (index < grid_queue.data._order.length - 1) {
     //si no es el ultimo suma 1
-    item = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"))+1]
+    item = grid_queue.data._order[grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1]
   }
-  
+
   if (grid_queue.data._order && index < grid_queue.data._order.length) {
-    grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"),"bg_id_Current");
-    grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"),"bg_id_Next");
-  
+    grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"), "bg_id_Current");
+    grid_queue.removeRowCss(localStorage.getItem("CurrentVideoID"), "bg_id_Next");
+
     /** si el item es temporal lo elimina de la cola al finalizar */
     if (grid_queue.data._order[index].temp) {
       /**lo borra de la lista */
@@ -524,17 +524,17 @@ function NextVideo() {
 
   StatusBar(item);
   SendFileToPlay(item);
-  
+
 }
 
 /**Drop & Drag Files */
-function dropHandler(ev) {
-  ev.preventDefault();
+const dropHandler = (e) => {
+  e.preventDefault();
   // Utilice la interfaz DataTransferItemList para acceder a los archivos
-  for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+  for (var i = 0; i < e.dataTransfer.items.length; i++) {
     // Si los elementos caídos no son archivos, rechácelos
-    if (ev.dataTransfer.items[i].kind === "file") {
-      let file = ev.dataTransfer.items[i].getAsFile();
+    if (e.dataTransfer.items[i].kind === "file") {
+      let file = e.dataTransfer.items[i].getAsFile();
 
       ffprobe(file.path, { path: ffprobeStatic.path })
         .then(function (info) {
@@ -555,25 +555,23 @@ function dropHandler(ev) {
     }
   }
   // para la limpieza
-  if (ev.dataTransfer.items) {
+  if (e.dataTransfer.items) {
     // Utilice la interfaz DataTransferItemList para eliminar los datos de arrastre
-    ev.dataTransfer.items.clear();
+    e.dataTransfer.items.clear();
   } else {
     // Utilice la interfaz DataTransfer para eliminar los datos de arrastre
-    ev.dataTransfer.clearData();
+    e.dataTransfer.clearData();
   }
 }
 
-function dragOverHandler(ev) {
-  ev.preventDefault();
-}
+const dragOverHandler = (e) => e.preventDefault()
 /** Drop & Drag Files, Ends*/
 ////////////////////////////// END LIST QUEUE ///////////////////////////////////////////
 
 
 ////////////////////////////// AD QUEUE ///////////////////////////////////////////////
 /** crear nueva lista en grid_queue_ad_container */
-var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
+const grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
   css: "my_grid_css",
   columns: [
     { width: 200, id: "namefile", header: [{ text: "Nombre" }] },
@@ -625,53 +623,49 @@ var grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
 
 /**Agrregar cortinillas */
 var n = 0
-function addCurtains(){
-    //si el video actual proviene de la misma lista de donde se cargaron las cortinillas
-    var dataItemCurrent = grid_queue.data.getItem(localStorage.getItem("CurrentVideoID")).pathListEvent
-    if(dataItemCurrent && dataItemCurrent === localStorage.getItem("pathListEvent")){
-      if (n === 0) {
-        // agrega la cortinilla de entrada de primero
-        if(localStorage.getItem("CurtainIn")){
-          grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainIn"))), 0);
-        }
+const addCurtains = () => {
+  //si el video actual proviene de la misma lista de donde se cargaron las cortinillas
+  var dataItemCurrent = grid_queue.data.getItem(localStorage.getItem("CurrentVideoID")).pathListEvent
+  if (dataItemCurrent && dataItemCurrent === localStorage.getItem("pathListEvent")) {
+    if (n === 0) {
+      // agrega la cortinilla de entrada de primero
+      if (localStorage.getItem("CurtainIn")) {
+        grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainIn"))), 0);
       }
-      if (n === 1) {
-        // agrega la cortinilla de salida de último
-        if(localStorage.getItem("CurtainOut")){
-          grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainOut"))), getIndexAddGrid(grid_ad_queue));
-        }
-      }
-      if (grid_ad_queue.data._order && grid_ad_queue.data._order.length === 0){
-        n = 0
-      }
-    
-      n += 1
     }
+    if (n === 1) {
+      // agrega la cortinilla de salida de último
+      if (localStorage.getItem("CurtainOut")) {
+        grid_ad_queue.data.add(convertList(JSON.parse(localStorage.getItem("CurtainOut"))), getIndexAddGrid(grid_ad_queue));
+      }
+    }
+    if (grid_ad_queue.data._order && grid_ad_queue.data._order.length === 0) {
+      n = 0
+    }
+
+    n += 1
+  }
 }
 
-function convertList(item){
+const convertList = (item) => {
   const NextVideo = {
-      namefile: `[${item.curtain}] ${item.namefile} | ${getTime.gT("hms24")}`,
-      ref: item.ref,
-      path: item.path,
-      duration: item.duration,
-      startTime: "00:00:00",
-      in: item.in,
-      custom: "bg_id_curtain",
-      random: 0,
-      temp: true,
+    namefile: `[${item.curtain}] ${item.namefile} | ${getTime.gT("hms24")}`,
+    ref: item.ref,
+    path: item.path,
+    duration: item.duration,
+    startTime: "00:00:00",
+    in: item.in,
+    custom: "bg_id_curtain",
+    random: 0,
+    temp: true,
   }
   return NextVideo
 }
 
 ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
-
   addCurtains()
-  
-  
-
   /** Bara de progreso */
-  let barvalue = progressBar.setBar(videoActualTime.TiempoTranscurrido,videoActualTime.TiempoDuracion,false);
+  let barvalue = progressBar.setBar(videoActualTime.TiempoTranscurrido, videoActualTime.TiempoDuracion, false);
   progressBarDomAD.style.width = `${barvalue.progressBar}%`;
   progressBarDomAD.style.backgroundColor = `${barvalue.bgColor}`;
 
@@ -696,11 +690,11 @@ ipcRenderer.on("datos:videoactual2", (e, videoActualTime) => {
 });
 
 /**controla los dos players pausando, deteniendo y reproduciendo */
-function controlPlayerAD(){
-  if (grid_ad_queue.data._order && grid_ad_queue.data._order.length > 0){
+const controlPlayerAD = () => {
+  if (grid_ad_queue.data._order && grid_ad_queue.data._order.length > 0) {
     ipcRenderer.send("control:player", "pause");
     SendFileToPlay2(grid_ad_queue.data._order[0]);
-  }else{
+  } else {
     // continua principal y detiene el secundario
     ipcRenderer.send("control:player", "play");
     ipcRenderer.send("control:player2", "stop");
@@ -711,7 +705,7 @@ function controlPlayerAD(){
 
 ////////////////////////////// GRAPHIC LIST /////////////////////////////////////////////
 
-function template(item) {
+const template = (item) => {
   let template = `<div>
     <video id="videoPlayerPreView" src="${item.path}" style="width: 100%;" preload="none" controls muted></video>
     <h5 class="card-title">${item.namefile}</h5>
@@ -733,7 +727,7 @@ const dataview_graphics = new dhx.DataView("dataview_graphics", {
 // dataview_graphics.data.load("https://snippet.dhtmlx.com/codebase/data/dataview/01/dataset.json");
 // dataview_graphics.data.parse(dataset);
 
-function actionBtns(action,id){
+const actionBtns = (action, id) => {
   var data = dataview_graphics.data.getItem(id)
   switch (action) {
     case "delete":
@@ -750,57 +744,57 @@ function actionBtns(action,id){
 
 abrirArchivo.addEventListener("click", () => {
   dialog.showOpenDialog({
-      title: "Selecciona tu video de gráficos",
-      buttonLabel: "Agregar",
-      properties: ["openFile"],
-      filters: [
-        {
-          name: "video con soporte de canal alfa",
-          extensions: ["webm", "mov"],
-        },
-        { name: "Todos", extensions: ["*"] },
-      ],
-    }).then((result) => {
+    title: "Selecciona tu video de gráficos",
+    buttonLabel: "Agregar",
+    properties: ["openFile"],
+    filters: [
+      {
+        name: "video con soporte de canal alfa",
+        extensions: ["webm", "mov"],
+      },
+      { name: "Todos", extensions: ["*"] },
+    ],
+  }).then((result) => {
 
-      var filepath = result.filePaths[0];
+    var filepath = result.filePaths[0];
 
-      ffprobe(filepath, { path: ffprobeStatic.path }).then(function (info) {
+    ffprobe(filepath, { path: ffprobeStatic.path }).then(function (info) {
 
-        let v = document.createElement('video')
-        v.setAttribute('src', filepath)
-        v.onloadeddata = function(e) {
-          const {videoHeight,videoWidth,duration} = e.srcElement
+      let v = document.createElement('video')
+      v.setAttribute('src', filepath)
+      v.onloadeddata = function (e) {
+        const { videoHeight, videoWidth, duration } = e.srcElement
 
-          dataview_graphics.data.add({
-            namefile: filename(filepath),
-            codec: info.streams[0].codec_long_name,
-            path: filepath,
-            duration,
-          });
+        dataview_graphics.data.add({
+          namefile: filename(filepath),
+          codec: info.streams[0].codec_long_name,
+          path: filepath,
+          duration,
+        });
 
-        }
+      }
 
 
-      }).catch(function (err) {
-        console.error(err);
-      });
-
-    }).catch((err) => {
-      console.log(err);
+    }).catch(function (err) {
+      console.error(err);
     });
+
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 
 ////////////////////////////// GRAPHIC LIST END ////////////////////////////////////////
 
 /** funcion para extraer nombre del archivo de una ruta */
-function filename(rutaAbsoluta) {
+const filename = (rutaAbsoluta) => {
   var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
   var nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
   //.replace(/^.*[\\\/]/, "")
   return nombreArchivo;
 }
 /**Obtiene el index para agregar de ultimo un elemento */
-function getIndexAddGrid(grid) {
+const getIndexAddGrid = (grid) => {
   if (grid.data._order) {
     return grid.data._order.length;
   } else {
@@ -809,20 +803,20 @@ function getIndexAddGrid(grid) {
 }
 
 /**envia a reproductor 1 */
-function SendFileToPlay(item) {
+const SendFileToPlay = (item) => {
   /**guardar id del item a reproducir */
   localStorage.setItem("CurrentVideoID", item.id);
 
   try {
     grid_queue.addRowCss(item.id, "bg_id_Current");
-  } catch (error) {}
+  } catch (error) { }
   ipcRenderer.send("datos:stream", item);
 
   //auto scroll
   grid_queue.scrollTo(item.id, "namefile");
 }
 /**envia a reproductor 2 */
-function SendFileToPlay2(item) {
+const SendFileToPlay2 = (item) => {
 
   var index = grid_ad_queue.data.getIndex(item.id);
 
@@ -835,7 +829,7 @@ function SendFileToPlay2(item) {
 
   try {
     grid_ad_queue.addRowCss(item.id, "bg_id_Current");
-  } catch (error) {}
+  } catch (error) { }
   ipcRenderer.send("datos:stream2", item);
 }
 
@@ -845,12 +839,12 @@ function SendFileToPlay2(item) {
 var theme = localStorage.getItem('theme') ? localStorage.getItem('theme') : 'dark';
 $('head').append('<link rel="stylesheet" href="./css/themes/' + theme + '/theme.css"/>');
 
-function changeTheme(newTheme) {
+const changeTheme = (newTheme) => {
   $('link[href="./css/themes/' + theme + '/theme.css"]').remove();
-  var head= document.getElementsByTagName('head')[0];
-  var link= document.createElement('link');
-  link.rel= "stylesheet";
-  link.href= "./css/themes/" + newTheme + "/theme.css";
+  var head = document.getElementsByTagName('head')[0];
+  var link = document.createElement('link');
+  link.rel = "stylesheet";
+  link.href = "./css/themes/" + newTheme + "/theme.css";
   head.appendChild(link);
   theme = newTheme;
 }
@@ -858,10 +852,10 @@ function changeTheme(newTheme) {
 //Opciones de tema a la configuración
 var themes = ['acri', 'dark', 'rachni'];
 
-$.each(themes, function(i) {
+$.each(themes, function (i) {
   var $selected = '';
 
-  if(themes[i] == theme) {
+  if (themes[i] == theme) {
     $selected = 'selected';
   }
 
@@ -880,7 +874,7 @@ grid_log_update.addEventListener("click", () => {
   logger.loadDir(grid_log_dir)
 });
 grid_log_csv.addEventListener("click", () => {
-  if (grid_log_view && grid_log_view.data._order.length > 0){
+  if (grid_log_view && grid_log_view.data._order.length > 0) {
     var selectedCell = grid_log_dir.selection.getCell();
     grid_log_view.export.csv({
       name: filename(grid_log_dir.selection.getCell().row.path)
@@ -888,7 +882,7 @@ grid_log_csv.addEventListener("click", () => {
   }
 });
 
-var grid_log_dir = new dhx.Grid("grid_log_dir_container", {
+const grid_log_dir = new dhx.Grid("grid_log_dir_container", {
   css: "my_grid_css",
   columns: [
     { width: 92, id: "filelog", header: [{ text: "Logs" }], type: "date", format: "%Y/%m-%d" },
@@ -905,24 +899,24 @@ var grid_log_dir = new dhx.Grid("grid_log_dir_container", {
 });
 
 logger.loadDir(grid_log_dir)
-grid_log_dir.events.on("CellClick", function(row,column,e){
-  logger.readLog(row.path,grid_log_view)
+grid_log_dir.events.on("CellClick", function (row, column, e) {
+  logger.readLog(row.path, grid_log_view)
 });
 
-var formFilterDate = new dhx.Form("formFilterDate", {
+const formFilterDate = new dhx.Form("formFilterDate", {
   ccss: "my_form_css",
   padding: 0,
   rows: [
-      {
-        labelInline: true,
-        // range: true,
-        labelPosition: "left",
-        label: "Filtar:",
-        placeholder: "Seleccione un fecha",
-        type: "datepicker",
-        name: "filterDateRange",
-        dateFormat: "%Y/%m/%d"
-      }
+    {
+      labelInline: true,
+      // range: true,
+      labelPosition: "left",
+      label: "Filtar:",
+      placeholder: "Seleccione un fecha",
+      type: "datepicker",
+      name: "filterDateRange",
+      dateFormat: "%Y/%m/%d"
+    }
   ]
 });
 
@@ -932,14 +926,14 @@ formFilterDate.events.on("change", function (name, value) {
 
 
 
-var grid_log_view = new dhx.Grid("grid_log_view_container", {
+const grid_log_view = new dhx.Grid("grid_log_view_container", {
   css: "my_grid_css",
   columns: [
     { width: 92, id: "fecha", header: [{ text: "Fecha" }] },
     { width: 72, id: "hora", header: [{ text: "Hora" }] },
     { width: 72, id: "duracion", header: [{ text: "Duración" }] },
-    { width: 72, id: "ref", header: [{ text: "Referencia" },{ content: "selectFilter" }] },
-    { width: 253, id: "nombre", header: [{ text: "Nombre" },{ content: "inputFilter" }] },
+    { width: 72, id: "ref", header: [{ text: "Referencia" }, { content: "selectFilter" }] },
+    { width: 253, id: "nombre", header: [{ text: "Nombre" }, { content: "inputFilter" }] },
     { width: 253, id: "info", header: [{ text: "Info" }] },
     { width: 253, id: "id", header: [{ text: "Id" }] },
   ],
@@ -952,6 +946,3 @@ var grid_log_view = new dhx.Grid("grid_log_view_container", {
   selection: "row",
   resizable: true,
 });
-
-
-

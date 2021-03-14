@@ -14,7 +14,7 @@ const nTF = require("./nice-time-format");
   en este se pinta el reloj
   */
 
-function startClock(format, contHTML) {
+const startClock = (format, contHTML) => {
   if (format.length > 1) {
     format.forEach(function (item, i, array) {
       if (format.length > i) {
@@ -34,21 +34,19 @@ function startClock(format, contHTML) {
   }, 1000);
 }
 
-function gT(Iwant) {
-  // exporta la funcion para obtener el tiempo actual
-  var CurrentTime = new Date();
+const gT = (Iwant, CurrentTime = new Date()) => {
 
-  var hr = CurrentTime.getHours(); // Devuelve la hora (de 0 a 23)
-  var min = CurrentTime.getMinutes(); // Devuelve los minutos (de 0 a 59)
-  var sec = CurrentTime.getSeconds(); // Devuelve los segundos (de 0 a 59)
+  let hr = CurrentTime.getHours(); // Devuelve la hora (de 0 a 23)
+  let min = CurrentTime.getMinutes(); // Devuelve los minutos (de 0 a 59)
+  let sec = CurrentTime.getSeconds(); // Devuelve los segundos (de 0 a 59)
 
-  var DayWeek = CurrentTime.getDay(); // Devuelve el día de la semana (de 0 a 6) iniciando en Domingo
+  let DayWeek = CurrentTime.getDay(); // Devuelve el día de la semana (de 0 a 6) iniciando en Domingo
 
-  var dd = CurrentTime.getDate(); // Devuelve el día del mes (de 1 a 31)
-  var mm = CurrentTime.getMonth(); // Devuelve el mes (de 0-11)
-  var yyyy = CurrentTime.getFullYear(); // Devuelve el año
+  let dd = CurrentTime.getDate(); // Devuelve el día del mes (de 1 a 31)
+  let mm = CurrentTime.getMonth(); // Devuelve el mes (de 0-11)
+  let yyyy = CurrentTime.getFullYear(); // Devuelve el año
 
-  var mesCorto = [
+  let mesCorto = [
     "ene",
     "feb",
     "mar",
@@ -62,7 +60,7 @@ function gT(Iwant) {
     "nov",
     "dic",
   ];
-  var mes = [
+  let mes = [
     "enero",
     "febrero",
     "marzo",
@@ -76,8 +74,8 @@ function gT(Iwant) {
     "noviembre",
     "diciembre",
   ];
-  var diaCorto = ["dom", "lun", "mar", "mie", "jue", "vie", "sab"];
-  var dia = [
+  let diaCorto = ["dom", "lun", "mar", "mie", "jue", "vie", "sab"];
+  let dia = [
     "domingo",
     "lunes",
     "martes",
@@ -87,21 +85,21 @@ function gT(Iwant) {
     "sabado",
   ];
 
-  var hms24 = nTF.hmsToHHMMSS(hr, min, sec);
+  let hms24 = nTF.hmsToHHMMSS(hr, min, sec);
 
-  ap = hr < 12 ? " a.m." : " p.m.";
-  hr = hr == 0 ? 12 : hr;
+  let ap = hr < 12 ? " a.m." : " p.m.";
+  hr = hr === 0 ? 12 : hr;
   hr = hr > 12 ? hr - 12 : hr;
 
-  var hms12 = nTF.hmsToHHMMSS(hr, min, sec);
-  var hms12ap = nTF.hmsToHHMMSS(hr, min, sec) + " " + ap;
+  let hms12 = nTF.hmsToHHMMSS(hr, min, sec);
+  let hms12ap = nTF.hmsToHHMMSS(hr, min, sec) + " " + ap;
 
-  var FullDate = dia[DayWeek] + ", " + dd + " de " + mes[mm] + " de " + yyyy;
-  var DateShort = diaCorto[DayWeek] + ", " + dd + " de " + mesCorto[mm] + " de " + yyyy;
+  let FullDate = dia[DayWeek] + ", " + dd + " de " + mes[mm] + " de " + yyyy;
+  let DateShort = dd + " " + mes[mm] + ", " + yyyy;
 
-  var DateDMYYYY = nTF.checkFormat(dd) + "/" + nTF.checkFormat(mm + 1) + "/" + yyyy;
+  let DateDMYYYY = nTF.checkFormat(dd) + "/" + nTF.checkFormat(mm + 1) + "/" + yyyy;
 
-  var DateLog = `${yyyy}-${mes[mm]}`;
+  let DateLog = `${yyyy}-${mes[mm]}`;
 
   switch (Iwant) {
     // "minutos y segundos en 00:00"
@@ -128,7 +126,7 @@ function gT(Iwant) {
     case "hms12ap":
       return hms12ap;
 
-    // "lun, 1 de Ene de 2020"
+    // "1 Enero, 2020"
     case "DateShort":
       return DateShort;
 
@@ -150,7 +148,7 @@ function gT(Iwant) {
 
     // devuelve cadena enviada
     default:
-      return Iwant;
+      return Iwant + " no es valido.";
   }
 }
 

@@ -37,8 +37,8 @@ const sizeDom = document.querySelector(".marcoVideoLocal");
 
 // window.onresize = reportWindowSize;
 
-loadConfig();
-function loadConfig() {
+
+const loadConfig = () => {
   try {
 
     // Cargar ultimo video
@@ -69,6 +69,7 @@ function loadConfig() {
     }, 1000);
   }
 }
+loadConfig();
 
 //guardar estado del reproductor 1
 localStorage.setItem("playerStatus", "onpause"); // al iniciar indicar que esta en pausa
