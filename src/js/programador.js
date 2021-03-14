@@ -109,7 +109,7 @@ save_btn_scheluder_list.addEventListener("click", () => {
                     title: "Lista guardada con exito",
                     message: "",
                     color: "green", // blue, red, green, yellow
-                  });
+                });
             });
         }
     }).catch((err) => {
@@ -225,8 +225,8 @@ const loadListQueue = (item) => {
     /**cargar los nuevos datos */
     /** obtener datos de la lista al cargar */
     fetch(item.path)
-        .then((results) => results.json())
-        .then(function (list) {
+        .then(res => res.json())
+        .then(list => {
             list.forEach(element => {
                 /**agregar item por item 
                  * y a cada uno darle un numero random
@@ -247,7 +247,7 @@ const loadListQueue = (item) => {
              * ordernar de forma random en base a los num randoms
              * generados anteriormente
              */
-            if (item.trueRandom === true){
+            if (item.trueRandom === true) {
                 grid_queue.data.sort({ by: "random", dir: "asc" });
             }
         });
@@ -269,13 +269,13 @@ const drop_scheduler_list = (ev) => {
                         title: "Primero selecciona una hora de inicio",
                         message: "",
                         color: "red", // blue, red, green, yellow
-                      });
+                    });
                     return
                 }
 
                 fetch(file.path)
-                    .then((results) => results.json())
-                    .then(function (list) {
+                    .then(res => res.json())
+                    .then(list => {
                         /**obtener duracion de la lista */
                         /**NOTA: crear funcion para esto */
                         var durationList = 0;
@@ -301,7 +301,7 @@ const drop_scheduler_list = (ev) => {
                     title: "Archivo no válido",
                     message: "",
                     color: "red", // blue, red, green, yellow
-                  });
+                });
             }
         }
     }
@@ -343,7 +343,7 @@ const grid_scheduler_event = new dhx.Grid("grid_event_container", {
                         return `<img src="./img/filetype/loop.png" height="20">`;
                     default:
                         return `#`;
-                  }
+                }
             },
         },
         { width: 85, id: "item", header: [{ text: "Nombre" }] },
@@ -409,9 +409,9 @@ jsonFile_btn_scheluder_event.addEventListener("click", () => {
         var pathListJson = result.filePaths[0];
         grid_scheduler_event.data.load(pathListJson);
     })
-    .catch((err) => {
-        console.log(err);
-    });
+        .catch((err) => {
+            console.log(err);
+        });
 });
 /** Boton guardar lista */
 save_btn_scheluder_event.addEventListener("click", () => {
@@ -578,7 +578,7 @@ const ejecute_scheduler_event = () => {
                         try {
                             let JSON_config = JSON.parse(localStorage.getItem("JSON_config"));
                             JSON_config.intervals.forEach((intervals) => {
-                                
+
                                 if (item.interval === intervals.interval) {
                                     if (intervals.Date.some((date) => date + ":00" === getTime.gT("min_sec"))) {
                                         if (item.instant) {
@@ -604,7 +604,7 @@ const ejecute_scheduler_event = () => {
             }
         });
         /**si hay texto GC entonces ejecutarlo y removerlo */
-        if(localStorage.getItem("gctemp")){
+        if (localStorage.getItem("gctemp")) {
             ipcRenderer.send("datos:gc", {
                 textoGC: localStorage.getItem("gctemp").slice(0, -38),
             })
@@ -628,10 +628,10 @@ const ejecuteAdd = (item) => {
                 temp: item.temp,
                 screenshot: item.screenshot,
             }, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
-          break;
+            break;
         case 'datos:plst':
             loadListProgram(item)
-          break;
+            break;
         default:
     }
 }
@@ -640,7 +640,7 @@ const ejecuteInstant = (item) => {
     switch (item.type) {
         case "datos:stream":
             const NextVideo = {
-                namefile: "[EVENTO] " + item.item + " | " +  item.interval + " | " + getTime.gT("hms24"),
+                namefile: "[EVENTO] " + item.item + " | " + item.interval + " | " + getTime.gT("hms24"),
                 ref: item.ref,
                 path: item.path,
                 duration: 0,
@@ -652,30 +652,30 @@ const ejecuteInstant = (item) => {
             }
             grid_ad_queue.data.add(NextVideo, 0);
             controlPlayerAD();
-          break;
+            break;
         case "datos:gc":
             fetch(item.path)
-            .then((results) => results.json())
-            .then(function (GCFile) {
-                /**Sumar textos del cg*/
-                const separador = '<spam style="color:#3498db"> • </spam>'
-                if(localStorage.getItem("gctemp")){
-                    localStorage.setItem("gctemp", localStorage.getItem("gctemp")+GCFile.textoGC+separador)
-                }else{
-                    localStorage.setItem("gctemp", GCFile.textoGC+separador);
-                }
-            });
-          break;
+                .then(res => res.json())
+                .then(GCFile => {
+                    /**Sumar textos del cg*/
+                    const separador = '<spam style="color:#3498db"> • </spam>'
+                    if (localStorage.getItem("gctemp")) {
+                        localStorage.setItem("gctemp", localStorage.getItem("gctemp") + GCFile.textoGC + separador)
+                    } else {
+                        localStorage.setItem("gctemp", GCFile.textoGC + separador);
+                    }
+                });
+            break;
         case "datos:plst":
             ipcRenderer.send("datos:stream", comand = {
                 referencia: "file-video",
                 url: loadListProgram(item),
                 in: 0,
             });
-          break;
+            break;
         case "videoloop":
             loadGraphics(item.type, item.path)
-          break;
+            break;
         default:
     }
 }
@@ -684,40 +684,40 @@ const ejecuteInstant = (item) => {
 const loadListProgram = (item) => {
     /** obtener datos de la lista al cargar */
     fetch(item.path)
-        .then((results) => results.json())
-        .then(function (list) {
+        .then(res => res.json())
+        .then(list => {
             /**Se carga los datos de las cortinilla de entrada y salida
              * en el localStorage con CurtainIn y CurtainOut
              * para la tandas de anuncios cada vez que se agrega una lista
              * en events (lista de videos uno a uno)
              */
             var n = 0
-            var a,b,c
+            var a, b, c
             list.forEach(dataVideo => {
-                if(dataVideo.curtain){
+                if (dataVideo.curtain) {
                     switch (dataVideo.curtain) {
                         case "inicio":
-                            localStorage.setItem("CurtainIn",JSON.stringify(dataVideo));
+                            localStorage.setItem("CurtainIn", JSON.stringify(dataVideo));
                             a = n
-                          break;
+                            break;
                         case "fin":
-                            localStorage.setItem("CurtainOut",JSON.stringify(dataVideo));
+                            localStorage.setItem("CurtainOut", JSON.stringify(dataVideo));
                             b = n
-                          break;
+                            break;
                         case "rating":
-                            localStorage.setItem("RatingProgram",JSON.stringify(dataVideo));
+                            localStorage.setItem("RatingProgram", JSON.stringify(dataVideo));
                             c = n
-                          break;
+                            break;
                         default:
                     }
                 }
                 n += 1
             });
             //Guardar en localStorage la ruta de la lista de la cual se agrega este video
-            localStorage.setItem("pathListEvent",item.path);
+            localStorage.setItem("pathListEvent", item.path);
 
             // Agrega video programado
-            var cell = list[getValidIndexList(list, false, item, [a,b,c])];
+            var cell = list[getValidIndexList(list, false, item, [a, b, c])];
             const programVideo = {
                 namefile: "[P] " + cell.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                 ref: cell.ref,
@@ -733,11 +733,11 @@ const loadListProgram = (item) => {
             }
             //agrega el video +1 index despues del actual en reproduccion
             var pAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
-            grid_queue.data.add(programVideo, pAddIndex ? pAddIndex+1 : 0);
+            grid_queue.data.add(programVideo, pAddIndex ? pAddIndex + 1 : 0);
 
             // Agrega video clasificador
             var cellRating = list[c];
-            if(cellRating){
+            if (cellRating) {
                 const ratingVideo = {
                     namefile: "[C] " + cellRating.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
                     ref: cellRating.ref,
@@ -752,7 +752,7 @@ const loadListProgram = (item) => {
                 }
                 //agrega el video +1 index despues del actual en reproduccion
                 var rAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
-                grid_queue.data.add(ratingVideo, rAddIndex ? rAddIndex+1 : 0);
+                grid_queue.data.add(ratingVideo, rAddIndex ? rAddIndex + 1 : 0);
             }
 
             return programVideo.path
@@ -766,9 +766,9 @@ const drop_scheduler_event = (ev) => {
     // validar datos del formulario
     if (!formData.playDateRange) {
         iziToast.show({
-          title: "Debe seleccionar una fecha",
-          message: "",
-          color: "red", // blue, red, green, yellow
+            title: "Debe seleccionar una fecha",
+            message: "",
+            color: "red", // blue, red, green, yellow
         });
         return
     }
@@ -810,43 +810,8 @@ const drop_scheduler_event = (ev) => {
 
                     let v = document.createElement('video')
                     v.setAttribute('src', file.path)
-                    v.onloadeddata = function(e) {
-                      const {videoHeight,videoWidth,duration} = e.srcElement
-
-                      var validDateRange;
-
-                      if (formData.playDateRange[0] && formData.playDateRange[1]) {
-                          validDateRange = formData.playDateRange;
-                      } else {
-                          validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
-                      }
-  
-                      const data = {
-                          item: filename(file.name),
-                          interval: formData.interval,
-                          playTime: formData.playTime + ":00",
-                          stopTime: formData.stopTime + ":00",
-                          instant: formData.instant,
-                          type: "datos:stream",
-                          ref: "file-video",
-                          duration,
-                          path: file.path,
-                          playDateRange: validDateRange,
-                          playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
-                          playDay: formData.playDay,
-                          temp: true,
-                          screenshot: formData.screenshot,
-                      };
-                      grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
-                    }
-                }
-            } else if (validExts(file.name, ["webm"])) { // Archivo de video con canal alfa webm
-                if (formData.playDateRange !== "") {
-
-                    let v = document.createElement('video')
-                    v.setAttribute('src', file.path)
-                    v.onloadeddata = function(e) {
-                        const {videoHeight,videoWidth,duration} = e.srcElement
+                    v.onloadeddata = function (e) {
+                        const { videoHeight, videoWidth, duration } = e.srcElement
 
                         var validDateRange;
 
@@ -855,7 +820,42 @@ const drop_scheduler_event = (ev) => {
                         } else {
                             validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
                         }
-        
+
+                        const data = {
+                            item: filename(file.name),
+                            interval: formData.interval,
+                            playTime: formData.playTime + ":00",
+                            stopTime: formData.stopTime + ":00",
+                            instant: formData.instant,
+                            type: "datos:stream",
+                            ref: "file-video",
+                            duration,
+                            path: file.path,
+                            playDateRange: validDateRange,
+                            playTimeRange: [formData.timeStart + ":00", formData.timeEnd + ":00"],
+                            playDay: formData.playDay,
+                            temp: true,
+                            screenshot: formData.screenshot,
+                        };
+                        grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
+                    }
+                }
+            } else if (validExts(file.name, ["webm"])) { // Archivo de video con canal alfa webm
+                if (formData.playDateRange !== "") {
+
+                    let v = document.createElement('video')
+                    v.setAttribute('src', file.path)
+                    v.onloadeddata = function (e) {
+                        const { videoHeight, videoWidth, duration } = e.srcElement
+
+                        var validDateRange;
+
+                        if (formData.playDateRange[0] && formData.playDateRange[1]) {
+                            validDateRange = formData.playDateRange;
+                        } else {
+                            validDateRange = [formData.playDateRange[0], formData.playDateRange[0]];
+                        }
+
                         const data = {
                             item: filename(file.name),
                             interval: formData.interval,
@@ -904,9 +904,9 @@ const drop_scheduler_event = (ev) => {
                 }
             } else {
                 iziToast.show({
-                  title: "Archivo no válido",
-                  message: "",
-                  color: "red", // blue, red, green, yellow
+                    title: "Archivo no válido",
+                    message: "",
+                    color: "red", // blue, red, green, yellow
                 });
             }
         }
@@ -1126,34 +1126,36 @@ const ejecute_scheduler_ad = () => {
 /**cargar AD */
 const loadListAd = (item) => {
     /** obtener datos de la lista al cargar */
-    fetch(item.path).then((results) => results.json()).then(function (list) {
-        var cell = list[getValidIndexList(list,false,item,[-1,-1])]
+    fetch(item.path)
+        .then(res => res.json())
+        .then(list => {
+            var cell = list[getValidIndexList(list, false, item, [-1, -1])]
 
-        const NextVideo = {
-            namefile: "[ANUNCIO] " + cell.namefile + " | " +  item.interval + " | " + getTime.gT("hms24"),
-            ref: cell.ref,
-            path: cell.path,
-            duration: cell.duration,
-            startTime: "00:00:00",
-            in: 0,
-            custom: "bg_id_Scheduler",
-            random: 0,
-            temp: true,
-        }
-        /**si el tiempo restante es menor a 8 min la publicidad se agrega en cola de programa
-         * si no lo es entonces se agrega a la cola de publicidad
-        */
-        if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (8 * 60)){
-            // se agrega adelante del video actualmente en reproduccion
-            grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1 );
-        }else{
-            grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));
-            
-            addCurtains()
+            const NextVideo = {
+                namefile: "[ANUNCIO] " + cell.namefile + " | " + item.interval + " | " + getTime.gT("hms24"),
+                ref: cell.ref,
+                path: cell.path,
+                duration: cell.duration,
+                startTime: "00:00:00",
+                in: 0,
+                custom: "bg_id_Scheduler",
+                random: 0,
+                temp: true,
+            }
+            /**si el tiempo restante es menor a 8 min la publicidad se agrega en cola de programa
+             * si no lo es entonces se agrega a la cola de publicidad
+            */
+            if (JSON.parse(localStorage.getItem("DataVideoCurrent")).TiempoRestante < (8 * 60)) {
+                // se agrega adelante del video actualmente en reproduccion
+                grid_queue.data.add(NextVideo, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
+            } else {
+                grid_ad_queue.data.add(NextVideo, getIndexAddGrid(grid_ad_queue));
 
-            controlPlayerAD();
-        }
-    });
+                addCurtains()
+
+                controlPlayerAD();
+            }
+        });
 }
 
 /**cargar graficos banner*/
@@ -1171,9 +1173,9 @@ const drop_scheduler_ad = (e) => {
     const formData = form_ad.getValue();
     if (!formData.playDateRange) {
         iziToast.show({
-          title: "Debe seleccionar una fecha",
-          message: "",
-          color: "red", // blue, red, green, yellow
+            title: "Debe seleccionar una fecha",
+            message: "",
+            color: "red", // blue, red, green, yellow
         });
         return
     }
@@ -1187,8 +1189,8 @@ const drop_scheduler_ad = (e) => {
             if (validExts(file.name, ["json", "plst"])) {
 
                 fetch(file.path)
-                    .then((results) => results.json())
-                    .then(function (list) {
+                    .then(res => res.json())
+                    .then(list => {
                         /**obtener duracion de la lista */
                         /**NOTA: crear funcion para esto */
                         var durationList = 0;
@@ -1236,9 +1238,9 @@ const drop_scheduler_ad = (e) => {
 
             } else {
                 iziToast.show({
-                  title: "Archivo no válido",
-                  message: "",
-                  color: "red", // blue, red, green, yellow
+                    title: "Archivo no válido",
+                    message: "",
+                    color: "red", // blue, red, green, yellow
                 });
             }
         }
@@ -1314,23 +1316,23 @@ const fromHttpJson_event = () => {
  * random: Boolean
  * skipIndex: Array [1,2] (dos de los index que se quieren omitir)
  */
-const getValidIndexList = (list,random,item,skipIndex) => {
+const getValidIndexList = (list, random, item, skipIndex) => {
     do {
         var index
-        if (random){
+        if (random) {
             // agregar de forma randon
             index = nTF.randomNumber(list.length - 1)
-        }else{
+        } else {
             // agregar de forma ordenada
-            if (localStorage.getItem(item.item)){ // si el index ya se ha guardado en sesion
+            if (localStorage.getItem(item.item)) { // si el index ya se ha guardado en sesion
                 // lee el index del ultimo item que se agrego de una lista especifica
                 index = parseInt(localStorage.getItem(item.item))
-                if (index < list.length - 1){ // mientras que el index este dentro de la lista
+                if (index < list.length - 1) { // mientras que el index este dentro de la lista
                     index += 1
-                }else{
+                } else {
                     index = 0
                 }
-            }else{
+            } else {
                 index = 0
             }
         }
@@ -1401,17 +1403,17 @@ const RelojProgramador = () => {
             //marca el video invalido
             grid_queue.addRowCss(itemCurrent.id, "bg_id_invalid");
             //mensaje de error
-            console.error("video error" , itemCurrent.path)
+            console.error("video error", itemCurrent.path)
 
 
             //datos del siguiente video
             let nextIndex;
             if (index === grid_queue.data._order.length) {
-              nextIndex = 0;
+                nextIndex = 0;
             } else {
-              nextIndex = index + 1;
+                nextIndex = index + 1;
             }
-            
+
             /**enviar a reproducir */
             var itemNext = grid_queue.data._order[nextIndex];
             SendFileToPlay({
@@ -1420,8 +1422,8 @@ const RelojProgramador = () => {
                 in: itemNext.in,
                 id: itemNext.id,
             });
-            
-        } catch (error) {}
+
+        } catch (error) { }
     }
 
 
@@ -1445,7 +1447,7 @@ const seeMessage = (text) => {
         title: text,
         message: "",
         color: "blue", // blue, red, green, yellow
-      });
+    });
 }
 
 /** guardar programacion */
@@ -1481,7 +1483,7 @@ const saveAsScheduler = () => {
     });
 }
 
-const saveFileSLST = (path) =>{
+const saveFileSLST = (path) => {
     const dataScheduler = {
         list_path: getContent(grid_scheduler_list),
         event_path: getContent(grid_scheduler_event),
@@ -1544,8 +1546,8 @@ ipcRenderer.on("openScheduler", () => {
 /** Cargar nuevos datos */
 const loadFileSLST = (path) => {
     fetch(path)
-        .then((results) => results.json())
-        .then(function (content) {
+        .then(res => res.json())
+        .then(content => {
             /**si hay datos en la lista borrarlos primero */
             if (grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0) {
                 grid_scheduler_list.data.removeAll()
@@ -1572,8 +1574,8 @@ const loadFileSLST = (path) => {
 ipcRenderer.on("open:fileType", (e, pathFile) => {
     if (pathFile !== ".") {
         fetch(pathFile)
-            .then((results) => results.json())
-            .then(function (content) {
+            .then(res => res.json())
+            .then(content => {
                 grid_scheduler_list.data.add(content.list_path);
                 grid_scheduler_event.data.add(content.event_path);
                 grid_scheduler_ad.data.add(content.ad_path);

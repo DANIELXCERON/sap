@@ -59,9 +59,11 @@ var ffprobe = require("ffprobe"),
 
 
 /** cargar configuracion de config.json en el localStorage */
-fetch("../config/config.json").then((results) => results.json()).then(function (config) {
-  localStorage.setItem("JSON_config", JSON.stringify(config));
-});
+fetch("../config/config.json")
+  .then(res => res.json())
+  .then(config => {
+    localStorage.setItem("JSON_config", JSON.stringify(config));
+  });
 // si no esta SpeedGC en localStorage
 if (!localStorage.getItem("SpeedGC")) {
   // crear Speed GC en localStorage con valor de 5

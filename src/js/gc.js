@@ -33,10 +33,10 @@ ipcRenderer.on("openFileGC", () => {
       sessionStorage.setItem("sgc-path", result.filePaths[0].toString());
       /**luego carga los nuevos datos */
       fetch(result.filePaths[0])
-        .then((results) => results.json())
-        .then(function (gcContent) {
+        .then(res => res.json())
+        .then(gcContent => {
           richtext.setValue(gcContent.textoGC.slice(24, -7), 'html');
-          formGC.setValue({"css": gcContent.textoGC.slice(13, 22)});
+          formGC.setValue({ "css": gcContent.textoGC.slice(13, 22) });
         });
     }
   }).catch((err) => {
@@ -85,27 +85,27 @@ const saveAsGC = () => {
   };
 
   dialog.showSaveDialog(null, options).then((result) => {
-      const datosGC = {
-        textoGC: `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
-      };
+    const datosGC = {
+      textoGC: `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
+    };
 
-      var fileGcContent = JSON.stringify(datosGC);
-      if (!result.canceled) {
-        /**se guarda la ruta del archivo sgc guardado */
-        sessionStorage.setItem("sgc-path", result.filePath.toString());
+    var fileGcContent = JSON.stringify(datosGC);
+    if (!result.canceled) {
+      /**se guarda la ruta del archivo sgc guardado */
+      sessionStorage.setItem("sgc-path", result.filePath.toString());
 
-        fs.writeFile(result.filePath.toString(), fileGcContent, function (err) {
-          if (err) throw err;
-          iziToast.show({
-            title: "GC guardado con exito",
-            message: "",
-            color: "green", // blue, red, green, yellow
-          });
+      fs.writeFile(result.filePath.toString(), fileGcContent, function (err) {
+        if (err) throw err;
+        iziToast.show({
+          title: "GC guardado con exito",
+          message: "",
+          color: "green", // blue, red, green, yellow
         });
-      }
-    }).catch((err) => {
-      console.log(err);
-    });
+      });
+    }
+  }).catch((err) => {
+    console.log(err);
+  });
 }
 
 const formGC = new dhx.Form("formGC", {
@@ -128,33 +128,33 @@ const formGC = new dhx.Form("formGC", {
       label: "CSS",
       helpMessage: "Selccione un estilo css",
       options: [
-          {
-              value: "GCStyle-0",
-              content: "GCStyle-0"
-          },
-          {
-              value: "GCStyle-1",
-              content: "GCStyle-1"
-          },
-          {
-              value: "GCStyle-2",
-              content: "GCStyle-2"
-          },
-          {
-              value: "GCStyle-3",
-              content: "GCStyle-3"
-          },
-          {
-              value: "GCStyle-4",
-              content: "GCStyle-4"
-          }
+        {
+          value: "GCStyle-0",
+          content: "GCStyle-0"
+        },
+        {
+          value: "GCStyle-1",
+          content: "GCStyle-1"
+        },
+        {
+          value: "GCStyle-2",
+          content: "GCStyle-2"
+        },
+        {
+          value: "GCStyle-3",
+          content: "GCStyle-3"
+        },
+        {
+          value: "GCStyle-4",
+          content: "GCStyle-4"
+        }
       ],
-  },
+    },
   ]
 });
 
 // setear input de velocidad al guardar en localStorage
-formGC.setValue({"speed": parseInt(localStorage.getItem("SpeedGC"))});
+formGC.setValue({ "speed": parseInt(localStorage.getItem("SpeedGC")) });
 // cada vez que se hace un cambio
 formGC.getItem("speed").events.on("change", function () {
   // guardar ese cambio
@@ -186,7 +186,7 @@ richtext.toolbar.data.add({
   id: "Preview"
 }, 3);
 
-richtext.toolbar.events.on("click", function(id) {
+richtext.toolbar.events.on("click", function (id) {
   if (id === "play") {
     const datosGC = {
       textoGC: `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
@@ -200,11 +200,11 @@ richtext.toolbar.events.on("click", function(id) {
     // Vista previa
     GCTextPreview.innerHTML = `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
 
-    /**se calcula el tiempo de desplazamiento en bace
-     * a la longitud del texto y a la velocidad
-     * condigurada
-     */
-    GCTextPreview.style.cssText = `animation-duration:${Math.floor( (5 * (marcoPreview.clientWidth + GCTextPreview.clientWidth)) / (formGC.getValue().speed * 100))}s;`;
+      /**se calcula el tiempo de desplazamiento en bace
+       * a la longitud del texto y a la velocidad
+       * condigurada
+       */
+      GCTextPreview.style.cssText = `animation-duration:${Math.floor((5 * (marcoPreview.clientWidth + GCTextPreview.clientWidth)) / (formGC.getValue().speed * 100))}s;`;
 
     // agregar animacion css
     CSSAnimations.get("moviendoGC").setKeyframe("0%", {
