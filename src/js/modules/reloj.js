@@ -148,7 +148,7 @@ const gT = (Iwant, CurrentTime = new Date()) => {
 
     // devuelve cadena enviada
     default:
-      return Iwant + " no es valido.";
+      return Iwant;
   }
 }
 
