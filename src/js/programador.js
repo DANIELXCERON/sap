@@ -1576,5 +1576,3 @@ ipcRenderer.on("open:fileType", (e, pathFile) => {
             });
     }
 });
-
-

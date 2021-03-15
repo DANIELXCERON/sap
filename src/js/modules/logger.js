@@ -3,20 +3,21 @@ const getTime = require("./reloj");
 const fs = require("fs");
 const { app } = require("electron").remote;
 
-let dir, dirSap, pathFile, log_file, f
+let dirLog, dirSap, pathFile, log_file, f, dirDocument
 
-dirSap = app.getPath("documents") + "\\SAP Playout"
-dir = app.getPath("documents") + "\\SAP Playout\\logs"
+dirDocument = app.getPath("documents")
+dirSap = dirDocument + "\\SAP Playout"
+dirLog = dirDocument + "\\SAP Playout\\logs"
 
-
-
-if (!fs.existsSync(dir)) {// si no existe el directorio
-  fs.mkdirSync(dirSap);// crea el directorio
-  fs.mkdirSync(dir);// crea el directorio
+const checkCreateDir = dir => {
+  fs.existsSync(dir) ? null : fs.mkdirSync(dir)
 }
 
+checkCreateDir(dirSap)
+checkCreateDir(dirLog)
+
 const checkFile = () => {
-  pathFile = dir + `\\${getTime.gT("DateLog")}.log`
+  pathFile = dirLog + `\\${getTime.gT("DateLog")}.log`
   if (!fs.existsSync(pathFile)) {// si no existe el archivo
     f = "w" // escribir
   } else {
@@ -25,7 +26,7 @@ const checkFile = () => {
   log_file = fs.createWriteStream(pathFile, { flags: f });
 }
 
-const write = (data) => {
+const write = data => {
   checkFile()
   var n = data.namefile,
     d = nTF.secToHHMMSS(data.duration),
@@ -36,7 +37,7 @@ const write = (data) => {
 
   if (data.screenshot) {
     /**Crear carpeta screenshot*/
-    var dirScreenshot = dir + `\\${getTime.gT("DateLog")}-screenshots`
+    var dirScreenshot = dirLog + `\\${getTime.gT("DateLog")}-screenshots`
     if (!fs.existsSync(dirScreenshot)) {// si no existe el directorio
       fs.mkdirSync(dirScreenshot);// crea el directorio
     }
@@ -54,7 +55,7 @@ const write = (data) => {
 }
 
 /** funcion para extraer nombre del archivo de una ruta */
-const filename = (rutaAbsoluta) => {
+const filename = rutaAbsoluta => {
   var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
   nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
   //.replace(/^.*[\\\/]/, "")
@@ -73,7 +74,7 @@ const writeControlPlayerLog = (n, i) => {
   log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"Control","nombre":"${n}","info":"${i}"},`));
 }
 
-const writeGCLog = (datosGC) => {
+const writeGCLog = datosGC => {
   checkFile()
   var s = ''
   var html = datosGC.textoGC
@@ -92,15 +93,15 @@ const writeGCLog = (datosGC) => {
 }
 
 
-const loadDir = (elementgrid) => {
+const loadDir = elementgrid => {
   elementgrid.data.removeAll()
-  fs.readdir(dir, (err, files) => {
+  fs.readdir(dirLog, (err, files) => {
     files.map(file => {
 
       if (nTF.validExts(file, ["log"])) {
         elementgrid.data.add({
           filelog: file.slice(0, -4).replace(/-/g, "/"),
-          path: dir + "\\" + file,
+          path: dirLog + "\\" + file,
         })
       }
     });

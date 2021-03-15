@@ -5,7 +5,8 @@ const { dialog, app } = require("electron").remote;
 const { ipcRenderer } = require("electron");
 const { shell } = require("electron");
 const https = require("https");
-
+const log = require('electron-log');
+console.log = log.log;
 
 /** Mis modulos */
 const nTF = require("../src/js/modules/nice-time-format");
@@ -125,7 +126,7 @@ window.addEventListener("load", () => {
   // }
 
   // pintar ultimo video
-  var id = localStorage.getItem("CurrentVideoID");
+  const id = localStorage.getItem("CurrentVideoID");
   if (id) {
     // var a = JSON.parse(localStorage.getItem("DataVideoCurrent"));
     grid_queue.data._order.forEach((row) => {
@@ -178,9 +179,11 @@ const initHiden = () => {
 }
 
 const resetHiden = () => {
-  ViewGraSwitch.checked
-    ? (MostrarG(), localStorage.setItem("ViewGraSwitch", "HiddenGraphics"))
-    : (OcultarG(), localStorage.removeItem("ViewGraSwitch"));
+ViewGraSwitch.checked ? (
+    MostrarG(), localStorage.setItem("ViewGraSwitch", "HiddenGraphics")
+  ) : (
+    OcultarG(), localStorage.removeItem("ViewGraSwitch")
+  );
 }
 
 // ocultar mostrar Safe Area
@@ -905,33 +908,10 @@ grid_log_dir.events.on("CellClick", function (row, column, e) {
   logger.readLog(row.path, grid_log_view)
 });
 
-const formFilterDate = new dhx.Form("formFilterDate", {
-  ccss: "my_form_css",
-  padding: 0,
-  rows: [
-    {
-      labelInline: true,
-      // range: true,
-      labelPosition: "left",
-      label: "Filtar:",
-      placeholder: "Seleccione un fecha",
-      type: "datepicker",
-      name: "filterDateRange",
-      dateFormat: "%Y/%m/%d"
-    }
-  ]
-});
-
-formFilterDate.events.on("change", function (name, value) {
-  grid_log_dir.data.filter({ by: "filelog", match: value });
-});
-
-
-
 const grid_log_view = new dhx.Grid("grid_log_view_container", {
   css: "my_grid_css",
   columns: [
-    { width: 92, id: "fecha", header: [{ text: "Fecha" }] },
+    { width: 92, id: "fecha", header: [{ text: "Fecha" }, { content: "selectFilter" }] },
     { width: 72, id: "hora", header: [{ text: "Hora" }] },
     { width: 72, id: "duracion", header: [{ text: "Duración" }] },
     { width: 72, id: "ref", header: [{ text: "Referencia" }, { content: "selectFilter" }] },
@@ -948,3 +928,4 @@ const grid_log_view = new dhx.Grid("grid_log_view_container", {
   selection: "row",
   resizable: true,
 });
+////////////////////////////// End logger list viewer ///////////////////////////////////////////////

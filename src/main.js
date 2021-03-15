@@ -615,6 +615,7 @@ const GCWindowMenu = [
     { type: "separator" },
     {
       label: "toggle Dev Tools",
+      accelerator: "F12",
       click(item, focusedWindow) {
         focusedWindow.toggleDevTools();
       },

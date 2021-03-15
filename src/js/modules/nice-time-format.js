@@ -13,7 +13,7 @@ const secToHHMMSS = (duration = 0) => {
   let secs = ~~duration % 60;
   return checkFormat(hrs) + ":" + checkFormat(mins) + ":" + checkFormat(secs);
 }
-const RelojToSec = (hms) => {
+const RelojToSec = hms => {
   let a = hms.split(":"); // separar por cada :
   // los minutos valen 60 segundos. Las horas valen 60 minutos.
   let sec = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
@@ -43,7 +43,7 @@ const GenNumRandom = (MaxItem = 999999999, ItemActual = -1) => {
 }
 
 //Combierte formato html a texto plano
-const htmlToText = (h) => {
+const htmlToText = h => {
   let s = '\n'
   h = h.replace(/<style([\s\S]*?)<\/style>/gi, '');
   h = h.replace(/<script([\s\S]*?)<\/script>/gi, '');
@@ -58,7 +58,7 @@ const htmlToText = (h) => {
   return h
 };
 
-const millisToDate = (millis) => new Date(millis)
+const millisToDate = millis => new Date(millis)
 
 //devuelve true si la extencion de una ruta de archivo coinciden con el parametro
 //ejemplo:
