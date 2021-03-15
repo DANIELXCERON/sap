@@ -6,7 +6,7 @@ const { ipcRenderer } = require("electron");
 const { shell } = require("electron");
 const https = require("https");
 const log = require('electron-log');
-console.log = log.log;
+// console.log = log.log;
 
 /** Mis modulos */
 const nTF = require("../src/js/modules/nice-time-format");

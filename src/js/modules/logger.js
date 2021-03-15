@@ -110,7 +110,6 @@ const loadDir = elementgrid => {
 
 const readLog = async (path, elementgrid) => {
   elementgrid.data.removeAll()
-
   const res = await fetch(path);
   const contentLog = await res.text();
   const dataset = new dhx.DataCollection().parse(JSON.parse("[" + contentLog.slice(0, -1) + "]"))
@@ -125,7 +124,23 @@ const readLog = async (path, elementgrid) => {
     }
     return items
   })
-  elementgrid.data.add(arrayData)
+  // console.log(arrayData.length)
+  // console.log(arrayData.slice(0, 5))
+  // console.log(arrayData.slice(5, 10))
+  // console.log(arrayData)
+
+  limit(arrayData, elementgrid)
+  // elementgrid.data.add(arrayData.slice(0, 5))
+}
+
+const limit = (arrayData, elementgrid) => {
+  let limit = 5
+  let end = limit
+  for (let ini = 0; end < arrayData.length; end += limit) {
+    console.log(arrayData.slice(ini, end))
+    // elementgrid.data.add(arrayData.slice(ini, end))
+    ini = end
+  }
 }
 
 // log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));

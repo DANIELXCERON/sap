@@ -138,7 +138,7 @@ vPLdos.ontimeupdate = function () {
 
 // Recibir Datos para Generar Caracteres GC
 ipcRenderer.on("datos:gc", (e, datosGC) => {
-  logger.writeGCLog(datosGC)
+  // logger.writeGCLog(datosGC)
 
   // remover animacion css
   GCText.classList.remove("moviendoGC");
@@ -416,7 +416,7 @@ ipcRenderer.on("datos:stream2", (e, data) => {
 
 // control reproductor 1
 ipcRenderer.on("control:player", (e, control) => {
-  logger.writeControlPlayerLog("Reproductor Principal",control)
+  // logger.writeControlPlayerLog("Reproductor Principal",control)
   switch (control) {
     case "play":
       vPLuno.play();
@@ -438,7 +438,7 @@ ipcRenderer.on("control:player", (e, control) => {
 
 // control reproductor 2
 ipcRenderer.on("control:player2", (e, control) => {
-  logger.writeControlPlayerLog("Reproductor Secundario",control)
+  // logger.writeControlPlayerLog("Reproductor Secundario",control)
   switch (control) {
     case "play":
       vPLdos.play();
