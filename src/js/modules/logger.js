@@ -95,23 +95,26 @@ const writeGCLog = (datosGC) => {
 const loadDir = (elementgrid) => {
   elementgrid.data.removeAll()
   fs.readdir(dir, (err, files) => {
-    files.forEach(file => {
-      elementgrid.data.add({
-        filelog: file.slice(0, -4).replace(/-/g, "/"),
-        path: dir + "\\" + file,
-      })
+    files.map(file => {
+
+      if (nTF.validExts(file, ["log"])) {
+        elementgrid.data.add({
+          filelog: file.slice(0, -4).replace(/-/g, "/"),
+          path: dir + "\\" + file,
+        })
+      }
     });
   });
 }
 
-const readLog = (path, elementgrid) => {
+const readLog = async (path, elementgrid) => {
   elementgrid.data.removeAll()
-  fetch(path)
-    .then(res => res.json())
-    .then(contentLog => {
-      var dataset = new dhx.DataCollection().parse(JSON.parse("[" + contentLog.slice(0, -1) + "]"))
-      elementgrid.data.add(dataset)
-    });
+
+  const res = await fetch(path);
+  const contentLog = await res.text();
+  const dataset = new dhx.DataCollection().parse(JSON.parse("[" + contentLog.slice(0, -1) + "]"))
+  elementgrid.data.add(dataset)
+
 }
 
 // log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));

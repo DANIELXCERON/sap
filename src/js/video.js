@@ -17,7 +17,7 @@ const videoPlayerBanner = document.querySelector("#videoplayerbanner");
 const GCText = document.querySelector("#GCText");
 const body = document.querySelector("body");
 const RelojDOM = document.querySelector("#clock");
-const sizeDom = document.querySelector(".marcoVideoLocal");
+// const sizeDom = document.querySelector(".marcoVideoLocal");
 
 
 /**Auto Ajustar Ventana */

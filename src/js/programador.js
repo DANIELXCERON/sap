@@ -212,7 +212,7 @@ const ejecute_scheduler_list = () => {
 }
 
 /**cargar lista en cola */
-const loadListQueue = (item) => {
+const loadListQueue = async (item) => {
     if (grid_queue.data._order && grid_queue.data._order.length > 0) {
         /**si hay datos en la lista de cola, borrarlos primero */
         grid_queue.data._order.forEach(item => {
@@ -224,33 +224,31 @@ const loadListQueue = (item) => {
     }
     /**cargar los nuevos datos */
     /** obtener datos de la lista al cargar */
-    fetch(item.path)
-        .then(res => res.json())
-        .then(list => {
-            list.forEach(element => {
-                /**agregar item por item 
-                 * y a cada uno darle un numero random
-                 * para ordenar aleatoriamente los videos
-                 */
-                grid_queue.data.add({
-                    namefile: element.namefile,
-                    ref: element.ref,
-                    path: element.path,
-                    duration: element.duration,
-                    in: element.in,
-                    custom: element.custom,
-                    temp: element.temp,
-                    random: Math.random() * 9999
-                });
-            });
-            /**Si el random esta activado en el item
-             * ordernar de forma random en base a los num randoms
-             * generados anteriormente
-             */
-            if (item.trueRandom === true) {
-                grid_queue.data.sort({ by: "random", dir: "asc" });
-            }
+    const res = await fetch(item.path);
+    const list = await res.json();
+    list.map(element => {
+        /**agregar item por item 
+         * y a cada uno darle un numero random
+         * para ordenar aleatoriamente los videos
+         */
+        grid_queue.data.add({
+            namefile: element.namefile,
+            ref: element.ref,
+            path: element.path,
+            duration: element.duration,
+            in: element.in,
+            custom: element.custom,
+            temp: element.temp,
+            random: Math.random() * 9999
         });
+    });
+    /**Si el random esta activado en el item
+     * ordernar de forma random en base a los num randoms
+     * generados anteriormente
+     */
+    if (item.trueRandom === true) {
+        grid_queue.data.sort({ by: "random", dir: "asc" });
+    }
 }
 
 /**Drop & Drag Files */
@@ -262,7 +260,7 @@ const drop_scheduler_list = (ev) => {
         if (ev.dataTransfer.items[i].kind === "file") {
             let file = ev.dataTransfer.items[i].getAsFile();
             // si la extencion es valida
-            if (validExts(file.name, ["json", "plst"])) {
+            if (nTF.validExts(file.name, ["json", "plst"])) {
                 const formData = form_scheduler_list.getValue();
                 if (!formData.playTime) {
                     iziToast.show({
@@ -273,13 +271,14 @@ const drop_scheduler_list = (ev) => {
                     return
                 }
 
+
                 fetch(file.path)
                     .then(res => res.json())
                     .then(list => {
                         /**obtener duracion de la lista */
                         /**NOTA: crear funcion para esto */
                         var durationList = 0;
-                        list.forEach(element => {
+                        list.map(element => {
                             durationList += parseFloat(element.duration);
                         });
 
@@ -778,7 +777,7 @@ const drop_scheduler_event = (ev) => {
         if (ev.dataTransfer.items[i].kind === "file") {
             let file = ev.dataTransfer.items[i].getAsFile();
             // si la extencion es
-            if (validExts(file.name, ["sgc"])) { // generador de caracteres
+            if (nTF.validExts(file.name, ["sgc"])) { // generador de caracteres
                 if (formData.playDateRange !== "") {
                     var validDateRange;
 
@@ -805,7 +804,7 @@ const drop_scheduler_event = (ev) => {
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
-            } else if (validExts(file.name, ["mp4", "mov"])) { // Archivo de video normal
+            } else if (nTF.validExts(file.name, ["mp4", "mov"])) { // Archivo de video normal
                 if (formData.playDateRange !== "") {
 
                     let v = document.createElement('video')
@@ -840,7 +839,7 @@ const drop_scheduler_event = (ev) => {
                         grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                     }
                 }
-            } else if (validExts(file.name, ["webm"])) { // Archivo de video con canal alfa webm
+            } else if (nTF.validExts(file.name, ["webm"])) { // Archivo de video con canal alfa webm
                 if (formData.playDateRange !== "") {
 
                     let v = document.createElement('video')
@@ -875,7 +874,7 @@ const drop_scheduler_event = (ev) => {
                         grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                     }
                 }
-            } else if (validExts(file.name, ["plst"])) { // Lista de reproduccion
+            } else if (nTF.validExts(file.name, ["plst"])) { // Lista de reproduccion
                 if (formData.playDateRange !== "") {
                     var validDateRange;
 
@@ -1186,7 +1185,7 @@ const drop_scheduler_ad = (e) => {
         if (e.dataTransfer.items[i].kind === "file") {
             let file = e.dataTransfer.items[i].getAsFile();
             // si la extencion es valida
-            if (validExts(file.name, ["json", "plst"])) {
+            if (nTF.validExts(file.name, ["json", "plst"])) {
 
                 fetch(file.path)
                     .then(res => res.json())
@@ -1216,7 +1215,7 @@ const drop_scheduler_ad = (e) => {
                         };
                         grid_scheduler_ad.data.add(data, getIndexAddGrid(grid_scheduler_ad));
                     });
-            } else if (validExts(file.name, ["webm"])) {
+            } else if (nTF.validExts(file.name, ["webm"])) {
 
                 var d = formData.playDateRange
                 var playDateRange = []
@@ -1374,13 +1373,8 @@ const rangeTime = (time) => {
     var cT = getTime.gT("hms24");
     return (time[0] <= cT) & (cT <= time[1]);
 }
-/**devuelve true si la extencion del nombre del archivo coinciden */
-const validExts = (nameFile, exts) => {
-    const even = (ext) => ext === nameFile.split(".").pop();
-    return exts.some(even);
-}
-/**Iniciar Reloj Programador */
 
+/**Iniciar Reloj Programador */
 const RelojProgramador = () => {
 
     /**Iniciar ejecucion de programadores */

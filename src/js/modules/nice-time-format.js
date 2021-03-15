@@ -60,6 +60,14 @@ const htmlToText = (h) => {
 
 const millisToDate = (millis) => new Date(millis)
 
+//devuelve true si la extencion de una ruta de archivo coinciden con el parametro
+//ejemplo:
+//nTF.validExts("nombre-o-ruta-artivo.ext", ["ext","jpg"]) = // true
+//nTF.validExts("nombre-o-ruta-artivo.png", ["ext","jpg"]) = // false
+const validExts = (nameFile, exts) => {
+  const even = (ext) => ext === nameFile.split(".").pop();
+  return exts.some(even);
+}
 
 module.exports = {
   secToHHMMSS,
@@ -69,4 +77,5 @@ module.exports = {
   GenNumRandom,
   htmlToText,
   millisToDate,
+  validExts,
 };
