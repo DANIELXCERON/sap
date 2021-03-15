@@ -114,8 +114,18 @@ const readLog = async (path, elementgrid) => {
   const res = await fetch(path);
   const contentLog = await res.text();
   const dataset = new dhx.DataCollection().parse(JSON.parse("[" + contentLog.slice(0, -1) + "]"))
-  elementgrid.data.add(dataset)
-
+  const arrayData = dataset.map(item => {
+    const items = {
+      fecha: item.fecha,
+      hora: item.hora,
+      duracion: item.duracion,
+      ref: item.ref,
+      nombre: item.nombre.replace(/,/g, ''),
+      id: item.id,
+    }
+    return items
+  })
+  elementgrid.data.add(arrayData)
 }
 
 // log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
