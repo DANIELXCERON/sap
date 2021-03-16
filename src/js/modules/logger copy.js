@@ -17,18 +17,13 @@ checkCreateDir(dirSap)
 checkCreateDir(dirLog)
 
 const checkFile = () => {
-  pathFile = dirLog + `\\${getTime.gT("DateLog")}.csv`
+  pathFile = dirLog + `\\${getTime.gT("DateLog")}.log`
   if (!fs.existsSync(pathFile)) {// si no existe el archivo
     f = "w" // escribir
-    log_file = fs.createWriteStream(pathFile, { flags: f });
-    log_file.write(util.format(
-      `fecha,Hora,duracion,ref,nombre,id\n`
-      ));
   } else {
     f = "a" // agregar
-    log_file = fs.createWriteStream(pathFile, { flags: f });
   }
-
+  log_file = fs.createWriteStream(pathFile, { flags: f });
 }
 
 const write = data => {
@@ -38,10 +33,7 @@ const write = data => {
     r = data.ref,
     id = `u${Date.now()}`,
     p = filename(data.path)
-  log_file.write(
-    util.format(
-      `${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${d},${r},${n.replace(/,/g, '')},${id}\n`
-      ));
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","duracion":"${d}","ref":"${r}","nombre":"${n}","id":"${id}"},`));
 
   if (data.screenshot) {
     /**Crear carpeta screenshot*/
@@ -74,16 +66,12 @@ const writeEventsLog = (data, n) => {
   checkFile()
   var p = data.path,
     r = data.ref
-  log_file.write(util.format(
-    `{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"${r}","nombre":"${n}","info":"${p}"},`
-    ));
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"${r}","nombre":"${n}","info":"${p}"},`));
 }
 
 const writeControlPlayerLog = (n, i) => {
   checkFile()
-  log_file.write(util.format(
-    `{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"Control","nombre":"${n}","info":"${i}"},`
-    ));
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"Control","nombre":"${n}","info":"${i}"},`));
 }
 
 const writeGCLog = datosGC => {
@@ -101,9 +89,7 @@ const writeGCLog = datosGC => {
   html = html.replace(/<br\s*[\/]?>/gi, s);
   html = html.replace(/<[^>]+>/ig, '');
 
-  log_file.write(util.format(
-    `{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"GC","nombre":"Generador de caracteres","info":"${html}"},`
-    ));
+  log_file.write(util.format(`{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"GC","nombre":"Generador de caracteres","info":"${html}"},`));
 }
 
 
@@ -111,7 +97,8 @@ const loadDir = elementgrid => {
   elementgrid.data.removeAll()
   fs.readdir(dirLog, (err, files) => {
     files.map(file => {
-      if (nTF.validExts(file, ["csv"])) {
+
+      if (nTF.validExts(file, ["log"])) {
         elementgrid.data.add({
           filelog: file.slice(0, -4).replace(/-/g, "/"),
           path: dirLog + "\\" + file,
@@ -122,6 +109,7 @@ const loadDir = elementgrid => {
 }
 
 const readLog = async (path, elementgrid) => {
+
   const res = await fetch(path);
   const contentLog = await res.text();
   const dataset = new dhx.DataCollection().parse(JSON.parse("[" + contentLog.slice(0, -1) + "]"))
@@ -131,7 +119,7 @@ const readLog = async (path, elementgrid) => {
       hora: item.hora,
       duracion: item.duracion,
       ref: item.ref,
-      nombre: item.nombre.replace(/,/g, ''),//eliminar comas
+      nombre: item.nombre.replace(/,/g, ''),
       id: item.id,
     }
     return items
@@ -142,9 +130,12 @@ const readLog = async (path, elementgrid) => {
   sessionStorage.setItem("List_Pages", JSON.stringify(ListPages))
   sessionStorage.setItem("current_page_logger_view", 0)
 
+
+
   elementgrid.data.removeAll()
   elementgrid.data.parse(arrayData)
   // elementgrid.data.parse(ListPages[0].list)
+
 
   document.querySelector("#grid_log_count").innerHTML = `1 / ${ListPages.length}`
 }
@@ -174,7 +165,7 @@ const limit = arrayData => {
 
 }
 
-
+// log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
 
 module.exports = {
   write,
