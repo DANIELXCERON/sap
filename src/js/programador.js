@@ -8,9 +8,7 @@ const grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
             width: 100,
             id: "duration",
             header: [{ text: "Duración" }],
-            template: function (text, row, col) {
-                return `<span>${nTF.secToHHMMSS(text)}</span>`;
-            },
+            template: (text, row, col) => `<span>${nTF.secToHHMMSS(text)}</span>`,
         },
         { width: 100, id: "trueRandom", header: [{ text: "Random" }] },
         { width: 100, id: "playTime", header: [{ text: "Hora" }] },
@@ -18,9 +16,9 @@ const grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
             width: 200,
             id: "playDay",
             header: [{ text: "Dias" }],
-            template: function (text, row, col) {
+            template: (text, row, col) => {
                 var dia = ``;
-                text.forEach((day) => {
+                text.forEach(day => {
                     dia += ` [${day}] `;
                 });
                 return `<span>${dia}</span>`;
@@ -30,9 +28,9 @@ const grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
             width: 200,
             id: "playMonths",
             header: [{ text: "Meses" }],
-            template: function (text, row, col) {
+            template: (text, row, col) => {
                 var meses = ``;
-                text.forEach((months) => {
+                text.forEach(months => {
                     meses += ` [${months}] `;
                 });
                 return `<span>${meses}</span>`;
@@ -44,7 +42,7 @@ const grid_scheduler_list = new dhx.Grid("grid_scheduler_list_container", {
     rowHeight: 25,
     headerRowHeight: 25,
     height: 377,
-    rowCss: function (row) { return row.custom; },
+    rowCss: row => row.custom,
     htmlEnable: true,
     dragMode: "both",
     dragCopy: false,
@@ -103,7 +101,7 @@ save_btn_scheluder_list.addEventListener("click", () => {
     dialog.showSaveDialog(null, options).then((result) => {
         var dataSchedulerList = JSON.stringify(grid_scheduler_list.data._order);
         if (!result.canceled) {
-            fs.writeFile(result.filePath.toString(), dataSchedulerList, function (err) {
+            fs.writeFile(result.filePath.toString(), dataSchedulerList, err => {
                 if (err) throw err;
                 iziToast.show({
                     title: "Lista guardada con exito",
@@ -117,7 +115,7 @@ save_btn_scheluder_list.addEventListener("click", () => {
     });
 });
 /** Boton de eliminar item */
-remove_btn_scheluder_list.addEventListener("click", function () {
+remove_btn_scheluder_list.addEventListener("click", () => {
     var cell = grid_scheduler_list.selection.getCell();
     if (cell.row) {
         grid_scheduler_list.data.remove(cell.row.id);
@@ -188,7 +186,7 @@ const form_scheduler_list = new dhx.Form("form_scheduler_list_container", {
     ],
 });
 
-grid_scheduler_list.events.on("CellDblClick", function (cell, e) {
+grid_scheduler_list.events.on("CellDblClick", (cell, e) => {
     loadListQueue(cell)
 });
 
@@ -328,7 +326,7 @@ const grid_scheduler_event = new dhx.Grid("grid_event_container", {
             width: 45,
             id: "type",
             header: [{ text: "Tipo" }],
-            template: function (text, row, col) {
+            template: (text, row, col) => {
                 switch (text) {
                     case "datos:gc":
                         return `<img src="./img/filetype/sgc.png" height="20">`;
@@ -354,7 +352,7 @@ const grid_scheduler_event = new dhx.Grid("grid_event_container", {
             width: 300,
             id: "playDateRange",
             header: [{ text: "Rango de fechas" }],
-            template: function (text, row, col) {
+            template: (text, row, col) => {
                 if (text[0] === text[1]) {
                     return `${text[0]}`;
                 } else {
@@ -366,7 +364,7 @@ const grid_scheduler_event = new dhx.Grid("grid_event_container", {
             width: 200,
             id: "playDay",
             header: [{ text: "Dias" }],
-            template: function (text, row, col) {
+            template: (text, row, col) => {
                 var dia = ``;
                 text.forEach((day) => {
                     dia += ` [${day}] `;
@@ -379,9 +377,7 @@ const grid_scheduler_event = new dhx.Grid("grid_event_container", {
     rowHeight: 25,
     headerRowHeight: 25,
     height: 454,
-    rowCss: function (row) {
-        return row.custom;
-    },
+    rowCss: row => row.custom,
     htmlEnable: true,
     dragMode: "both",
     dragCopy: false,
@@ -429,9 +425,7 @@ save_btn_scheluder_event.addEventListener("click", () => {
         .then((result) => {
             var dataFilePlayList = JSON.stringify(grid_scheduler_event.data._order);
             if (!result.canceled) {
-                fs.writeFile(result.filePath.toString(), dataFilePlayList, function (
-                    err
-                ) {
+                fs.writeFile(result.filePath.toString(), dataFilePlayList, (err) => {
                     if (err) throw err;
                     console.log("Lista de programacion guardada");
                 });
@@ -442,7 +436,7 @@ save_btn_scheluder_event.addEventListener("click", () => {
         });
 });
 /** Boton de eliminar item */
-remove_btn_scheluder_event.addEventListener("click", function () {
+remove_btn_scheluder_event.addEventListener("click", () => {
     var cell = grid_scheduler_event.selection.getCell();
     if (cell.row) {
         grid_scheduler_event.data.remove(cell.row.id);
@@ -554,7 +548,7 @@ var form_scheduler_events = new dhx.Form("form_container", {
     ],
 });
 
-grid_scheduler_event.events.on("CellDblClick", function (cell, e) {
+grid_scheduler_event.events.on("CellDblClick", (cell, e) => {
     if (cell.instant) {
         ejecuteInstant(cell);
     } else {
@@ -809,7 +803,7 @@ const drop_scheduler_event = e => {
 
                     let v = document.createElement('video')
                     v.setAttribute('src', file.path)
-                    v.onloadeddata = function (e) {
+                    v.onloadeddata = e => {
                         const { videoHeight, videoWidth, duration } = e.srcElement
 
                         var validDateRange;
@@ -844,7 +838,7 @@ const drop_scheduler_event = e => {
 
                     let v = document.createElement('video')
                     v.setAttribute('src', file.path)
-                    v.onloadeddata = function (e) {
+                    v.onloadeddata = e => {
                         const { videoHeight, videoWidth, duration } = e.srcElement
 
                         var validDateRange;
@@ -935,7 +929,7 @@ const grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
             width: 300,
             id: "playDateRange",
             header: [{ text: "Fecha" }],
-            template: function (text, row, col) {
+            template: (text, row, col) => {
                 if (text[0] === text[1]) {
                     return `${text[0]}`;
                 } else {
@@ -947,9 +941,7 @@ const grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
             width: 100,
             id: "duration",
             header: [{ text: "Duración" }],
-            template: function (text, row, col) {
-                return `<span>${nTF.secToHHMMSS(text)}</span>`;
-            },
+            template: (text, row, col) => `<span>${nTF.secToHHMMSS(text)}</span>`,
         },
         { width: 150, id: "path", header: [{ text: "Ruta" }] },
     ],
@@ -957,9 +949,7 @@ const grid_scheduler_ad = new dhx.Grid("grid_ad_container", {
     rowHeight: 25,
     headerRowHeight: 25,
     height: 377,
-    rowCss: function (row) {
-        return row.custom;
-    },
+    rowCss: row => row.custom,
     htmlEnable: true,
     dragMode: "both",
     dragCopy: false,
@@ -1010,9 +1000,7 @@ save_btn_scheluder_ad.addEventListener("click", () => {
         .then((result) => {
             var dataFilePlayList = JSON.stringify(grid_scheduler_ad.data._order);
             if (!result.canceled) {
-                fs.writeFile(result.filePath.toString(), dataFilePlayList, function (
-                    err
-                ) {
+                fs.writeFile(result.filePath.toString(), dataFilePlayList, err => {
                     if (err) throw err;
                     console.log("Lista de programacion guardada");
                 });
@@ -1023,7 +1011,7 @@ save_btn_scheluder_ad.addEventListener("click", () => {
         });
 });
 /** Boton de eliminar item */
-remove_btn_scheluder_ad.addEventListener("click", function () {
+remove_btn_scheluder_ad.addEventListener("click", () => {
     var cell = grid_scheduler_ad.selection.getCell();
     if (cell.row) {
         grid_scheduler_ad.data.remove(cell.row.id);
@@ -1085,7 +1073,7 @@ const form_ad = new dhx.Form("form_ad_container", {
     },
     ],
 });
-grid_scheduler_ad.events.on("CellDblClick", function (cell, e) {
+grid_scheduler_ad.events.on("CellDblClick", (cell, e) => {
     loadListAd(cell)
 });
 
@@ -1514,24 +1502,16 @@ const loadFileSLST = path => {
         .then(res => res.json())
         .then(content => {
             /**si hay datos en la lista borrarlos primero */
-            if (grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0) {
-                grid_scheduler_list.data.removeAll()
-            }
-            if (grid_scheduler_event.data._order && grid_scheduler_event.data._order.length > 0) {
-                grid_scheduler_event.data.removeAll()
-            }
-            if (grid_scheduler_ad.data._order && grid_scheduler_ad.data._order.length > 0) {
-                grid_scheduler_ad.data.removeAll()
-            }
-            if (dataview_graphics.data._order && dataview_graphics.data._order.length > 0) {
-                dataview_graphics.data.removeAll()
-            }
+            grid_scheduler_list.data._order && grid_scheduler_list.data._order.length > 0 ? grid_scheduler_list.data.removeAll() : null
+            grid_scheduler_event.data._order && grid_scheduler_event.data._order.length > 0 ? grid_scheduler_event.data.removeAll() : null
+            grid_scheduler_ad.data._order && grid_scheduler_ad.data._order.length > 0 ? grid_scheduler_ad.data.removeAll() : null
+            dataview_graphics.data._order && dataview_graphics.data._order.length > 0 ? dataview_graphics.data.removeAll() : null
+
             /**luego carga los nuevos datos */
             grid_scheduler_list.data.parse(content.list_path);
-            grid_scheduler_event.data.add(content.event_path);
-            grid_scheduler_ad.data.add(content.ad_path);
+            grid_scheduler_event.data.parse(content.event_path);
+            grid_scheduler_ad.data.parse(content.ad_path);
             dataview_graphics.data.parse(content.graphics_path);
-            // dataview_graphics.data.add(content.graphics_path);
         });
 }
 
