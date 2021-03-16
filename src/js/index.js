@@ -135,9 +135,7 @@ window.addEventListener("load", () => {
     });
     grid_queue.addRowCss(id, "bg_id_Current");
     //auto scroll a último item reproducido
-    setTimeout(function () {
-      grid_queue.scrollTo(id, "namefile");
-    }, 200);
+    setTimeout(() => grid_queue.scrollTo(id, "namefile"), 200);
 
     // ipcRenderer.send("datos:stream", {
     //   ref: "file-video",
@@ -272,7 +270,7 @@ var formLive = new dhx.Form("formLive", {
 /** entrada para setear la escala en live stream de facebook
  * cuando la orientación del video es vertical
  */
-formLive.getItem("scale").events.on("change", function () {
+formLive.getItem("scale").events.on("change", () => {
   const datosStream = {
     ref: "SetAspectRatioForFacebook",
     numberAspectRatio: arguments[0][0],
@@ -304,28 +302,19 @@ const grid_queue = new dhx.Grid("grid_queue_container", {
       width: 100,
       id: "duration",
       header: [{ text: "Duración" }],
-      template: function (text, row, col) {
-        return `
-        <span class='item_2'> <i class="fad fa-clock"></i> ${nTF.secToHHMMSS(text)}</span>`;
-      },
+      template: (text, row, col) => `<span class='item_2'> <i class="fad fa-clock"></i> ${nTF.secToHHMMSS(text)}</span>`,
     },
     {
       width: 100,
       id: "ref",
       header: [{ text: "Tipo" }],
-      template: function (text, row, col) {
-        return `<i class="fas fa-${text}"></i> ${text}`;
-      },
+      template: (text, row, col) => `<i class="fas fa-${text}"></i> ${text}`,
     },
     {
       width: 100,
       id: "in",
       header: [{ text: "Iniciar" }],
-      template: function (text, row, col) {
-        return `<span class='item_2'><i class="fas fa-forward"></i> ${nTF.secToHHMMSS(
-          text
-        )}</span>`;
-      },
+      template: (text, row, col) => `<span class='item_2'><i class="fas fa-forward"></i> ${nTF.secToHHMMSS(text)}</span>`,
     },
     { width: 200, id: "path", header: [{ text: "Ruta" }] },
   ],
@@ -333,7 +322,7 @@ const grid_queue = new dhx.Grid("grid_queue_container", {
   headerRowHeight: 25,
   // width: 492,
   height: 400,
-  rowCss: function (row) { return row.custom ? row.custom : "bg_id_Block" },
+  rowCss: row => row.custom ? row.custom : "bg_id_Block",
   htmlEnable: true,
   dragMode: "both",
   dragCopy: false,
@@ -398,17 +387,14 @@ grid_save_btn.addEventListener("click", () => {
     .then((result) => {
       var dataFilePlayList = JSON.stringify(grid_queue.data._order);
       if (!result.canceled) {
-        fs.writeFile(
-          result.filePath.toString(),
-          dataFilePlayList,
-          function (err) {
-            if (err) throw err;
-            iziToast.show({
-              title: "PlayList Grid Guardada",
-              message: "",
-              color: "green", // blue, red, green, yellow
-            });
-          }
+        fs.writeFile(result.filePath.toString(), dataFilePlayList, (err) => {
+          if (err) throw err;
+          iziToast.show({
+            title: "PlayList Grid Guardada",
+            message: "",
+            color: "green", // blue, red, green, yellow
+          });
+        }
         );
       }
     })
@@ -417,7 +403,7 @@ grid_save_btn.addEventListener("click", () => {
     });
 });
 /** Boton de eliminar item */
-grid_remove_btn.addEventListener("click", function () {
+grid_remove_btn.addEventListener("click", () => {
   var cell = grid_queue.selection.getCell();
   if (cell.row) {
     grid_queue.data.remove(cell.row.id);
@@ -426,7 +412,7 @@ grid_remove_btn.addEventListener("click", function () {
 /** END Controles de la lista */
 
 /** ver duracion de la grilla */
-grid_queue.events.on("CellMouseOver", function (row, column, e) {
+grid_queue.events.on("CellMouseOver", (row, column, e) => {
   let duration = 0;
   let numElements = grid_queue.data._order.length;
   grid_queue.data._order.forEach((element) => {
@@ -440,7 +426,7 @@ grid_queue.events.on("CellMouseOver", function (row, column, e) {
 });
 
 /** al hacer doble click en un item */
-grid_queue.events.on("CellDblClick", function (cell, e) {
+grid_queue.events.on("CellDblClick", (cell, e) => {
   /** remover css de todos */
   grid_queue.data._order.forEach((row) => {
     grid_queue.removeRowCss(row.id, "bg_id_Next");
@@ -542,7 +528,7 @@ const dropHandler = (e) => {
       let file = e.dataTransfer.items[i].getAsFile();
 
       ffprobe(file.path, { path: ffprobeStatic.path })
-        .then(function (info) {
+        .then(info => {
           grid_queue.data.add(
             {
               namefile: filename(file.path),
@@ -554,7 +540,7 @@ const dropHandler = (e) => {
             },
             getIndexAddGrid(grid_queue)
           );
-        }).catch(function (err) {
+        }).catch(err => {
           console.error(err);
         });
     }
@@ -584,29 +570,19 @@ const grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
       width: 100,
       id: "duration",
       header: [{ text: "Duración" }],
-      template: function (text, row, col) {
-        return `<span class='item_2'> <i class="fad fa-clock"></i> ${nTF.secToHHMMSS(
-          text
-        )}</span>`;
-      },
+      template: (text, row, col) => `<span class='item_2'> <i class="fad fa-clock"></i> ${nTF.secToHHMMSS(text)}</span>`,
     },
     {
       width: 100,
       id: "ref",
       header: [{ text: "Tipo" }],
-      template: function (text, row, col) {
-        return `<i class="fas fa-${text}"></i> ${text}`;
-      },
+      template: (text, row, col) => `<i class="fas fa-${text}"></i> ${text}`,
     },
     {
       width: 100,
       id: "in",
       header: [{ text: "Iniciar" }],
-      template: function (text, row, col) {
-        return `<span class='item_2'><i class="fas fa-forward"></i> ${nTF.secToHHMMSS(
-          text
-        )}</span>`;
-      },
+      template: (text, row, col) => `<span class='item_2'><i class="fas fa-forward"></i> ${nTF.secToHHMMSS(text)}</span>`,
     },
     { width: 200, id: "path", header: [{ text: "Ruta" }] },
   ],
@@ -614,9 +590,7 @@ const grid_ad_queue = new dhx.Grid("grid_queue_ad_container", {
   headerRowHeight: 25,
   // width: 500,
   height: 400,
-  rowCss: function (row) {
-    return row.custom;
-  },
+  rowCss: row => row.custom,
   htmlEnable: true,
   dragMode: "both",
   dragCopy: false,
@@ -759,47 +733,45 @@ abrirArchivo.addEventListener("click", () => {
       },
       { name: "Todos", extensions: ["*"] },
     ],
-  }).then((result) => {
+  })
+    .then(result => {
 
-    var filepath = result.filePaths[0];
+      var filepath = result.filePaths[0];
 
-    ffprobe(filepath, { path: ffprobeStatic.path }).then(function (info) {
+      ffprobe(filepath, { path: ffprobeStatic.path })
+        .then(info => {
 
-      let v = document.createElement('video')
-      v.setAttribute('src', filepath)
-      v.onloadeddata = function (e) {
-        const { videoHeight, videoWidth, duration } = e.srcElement
+          let v = document.createElement('video')
+          v.setAttribute('src', filepath)
+          v.onloadeddata = e => {
+            const { videoHeight, videoWidth, duration } = e.srcElement
 
-        dataview_graphics.data.add({
-          namefile: filename(filepath),
-          codec: info.streams[0].codec_long_name,
-          path: filepath,
-          duration,
+            dataview_graphics.data.add({
+              namefile: filename(filepath),
+              codec: info.streams[0].codec_long_name,
+              path: filepath,
+              duration,
+            });
+          }
+        }).catch(err => {
+          console.error(err);
         });
-
-      }
-
-
-    }).catch(function (err) {
-      console.error(err);
+    }).catch(err => {
+      console.log(err);
     });
-
-  }).catch((err) => {
-    console.log(err);
-  });
 });
 
 ////////////////////////////// GRAPHIC LIST END ////////////////////////////////////////
 
 /** funcion para extraer nombre del archivo de una ruta */
-const filename = (rutaAbsoluta) => {
+const filename = rutaAbsoluta => {
   var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
   var nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
   //.replace(/^.*[\\\/]/, "")
   return nombreArchivo;
 }
 /**Obtiene el index para agregar de ultimo un elemento */
-const getIndexAddGrid = (grid) => {
+const getIndexAddGrid = grid => {
   if (grid.data._order) {
     return grid.data._order.length;
   } else {
@@ -857,7 +829,7 @@ const changeTheme = (newTheme) => {
 //Opciones de tema a la configuración
 var themes = ['acri', 'dark', 'rachni'];
 
-$.each(themes, function (i) {
+$.each(themes, i => {
   var $selected = '';
 
   if (themes[i] == theme) {
@@ -904,9 +876,7 @@ const grid_log_dir = new dhx.Grid("grid_log_dir_container", {
 });
 
 logger.loadDir(grid_log_dir)
-grid_log_dir.events.on("CellClick", function (row, column, e) {
-  logger.readLog(row.path, grid_log_view)
-});
+grid_log_dir.events.on("CellClick", (row, column, e) => logger.readLog(row.path, grid_log_view));
 
 const grid_log_view = new dhx.Grid("grid_log_view_container", {
   css: "my_grid_css",
