@@ -25,7 +25,7 @@ const RelojDOM = document.querySelector("#clock");
 // alto = sizeDom.getBoundingClientRect().height,
 // videoSizeStyle = "width: " + ancho + "px;" + "height: " + alto + "px;"
 
-// function reportWindowSize() {
+// const reportWindowSize = () => {
 
 //   vPLuno.style.cssText = videoSizeStyle
 //   vPLdos.style.cssText = videoSizeStyle
@@ -42,7 +42,7 @@ const loadConfig = () => {
   try {
 
     // Cargar ultimo video
-    if(localStorage.getItem("DataVideoCurrent")){
+    if (localStorage.getItem("DataVideoCurrent")) {
       var data = JSON.parse(localStorage.getItem("DataVideoCurrent"))
       vPLuno.src = data.srcVideoCurrent;
       vPLuno.currentTime = data.TiempoTranscurrido + 0.390;
@@ -64,9 +64,7 @@ const loadConfig = () => {
 
 
   } catch (error) { // si hay error volver a cargar
-    setTimeout(function () {
-      loadConfig();
-    }, 1000);
+    setTimeout(() => loadConfig(), 1000)
   }
 }
 loadConfig();
@@ -82,7 +80,7 @@ vPLuno.onplay = (event) => {
 vPLuno.onended = (event) => {
   localStorage.setItem("playerStatus", "onended");
 };
-vPLuno.onerror = function (event) {
+vPLuno.onerror = (event) => {
   localStorage.setItem("playerStatus", "error");
 };
 
@@ -97,12 +95,12 @@ vPLdos.onplay = (event) => {
 vPLdos.onended = (event) => {
   localStorage.setItem("playerStatus2", "onended");
 };
-vPLdos.onerror = function (event) {
+vPLdos.onerror = (event) => {
   localStorage.setItem("playerStatus2", "error");
 };
 
 // obtener datos del video 1 actual cada vez que cambia el tiempo del video
-vPLuno.ontimeupdate = function () {
+vPLuno.ontimeupdate = () => {
   if (vPLuno.readyState == 4) {
     //si hay video diponiple para reproducir
     const videoActualTime = {
@@ -154,7 +152,7 @@ ipcRenderer.on("datos:gc", (e, datosGC) => {
     "animation-duration:" +
     Math.floor(
       (5 * (body.clientWidth + GCText.clientWidth)) /
-        (parseInt(localStorage.getItem("SpeedGC")) * 100)
+      (parseInt(localStorage.getItem("SpeedGC")) * 100)
     ) +
     "s;";
 
@@ -173,8 +171,8 @@ var s
 //datos stream ipc render
 ipcRenderer.on("datos:stream", (e, data) => {
   s = data.ref
-  if (s === "livestream" || s === "anyone" || s === "facebook" || s === "youtube"){
-    logger.writeEventsLog(data,"Transmisión en vivo")
+  if (s === "livestream" || s === "anyone" || s === "facebook" || s === "youtube") {
+    logger.writeEventsLog(data, "Transmisión en vivo")
   }
   switch (data.ref) {
     case "livestream":
@@ -217,7 +215,7 @@ ipcRenderer.on("datos:stream", (e, data) => {
       `;
       break;
     case "file-video": //video local 1
-    logger.write(data)
+      logger.write(data)
       marcoVideoWebview.innerHTML = ``;
       vPLuno.src = data.path;
       vPLuno.currentTime = data.in;
@@ -279,7 +277,7 @@ ipcRenderer.on("datos:stream", (e, data) => {
       //cuando webview este listo, pausar video local y ocultarlo
       vPLuno.pause();
       vPLuno.style.cssText = "display: none;"
-      if(s==="facebook"){
+      if (s === "facebook") {
         webview.style.marginTop = "43px";
       };
       //transition
