@@ -16,12 +16,12 @@ const nTF = require("./nice-time-format");
 
 const startClock = (format, contHTML) => {
   if (format.length > 1) {
-    format.forEach(function (item, i, array) {
+    format.forEach((item, i, array) => {
       if (format.length > i) {
         contHTML.innerHTML = "";
       }
     });
-    format.forEach(function (item, i, array) {
+    format.forEach((item, i, array) => {
       contHTML.innerHTML += " " + gT(item) + " ";
     });
   } else {
@@ -29,9 +29,7 @@ const startClock = (format, contHTML) => {
     contHTML.innerHTML = htmlget;
   }
 
-  setTimeout(function () {
-    startClock(format, contHTML);
-  }, 1000);
+  setTimeout(() => startClock(format, contHTML), 1000);
 }
 
 const gT = (Iwant, CurrentTime = new Date()) => {

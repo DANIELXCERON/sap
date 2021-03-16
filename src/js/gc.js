@@ -52,17 +52,14 @@ ipcRenderer.on("saveGC", () => {
     };
 
     var fileGcContent = JSON.stringify(datosGC);
-    fs.writeFile(
-      sessionStorage.getItem("sgc-path"),
-      fileGcContent,
-      function (err) {
-        if (err) throw err;
-        iziToast.show({
-          title: "GC guardado con exito",
-          message: "",
-          color: "green", // blue, red, green, yellow
-        });
-      }
+    fs.writeFile(sessionStorage.getItem("sgc-path"), fileGcContent, err => {
+      if (err) throw err;
+      iziToast.show({
+        title: "GC guardado con exito",
+        message: "",
+        color: "green", // blue, red, green, yellow
+      });
+    }
     );
   } else {
     saveAsGC();
@@ -94,7 +91,7 @@ const saveAsGC = () => {
       /**se guarda la ruta del archivo sgc guardado */
       sessionStorage.setItem("sgc-path", result.filePath.toString());
 
-      fs.writeFile(result.filePath.toString(), fileGcContent, function (err) {
+      fs.writeFile(result.filePath.toString(), fileGcContent, err => {
         if (err) throw err;
         iziToast.show({
           title: "GC guardado con exito",
@@ -156,7 +153,7 @@ const formGC = new dhx.Form("formGC", {
 // setear input de velocidad al guardar en localStorage
 formGC.setValue({ "speed": parseInt(localStorage.getItem("SpeedGC")) });
 // cada vez que se hace un cambio
-formGC.getItem("speed").events.on("change", function () {
+formGC.getItem("speed").events.on("change", () => {
   // guardar ese cambio
   localStorage.setItem("SpeedGC", arguments[0][0]);
 });
@@ -186,7 +183,7 @@ richtext.toolbar.data.add({
   id: "Preview"
 }, 3);
 
-richtext.toolbar.events.on("click", function (id) {
+richtext.toolbar.events.on("click", id => {
   if (id === "play") {
     const datosGC = {
       textoGC: `<spam class="${formGC.getValue().css}">${richtext.getValue('html')}</spam>`,
