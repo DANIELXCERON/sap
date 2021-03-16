@@ -71,31 +71,31 @@ loadConfig();
 
 //guardar estado del reproductor 1
 localStorage.setItem("playerStatus", "onpause"); // al iniciar indicar que esta en pausa
-vPLuno.onpause = (event) => {
+vPLuno.onpause = () => {
   localStorage.setItem("playerStatus", "onpause");
 };
-vPLuno.onplay = (event) => {
+vPLuno.onplay = () => {
   localStorage.setItem("playerStatus", "onplay");
 };
-vPLuno.onended = (event) => {
+vPLuno.onended = () => {
   localStorage.setItem("playerStatus", "onended");
 };
-vPLuno.onerror = (event) => {
+vPLuno.onerror = () => {
   localStorage.setItem("playerStatus", "error");
 };
 
 //guardar estado del reproductor 2
 localStorage.setItem("playerStatus2", "onpause"); // al iniciar indicar que esta en pausa
-vPLdos.onpause = (event) => {
+vPLdos.onpause = () => {
   localStorage.setItem("playerStatus2", "onpause");
 };
-vPLdos.onplay = (event) => {
+vPLdos.onplay = () => {
   localStorage.setItem("playerStatus2", "onplay");
 };
-vPLdos.onended = (event) => {
+vPLdos.onended = () => {
   localStorage.setItem("playerStatus2", "onended");
 };
-vPLdos.onerror = (event) => {
+vPLdos.onerror = () => {
   localStorage.setItem("playerStatus2", "error");
 };
 
@@ -117,7 +117,7 @@ vPLuno.ontimeupdate = () => {
   }
 };
 // obtener datos del video 2 actual cada vez que cambia el tiempo del video
-vPLdos.ontimeupdate = function () {
+vPLdos.ontimeupdate = () => {
   if (vPLdos.readyState == 4) {
     //si hay video diponiple para reproducir
     const videoActualTime = {
