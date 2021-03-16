@@ -141,7 +141,7 @@ const readLog = async (path, elementgrid) => {
 
 const limit = arrayData => {
   let ini = 0
-  let limit = 500
+  let limit = 1000
   let end = limit
 
   const divi = arrayData.length / limit
