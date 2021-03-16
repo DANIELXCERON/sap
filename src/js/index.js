@@ -179,7 +179,7 @@ const initHiden = () => {
 }
 
 const resetHiden = () => {
-ViewGraSwitch.checked ? (
+  ViewGraSwitch.checked ? (
     MostrarG(), localStorage.setItem("ViewGraSwitch", "HiddenGraphics")
   ) : (
     OcultarG(), localStorage.removeItem("ViewGraSwitch")
@@ -928,4 +928,39 @@ const grid_log_view = new dhx.Grid("grid_log_view_container", {
   selection: "row",
   resizable: true,
 });
+
+const gridLogPreviousPage = document.querySelector("#grid_log_previous_page_btn");
+const gridLogNextPage = document.querySelector("#grid_log_next_page_btn");
+const gridLogCount = document.querySelector("#grid_log_count");
+
+gridLogPreviousPage.addEventListener("click", () => {
+  naviPage("previous")
+});
+
+gridLogNextPage.addEventListener("click", () => {
+  naviPage("next")
+});
+
+const naviPage = (c) => {
+  const length = parseInt(sessionStorage.getItem("Numbers_pages_logger_view"))
+  const index = parseInt(sessionStorage.getItem("current_page_logger_view"))
+  const ListPages = JSON.parse(sessionStorage.getItem("List_Pages"))
+
+  console.log(index + 1 < length && index > 0)
+
+  if (index + 1 < length && index > 0) {
+
+  }
+  grid_log_view.data.removeAll()
+  if (c === "next") {
+    grid_log_view.data.add(ListPages[index + 1].list)
+    sessionStorage.setItem("current_page_logger_view", index + 1)
+
+  }
+  if (c === "previous") {
+    grid_log_view.data.add(ListPages[index - 1].list)
+    sessionStorage.setItem("current_page_logger_view", index - 1)
+  }
+  gridLogCount.innerHTML = `${parseInt(sessionStorage.getItem("current_page_logger_view")) + 1} / ${length}`
+}
 ////////////////////////////// End logger list viewer ///////////////////////////////////////////////
