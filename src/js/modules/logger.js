@@ -134,11 +134,11 @@ const readLog = async (path, elementgrid) => {
 }
 
 const limit = (arrayData, elementgrid) => {
-  let limit = 5
+  let limit = 100
   let end = limit
   for (let ini = 0; end < arrayData.length; end += limit) {
-    console.log(arrayData.slice(ini, end))
-    // elementgrid.data.add(arrayData.slice(ini, end))
+    // console.log(arrayData.slice(ini, end))
+    elementgrid.data.add(arrayData.slice(ini, end))
     ini = end
   }
 }
