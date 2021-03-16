@@ -133,7 +133,8 @@ const readLog = async (path, elementgrid) => {
 
 
   elementgrid.data.removeAll()
-  elementgrid.data.add(ListPages[0].list)
+  elementgrid.data.parse(arrayData)
+  // elementgrid.data.parse(ListPages[0].list)
 
 
   document.querySelector("#grid_log_count").innerHTML = `1 / ${ListPages.length}`

@@ -612,7 +612,7 @@ const ejecute_scheduler_event = () => {
     }
 }
 
-const ejecuteAdd = (item) => {
+const ejecuteAdd = item => {
     console.log(item)
     switch (item.type) {
         case 'datos:stream':
@@ -635,7 +635,7 @@ const ejecuteAdd = (item) => {
     }
 }
 
-const ejecuteInstant = (item) => {
+const ejecuteInstant = item => {
     switch (item.type) {
         case "datos:stream":
             const NextVideo = {
@@ -680,7 +680,7 @@ const ejecuteInstant = (item) => {
 }
 
 /**cargar item de la lista en cola (Programas) */
-const loadListProgram = (item) => {
+const loadListProgram = item => {
     /** obtener datos de la lista al cargar */
     fetch(item.path)
         .then(res => res.json())
@@ -759,8 +759,8 @@ const loadListProgram = (item) => {
 }
 
 /**Drop & Drag Files */
-const drop_scheduler_event = (ev) => {
-    ev.preventDefault();
+const drop_scheduler_event = e => {
+    e.preventDefault();
     const formData = form_scheduler_events.getValue();
     // validar datos del formulario
     if (!formData.playDateRange) {
@@ -772,10 +772,10 @@ const drop_scheduler_event = (ev) => {
         return
     }
     // Utilice la interfaz DataTransferItemList para acceder a los archivos
-    for (var i = 0; i < ev.dataTransfer.items.length; i++) {
+    for (var i = 0; i < e.dataTransfer.items.length; i++) {
         // Si los elementos caídos no son archivos, rechácelos
-        if (ev.dataTransfer.items[i].kind === "file") {
-            let file = ev.dataTransfer.items[i].getAsFile();
+        if (e.dataTransfer.items[i].kind === "file") {
+            let file = e.dataTransfer.items[i].getAsFile();
             // si la extencion es
             if (nTF.validExts(file.name, ["sgc"])) { // generador de caracteres
                 if (formData.playDateRange !== "") {
@@ -911,15 +911,15 @@ const drop_scheduler_event = (ev) => {
         }
     }
     // para la limpieza
-    if (ev.dataTransfer.items) {
+    if (e.dataTransfer.items) {
         // Utilice la interfaz DataTransferItemList para eliminar los datos de arrastre
-        ev.dataTransfer.items.clear();
+        e.dataTransfer.items.clear();
     } else {
         // Utilice la interfaz DataTransfer para eliminar los datos de arrastre
-        ev.dataTransfer.clearData();
+        e.dataTransfer.clearData();
     }
 }
-const drag_scheduler_event = (ev) => ev.preventDefault()
+const drag_scheduler_event = e => e.preventDefault()
 /** Drop & Drag Files, Ends*/
 ///////////////////////////////////////// * END EVENTS * //////////////////////////////////////////////////
 
@@ -1123,7 +1123,7 @@ const ejecute_scheduler_ad = () => {
 }
 
 /**cargar AD */
-const loadListAd = (item) => {
+const loadListAd = item => {
     /** obtener datos de la lista al cargar */
     fetch(item.path)
         .then(res => res.json())
@@ -1167,7 +1167,7 @@ const loadGraphics = (ref, url) => {
 }
 
 /**Drop & Drag Files */
-const drop_scheduler_ad = (e) => {
+const drop_scheduler_ad = e => {
     e.preventDefault();
     const formData = form_ad.getValue();
     if (!formData.playDateRange) {
@@ -1254,7 +1254,7 @@ const drop_scheduler_ad = (e) => {
     }
 }
 
-const drag_scheduler_ad = (e) => e.preventDefault()
+const drag_scheduler_ad = e => e.preventDefault()
 /** Drop & Drag Files, Ends*/
 ///////////////////////////////////////// * END AD * //////////////////////////////////////////////////
 
@@ -1349,7 +1349,7 @@ const getValidIndexList = (list, random, item, skipIndex) => {
  * una fecha (date) especificada
  * rangeDate(["startDate","endDate"])
  */
-const rangeDate = (date) => {
+const rangeDate = date => {
     var s = date[0].split("/");
     var e = date[1].split("/");
     var c = getTime.gT("DateDMYYYY").split("/");
@@ -1369,7 +1369,7 @@ const rangeDate = (date) => {
  * una hora (time) especificada
  * rangeTime(["startTime","endTime"])
  */
-const rangeTime = (time) => {
+const rangeTime = time => {
     var cT = getTime.gT("hms24");
     return (time[0] <= cT) & (cT <= time[1]);
 }
@@ -1420,23 +1420,14 @@ const RelojProgramador = () => {
         } catch (error) { }
     }
 
-
-    setTimeout(function () {
-        RelojProgramador();
-    }, 800);
+    setTimeout(() => RelojProgramador(), 900);
 }
 RelojProgramador();
 
 //obtener contenido
-const getContent = (content) => {
-    if (content.data._order) {
-        return content.data._order
-    } else {
-        return []
-    }
-}
+const getContent = content => content.data._order ? content.data._order : []
 
-const seeMessage = (text) => {
+const seeMessage = text => {
     iziToast.show({
         title: text,
         message: "",
@@ -1477,7 +1468,7 @@ const saveAsScheduler = () => {
     });
 }
 
-const saveFileSLST = (path) => {
+const saveFileSLST = path => {
     const dataScheduler = {
         list_path: getContent(grid_scheduler_list),
         event_path: getContent(grid_scheduler_event),
@@ -1487,32 +1478,12 @@ const saveFileSLST = (path) => {
 
     var fileGcContent = JSON.stringify(dataScheduler);
 
-    fs.writeFile(path, fileGcContent, function (err) {
+    fs.writeFile(path, fileGcContent, (err) => {
         if (err) throw err;
-
-        if (!dataScheduler.list_path.length > 0) {
-            seeMessage("list no hay datos");
-        } else {
-            seeMessage("¡List Guardado con exito!");
-        }
-
-        if (!dataScheduler.event_path.length > 0) {
-            seeMessage("event no hay datos");
-        } else {
-            seeMessage("¡Event Guardado con exito!");
-        }
-
-        if (!dataScheduler.ad_path.length > 0) {
-            seeMessage("Ad no hay datos");
-        } else {
-            seeMessage("¡Ad Guardado con exito!");
-        }
-
-        if (!dataScheduler.graphics_path.length > 0) {
-            seeMessage("No hay gráficos");
-        } else {
-            seeMessage("¡Gráficos guardados con exito!");
-        }
+        dataScheduler.list_path.length > 0 ? seeMessage("¡List Guardado con exito!") : seeMessage("List no hay datos")
+        dataScheduler.event_path.length > 0 ? seeMessage("¡Event Guardado con exito!") : seeMessage("Event no hay datos")
+        dataScheduler.ad_path.length > 0 ? seeMessage("¡Ad Guardado con exito!") : seeMessage("Ad no hay datos")
+        dataScheduler.graphics_path.length > 0 ? seeMessage("¡Gráficos Guardado con exito!") : seeMessage("Gráficos no hay datos")
     });
 }
 
@@ -1538,7 +1509,7 @@ ipcRenderer.on("openScheduler", () => {
 });
 
 /** Cargar nuevos datos */
-const loadFileSLST = (path) => {
+const loadFileSLST = path => {
     fetch(path)
         .then(res => res.json())
         .then(content => {
