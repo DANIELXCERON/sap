@@ -113,59 +113,10 @@ const readLog = async (path, elementgrid) => {
   const res = await fetch(path);
   const contentLog = await res.text();
   const dataset = new dhx.DataCollection().parse(JSON.parse("[" + contentLog.slice(0, -1) + "]"))
-  const arrayData = dataset.map(item => {
-    const items = {
-      fecha: item.fecha,
-      hora: item.hora,
-      duracion: item.duracion,
-      ref: item.ref,
-      nombre: item.nombre.replace(/,/g, ''),
-      id: item.id,
-    }
-    return items
-  })
-  const ListPages = limit(arrayData)
-
-  sessionStorage.setItem("Numbers_pages_logger_view", ListPages.length)
-  sessionStorage.setItem("List_Pages", JSON.stringify(ListPages))
-  sessionStorage.setItem("current_page_logger_view", 0)
-
-
 
   elementgrid.data.removeAll()
-  elementgrid.data.parse(arrayData)
-  // elementgrid.data.parse(ListPages[0].list)
-
-
-  document.querySelector("#grid_log_count").innerHTML = `1 / ${ListPages.length}`
+  elementgrid.data.parse(dataset)
 }
-
-const limit = arrayData => {
-  let ini = 0
-  let limit = 1000
-  let end = limit
-
-  const divi = arrayData.length / limit
-  const rest = (divi - parseInt(divi)) > 0 ? 1 : 0
-  const pages = parseInt(divi) + rest
-
-  let listDivi = []
-  for (let i = 0; i < pages; i++) {
-
-    listDivi.push({
-      page: i,
-      list: arrayData.slice(ini, end)
-    })
-
-    ini = end
-    end += limit
-  }
-
-  return listDivi
-
-}
-
-// log_file.write(util.format(`Fecha,Hora,Nombre,Duración\n`));
 
 module.exports = {
   write,

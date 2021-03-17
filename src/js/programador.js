@@ -607,7 +607,6 @@ const ejecute_scheduler_event = () => {
 }
 
 const ejecuteAdd = item => {
-    console.log(item)
     switch (item.type) {
         case 'datos:stream':
             grid_queue.data.add({

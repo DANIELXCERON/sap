@@ -18,17 +18,14 @@ checkCreateDir(dirLog)
 
 const checkFile = () => {
   pathFile = dirLog + `\\${getTime.gT("DateLog")}.csv`
-  if (!fs.existsSync(pathFile)) {// si no existe el archivo
-    f = "w" // escribir
-    log_file = fs.createWriteStream(pathFile, { flags: f });
-    log_file.write(util.format(
-      `fecha,Hora,duracion,ref,nombre,id\n`
+  const f = fs.existsSync(pathFile) ? "a" : "w" // "a" agrega "w" escribe
+  log_file = fs.createWriteStream(pathFile, { flags: f });
+  if (f === "w") {
+    log_file.write(
+      util.format(
+        `Fecha,Hora,Duración,Tipo,Nombre,Id\r`
       ));
-  } else {
-    f = "a" // agregar
-    log_file = fs.createWriteStream(pathFile, { flags: f });
   }
-
 }
 
 const write = data => {
@@ -37,24 +34,22 @@ const write = data => {
     d = nTF.secToHHMMSS(data.duration),
     r = data.ref,
     id = `u${Date.now()}`,
-    p = filename(data.path)
+    p = nTF.filename(data.path)
   log_file.write(
     util.format(
-      `${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${d},${r},${n.replace(/,/g, '')},${id}\n`
-      ));
+      `${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${d},${r},${n.replace(/,/g, '')},${id}\r`
+    ));
 
   if (data.screenshot) {
+
     /**Crear carpeta screenshot*/
     var dirScreenshot = dirLog + `\\${getTime.gT("DateLog")}-screenshots`
-    if (!fs.existsSync(dirScreenshot)) {// si no existe el directorio
-      fs.mkdirSync(dirScreenshot);// crea el directorio
-    }
+    fs.existsSync(dirScreenshot) ? null : fs.mkdirSync(dirScreenshot)
+
     /**Crear carpeta individual*/
-    var dirIndividualScreenshot = dirScreenshot + `\\${p}`
-    if (!fs.existsSync(dirIndividualScreenshot)) {// si no existe el directorio
-      fs.mkdirSync(dirIndividualScreenshot);// crear el directorio
-    }
-    console.log(nTF.RelojToSec(data.duration))
+    const dirIndividualScreenshot = dirScreenshot + `\\${p}`
+    fs.existsSync(dirIndividualScreenshot) ? null : fs.mkdirSync(dirIndividualScreenshot)
+
     setTimeout(() => {
       ipcRenderer.send("screenshot", dirIndividualScreenshot + `\\${id}.jpeg`);
     }, 3000);
@@ -62,28 +57,20 @@ const write = data => {
   }
 }
 
-/** funcion para extraer nombre del archivo de una ruta */
-const filename = rutaAbsoluta => {
-  var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
-  nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
-  //.replace(/^.*[\\\/]/, "")
-  return nombreArchivo;
-}
-
 const writeEventsLog = (data, n) => {
   checkFile()
   var p = data.path,
     r = data.ref
   log_file.write(util.format(
-    `{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"${r}","nombre":"${n}","info":"${p}"},`
-    ));
+    `${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${r},${n},${p}\n`
+  ));
 }
 
 const writeControlPlayerLog = (n, i) => {
   checkFile()
   log_file.write(util.format(
     `{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"Control","nombre":"${n}","info":"${i}"},`
-    ));
+  ));
 }
 
 const writeGCLog = datosGC => {
@@ -103,7 +90,7 @@ const writeGCLog = datosGC => {
 
   log_file.write(util.format(
     `{"fecha":"${getTime.gT("DateDMYYYY")}","hora":"${getTime.gT("hms24")}","ref":"GC","nombre":"Generador de caracteres","info":"${html}"},`
-    ));
+  ));
 }
 
 
@@ -123,58 +110,25 @@ const loadDir = elementgrid => {
 
 const readLog = async (path, elementgrid) => {
   const res = await fetch(path);
-  const contentLog = await res.text();
-  const dataset = new dhx.DataCollection().parse(JSON.parse("[" + contentLog.slice(0, -1) + "]"))
-  const arrayData = dataset.map(item => {
-    const items = {
-      fecha: item.fecha,
-      hora: item.hora,
-      duracion: item.duracion,
-      ref: item.ref,
-      nombre: item.nombre.replace(/,/g, ''),//eliminar comas
-      id: item.id,
-    }
-    return items
-  })
-  const ListPages = limit(arrayData)
-
-  sessionStorage.setItem("Numbers_pages_logger_view", ListPages.length)
-  sessionStorage.setItem("List_Pages", JSON.stringify(ListPages))
-  sessionStorage.setItem("current_page_logger_view", 0)
-
-  elementgrid.data.removeAll()
-  elementgrid.data.parse(arrayData)
-  // elementgrid.data.parse(ListPages[0].list)
-
-  document.querySelector("#grid_log_count").innerHTML = `1 / ${ListPages.length}`
+  const file = await res.text();
+  const data = Papa.parse(file);
+  elementgrid.data.parse(papaTojson(data.data))
 }
 
-const limit = arrayData => {
-  let ini = 0
-  let limit = 1000
-  let end = limit
-
-  const divi = arrayData.length / limit
-  const rest = (divi - parseInt(divi)) > 0 ? 1 : 0
-  const pages = parseInt(divi) + rest
-
-  let listDivi = []
-  for (let i = 0; i < pages; i++) {
-
-    listDivi.push({
-      page: i,
-      list: arrayData.slice(ini, end)
+const papaTojson = (data) => {
+  const json = []
+  data.slice(1, -1).map(res => {
+    json.push({
+      fecha: res[0],
+      hora: res[1],
+      duracion: res[2],
+      tipo: res[3],
+      nombre: res[4],
+      id: res[5],
     })
-
-    ini = end
-    end += limit
-  }
-
-  return listDivi
-
+  })
+  return json
 }
-
-
 
 module.exports = {
   write,

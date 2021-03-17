@@ -69,6 +69,14 @@ const validExts = (nameFile, exts) => {
   return exts.some(even);
 }
 
+/** funcion para extraer nombre del archivo de una ruta */
+const filename = rutaAbsoluta => {
+  var nombreArchivo = rutaAbsoluta.replace(/^.*(\\|\/|\:)/, ""); // dejar solo nombre
+  nombreArchivo = nombreArchivo.replace(/(.*)\.(.*?)$/, "$1"); // eliminar extencion
+  //.replace(/^.*[\\\/]/, "")
+  return nombreArchivo;
+}
+
 module.exports = {
   secToHHMMSS,
   RelojToSec,
@@ -78,4 +86,5 @@ module.exports = {
   htmlToText,
   millisToDate,
   validExts,
+  filename,
 };

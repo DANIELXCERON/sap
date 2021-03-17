@@ -884,9 +884,8 @@ const grid_log_view = new dhx.Grid("grid_log_view_container", {
     { width: 92, id: "fecha", header: [{ text: "Fecha" }, { content: "selectFilter" }] },
     { width: 72, id: "hora", header: [{ text: "Hora" }] },
     { width: 72, id: "duracion", header: [{ text: "Duración" }] },
-    { width: 72, id: "ref", header: [{ text: "Referencia" }, { content: "selectFilter" }] },
+    { width: 72, id: "tipo", header: [{ text: "Tipo" }, { content: "selectFilter" }] },
     { width: 253, id: "nombre", header: [{ text: "Nombre" }, { content: "inputFilter" }] },
-    { width: 253, id: "info", header: [{ text: "Info" }] },
     { width: 253, id: "id", header: [{ text: "Id" }] },
   ],
   rowHeight: 25,
@@ -898,66 +897,4 @@ const grid_log_view = new dhx.Grid("grid_log_view_container", {
   selection: "row",
   resizable: true,
 });
-
-/// Paginacion de resultados
-const gridLogPreviousPage = document.querySelector("#grid_log_previous_page_btn");
-const gridLogNextPage = document.querySelector("#grid_log_next_page_btn");
-const gridLogCount = document.querySelector("#grid_log_count");
-
-gridLogPreviousPage.addEventListener("click", () => {
-  naviPageLogView("previous")
-});
-
-gridLogNextPage.addEventListener("click", () => {
-  naviPageLogView("next")
-});
-
-const naviPageLogView = (c) => {
-  const length = parseInt(sessionStorage.getItem("Numbers_pages_logger_view"))
-  const index = parseInt(sessionStorage.getItem("current_page_logger_view"))
-  const ListPages = JSON.parse(sessionStorage.getItem("List_Pages"))
-
-  grid_log_view.data.removeAll()
-  if (c === "next") {
-    if (index + 1 < length) {
-      grid_log_view.data.add(ListPages[index + 1].list)
-      sessionStorage.setItem("current_page_logger_view", index + 1)
-    } else {
-      grid_log_view.data.add(ListPages[0].list)
-      sessionStorage.setItem("current_page_logger_view", 0)
-    }
-  }
-  if (c === "previous") {
-    if (index > 0) {
-      grid_log_view.data.add(ListPages[index - 1].list)
-      sessionStorage.setItem("current_page_logger_view", index - 1)
-    } else {
-      grid_log_view.data.add(ListPages[length - 1].list)
-      sessionStorage.setItem("current_page_logger_view", length - 1)
-    }
-  }
-  gridLogCount.innerHTML = `${parseInt(sessionStorage.getItem("current_page_logger_view")) + 1} / ${length}`
-}
-
-const limit = arrayData => {
-  let ini = 0
-  let limit = 1000
-  let end = limit
-
-  const divi = arrayData.length / limit
-  const rest = (divi - parseInt(divi)) > 0 ? 1 : 0
-  const pages = parseInt(divi) + rest
-
-  let listDivi = []
-  for (let i = 0; i < pages; i++) {
-
-    listDivi.push({
-      page: i,
-      list: arrayData.slice(ini, end)
-    })
-    ini = end
-    end += limit
-  }
-  return listDivi
-}
 ////////////////////////////// End logger list viewer ///////////////////////////////////////////////
