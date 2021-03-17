@@ -29,31 +29,27 @@ const checkFile = () => {
 }
 
 const write = data => {
-  checkFile()
   var n = data.namefile,
     d = nTF.secToHHMMSS(data.duration),
     r = data.ref,
     id = `u${Date.now()}`,
     p = nTF.filename(data.path)
-  log_file.write(
-    util.format(
-      `${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${d},${r},${n.replace(/,/g, '')},${id}\r`
-    ));
 
+  if (data.genLog) {
+    checkFile()
+    log_file.write(
+      util.format(
+        `${getTime.gT("DateDMYYYY")},${getTime.gT("hms24")},${d},${r},${n.replace(/,/g, '')},${id}\r`
+      ));
+  }
   if (data.screenshot) {
-
     /**Crear carpeta screenshot*/
     var dirScreenshot = dirLog + `\\${getTime.gT("DateLog")}-screenshots`
     fs.existsSync(dirScreenshot) ? null : fs.mkdirSync(dirScreenshot)
-
     /**Crear carpeta individual*/
     const dirIndividualScreenshot = dirScreenshot + `\\${p}`
     fs.existsSync(dirIndividualScreenshot) ? null : fs.mkdirSync(dirIndividualScreenshot)
-
-    setTimeout(() => {
-      ipcRenderer.send("screenshot", dirIndividualScreenshot + `\\${id}.jpeg`);
-    }, 3000);
-    // nTF.randomNumber(nTF.RelojToSec(data.duration))
+    setTimeout(() => ipcRenderer.send("screenshot", dirIndividualScreenshot + `\\${id}.jpeg`), 4133);
   }
 }
 

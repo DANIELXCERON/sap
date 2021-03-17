@@ -445,106 +445,114 @@ remove_btn_scheluder_event.addEventListener("click", () => {
 /** formulario para agregar */
 var form_scheduler_events = new dhx.Form("form_container", {
     css: "my_form_css",
-    rows: [{
-        name: "interval",
-        type: "select",
-        label: "Intervalo",
-        helpMessage: `
-    <p style="font-size: xx-small;">
-        <br>10 > 00 10 20 30 40 50 
-        <br>15 > 10 25 40 55 
-        <br>20 > 05 25 45 
-        <br>30 > 15 45 
-        <br>60 > 30
-    </p>
-      `,
-        labelInline: true,
-        value: "No",
-        labelPosition: "left",
-        options: [
-            { value: "No", content: "No" },
-            { value: "10", content: "Cada 10 min" },
-            { value: "15", content: "Cada 15 min" },
-            { value: "20", content: "Cada 20 min" },
-            { value: "30", content: "Cada 30 min" },
-            { value: "60", content: "Cada hora" },
-        ],
-    },
-    {
-        name: "playTime",
-        type: "timepicker",
-        label: "Hora",
-        labelPosition: "left",
-        labelInline: true,
-        value: "00:00",
-    },
-    {
-        name: "stopTime",
-        type: "timepicker",
-        label: "Stop Time",
-        labelPosition: "left",
-        labelInline: true,
-        value: "00:00",
-    },
-    {
-        name: "instant",
-        type: "checkbox",
-        label: "Inmediato",
-        labelPosition: "left",
-        labelInline: true,
-        value: false,
-    },
-    {
-        name: "screenshot",
-        type: "checkbox",
-        label: "screenshot",
-        labelPosition: "left",
-        labelInline: true,
-        value: false,
-    },
-    {
-        name: "playDay",
-        type: "combo",
-        label: "Días",
-        labelPosition: "left",
-        multiselection: true,
-        selectAllButton: true,
-        value: ["dom", "lun", "mar", "mie", "jue", "vie", "sab"],
-        data: [
-            { value: "dom", id: "dom" },
-            { value: "lun", id: "lun" },
-            { value: "mar", id: "mar" },
-            { value: "mie", id: "mie" },
-            { value: "jue", id: "jue" },
-            { value: "vie", id: "vie" },
-            { value: "sab", id: "sab" },
-        ],
-    },
-    {
-        name: "playDateRange",
-        type: "datepicker",
-        label: "Fecha",
-        labelPosition: "left",
-        labelInline: true,
-        range: true,
-        dateFormat: "%d/%m/%Y",
-    },
-    {
-        name: "timeStart",
-        type: "timepicker",
-        label: "Hora de inicio",
-        labelPosition: "left",
-        labelInline: true,
-        value: "00:00",
-    },
-    {
-        name: "timeEnd",
-        type: "timepicker",
-        label: "Hora de finalización",
-        labelPosition: "left",
-        labelInline: true,
-        value: "23:59",
-    },
+    rows: [
+        {
+            name: "interval",
+            type: "select",
+            label: "Intervalo",
+            helpMessage:
+                `<p style="font-size: xx-small;">
+                    <br>10 > 00 10 20 30 40 50 
+                    <br>15 > 10 25 40 55 
+                    <br>20 > 05 25 45 
+                    <br>30 > 15 45 
+                    <br>60 > 30
+                </p>`,
+            labelInline: true,
+            value: "No",
+            labelPosition: "left",
+            options: [
+                { value: "No", content: "No" },
+                { value: "10", content: "Cada 10 min" },
+                { value: "15", content: "Cada 15 min" },
+                { value: "20", content: "Cada 20 min" },
+                { value: "30", content: "Cada 30 min" },
+                { value: "60", content: "Cada hora" },
+            ],
+        },
+        {
+            name: "playTime",
+            type: "timepicker",
+            label: "Hora",
+            labelPosition: "left",
+            labelInline: true,
+            value: "00:00",
+        },
+        {
+            name: "stopTime",
+            type: "timepicker",
+            label: "Stop Time",
+            labelPosition: "left",
+            labelInline: true,
+            value: "00:00",
+        },
+        {
+            name: "instant",
+            type: "checkbox",
+            label: "Inmediato",
+            labelPosition: "left",
+            labelInline: true,
+            value: false,
+        },
+        {
+            name: "screenshot",
+            type: "checkbox",
+            label: "screenshot",
+            labelPosition: "left",
+            labelInline: true,
+            value: false,
+        },
+        {
+            name: "genLog",
+            type: "checkbox",
+            label: "generar log",
+            labelPosition: "left",
+            labelInline: true,
+            value: false,
+        },
+        {
+            name: "playDay",
+            type: "combo",
+            label: "Días",
+            labelPosition: "left",
+            multiselection: true,
+            selectAllButton: true,
+            value: ["dom", "lun", "mar", "mie", "jue", "vie", "sab"],
+            data: [
+                { value: "dom", id: "dom" },
+                { value: "lun", id: "lun" },
+                { value: "mar", id: "mar" },
+                { value: "mie", id: "mie" },
+                { value: "jue", id: "jue" },
+                { value: "vie", id: "vie" },
+                { value: "sab", id: "sab" },
+            ],
+        },
+        {
+            name: "playDateRange",
+            type: "datepicker",
+            label: "Fecha",
+            labelPosition: "left",
+            labelInline: true,
+            range: true,
+            dateFormat: "%d/%m/%Y",
+        },
+        {
+            name: "timeStart",
+            type: "timepicker",
+            label: "Hora de inicio",
+            labelPosition: "left",
+            labelInline: true,
+            value: "00:00",
+        },
+        {
+            name: "timeEnd",
+            type: "timepicker",
+            label: "Hora de finalización",
+            labelPosition: "left",
+            labelInline: true,
+            value: "23:59",
+        },
     ],
 });
 
@@ -619,6 +627,7 @@ const ejecuteAdd = item => {
                 custom: "bg_id_Scheduler",
                 temp: item.temp,
                 screenshot: item.screenshot,
+                genLog: item.genLog,
             }, grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID")) + 1);
             break;
         case 'datos:plst':
@@ -722,6 +731,7 @@ const loadListProgram = item => {
                 temp: true,
                 pathListEvent: item.path,
                 screenshot: item.screenshot,
+                genLog: item.genLog,
             }
             //agrega el video +1 index despues del actual en reproduccion
             var pAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
@@ -741,6 +751,7 @@ const loadListProgram = item => {
                     random: 0,
                     temp: true,
                     screenshot: item.screenshot,
+                    genLog: item.genLog,
                 }
                 //agrega el video +1 index despues del actual en reproduccion
                 var rAddIndex = grid_queue.data.getIndex(localStorage.getItem("CurrentVideoID"));
@@ -794,6 +805,7 @@ const drop_scheduler_event = e => {
                         playDay: formData.playDay,
                         temp: true,
                         screenshot: formData.screenshot,
+                        genLog: formData.genLog,
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
@@ -828,6 +840,7 @@ const drop_scheduler_event = e => {
                             playDay: formData.playDay,
                             temp: true,
                             screenshot: formData.screenshot,
+                            genLog: formData.genLog,
                         };
                         grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                     }
@@ -863,6 +876,7 @@ const drop_scheduler_event = e => {
                             playDay: formData.playDay,
                             temp: false,
                             screenshot: formData.screenshot,
+                            genLog: formData.genLog,
                         };
                         grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                     }
@@ -891,6 +905,7 @@ const drop_scheduler_event = e => {
                         playDay: formData.playDay,
                         temp: false,
                         screenshot: formData.screenshot,
+                        genLog: formData.genLog,
                     };
                     grid_scheduler_event.data.add(data, getIndexAddGrid(grid_scheduler_event));
                 }
